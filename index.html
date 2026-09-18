@@ -234,6 +234,41 @@
   </section>
 
   <!-- ====================================================================
+       NEWS CAROUSEL
+       Own news loaded from data/news.json — always shown first.
+       External slots filled from Dev.to public API (no key needed).
+  ==================================================================== -->
+  <section id="news" class="news-section">
+    <div class="container">
+      <div class="news-section__head">
+        <div>
+          <div class="section-eyebrow">// updates</div>
+          <h2 class="section-title">Новости &amp; обновления</h2>
+          <div class="section-rule"></div>
+        </div>
+        <!-- Prev / Next arrows -->
+        <div class="news-controls">
+          <button class="news-btn" id="news-prev" aria-label="Назад">&#8592;</button>
+          <button class="news-btn" id="news-next" aria-label="Вперёд">&#8594;</button>
+        </div>
+      </div>
+
+      <!-- Carousel viewport — overflow hidden, track slides inside -->
+      <div class="news-viewport">
+        <div class="news-track" id="news-track">
+          <!-- Cards injected by JS -->
+          <div class="news-skeleton"></div>
+          <div class="news-skeleton"></div>
+          <div class="news-skeleton"></div>
+        </div>
+      </div>
+
+      <!-- Dot indicators -->
+      <div class="news-dots" id="news-dots"></div>
+    </div>
+  </section>
+
+  <!-- ====================================================================
        SKILLS
   ==================================================================== -->
   <section id="skills" class="skills-section">

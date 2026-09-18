@@ -128,3 +128,164 @@ async function initMap() {
 }
 
 initMap();
+
+
+/* ==========================================================================
+ * NEWS CAROUSEL
+ *
+ * Priority system:
+ *   1. Load own news from data/news.json — always displayed first
+ *   2. Fill remaining slots with Dev.to public API (webdev articles)
+ *   3. If both fail — show a friendly "check back later" message
+ *
+ * Carousel behaviour:
+ *   - Shows 3 cards on desktop, 1 on mobile
+ *   - Auto-advances every 5 seconds, pauses on hover
+ *   - Arrow buttons + dot indicators for manual navigation
+ * ==========================================================================
+ */
+
+async function initNews() {
+  const track   = document.getElementById('news-track');
+  const dotsEl  = document.getElementById('news-dots');
+  const prevBtn = document.getElementById('news-prev');
+  const nextBtn = document.getElementById('news-next');
+  if (!track) return;
+
+  let ownNews = [];
+  let extNews = [];
+
+  // --- 1. Fetch own news (priority) ---
+  try {
+    const res  = await fetch('data/news.json');
+    ownNews    = await res.json();
+  } catch {
+    // File missing or empty — that's fine, we fall back to external
+  }
+
+  // --- 2. Fetch external news from Dev.to (free, no API key) ---
+  try {
+    const res  = await fetch('https://dev.to/api/articles?tags=webdev,javascript,css&per_page=9&top=7');
+    const data = await res.json();
+    extNews = data.map(a => ({
+      title:  a.title,
+      desc:   a.description || a.tag_list.join(', '),
+      url:    a.url,
+      date:   a.published_at ? a.published_at.slice(0, 10) : '',
+      tag:    a.user.name || 'Dev.to',
+      own:    false
+    }));
+  } catch {
+    // Dev.to unavailable — we'll show only own news or empty state
+  }
+
+  // --- 3. Merge: own news first, external fills the rest ---
+  const tagged = [
+    ...ownNews.map(n => ({ ...n, own: true })),
+    ...extNews.filter(e => !e.own)
+  ].slice(0, 12); // max 12 cards
+
+  // Clear skeleton placeholders
+  track.innerHTML = '';
+
+  if (tagged.length === 0) {
+    track.innerHTML = `
+      <div class="news-card" style="flex:1; align-items:center; justify-content:center; text-align:center;">
+        <div style="font-size:1.5rem;">📡</div>
+        <div style="color:var(--color-muted); font-size:0.9rem;">Нет доступных новостей — зайдите позже</div>
+      </div>`;
+    return;
+  }
+
+  // --- 4. Render cards ---
+  tagged.forEach(item => {
+    const isOwn    = item.own;
+    const dateStr  = item.date ? new Date(item.date).toLocaleDateString('ru-RU', { day: 'numeric', month: 'short', year: 'numeric' }) : '';
+    const badgeClass = isOwn ? '' : 'news-card__badge--ext';
+    const badgeIcon  = isOwn ? '🟢' : '🔗';
+    const sourceName = isOwn ? 'SimorghDev' : (item.tag || 'Dev.to');
+
+    const card = document.createElement('a');
+    card.className  = `news-card${isOwn ? ' news-card--own' : ''}`;
+    card.href       = item.url || '#';
+    card.target     = '_blank';
+    card.rel        = 'noopener noreferrer';
+    card.innerHTML  = `
+      <div class="news-card__badge ${badgeClass}">${badgeIcon} ${sourceName}</div>
+      <div class="news-card__title">${item.title}</div>
+      <div class="news-card__desc">${item.desc || ''}</div>
+      <div class="news-card__footer">
+        <span>${dateStr}</span>
+        <span class="news-card__read">Читать →</span>
+      </div>`;
+    track.appendChild(card);
+  });
+
+  // --- 5. Carousel logic ---
+  const cards      = track.querySelectorAll('.news-card');
+  const total      = cards.length;
+  let current      = 0;
+  let autoTimer    = null;
+
+  // How many cards fit in view at once
+  function perView() {
+    return window.innerWidth <= 768 ? 1 : 3;
+  }
+
+  // Max index we can scroll to (don't scroll past the last card)
+  function maxIndex() {
+    return Math.max(0, total - perView());
+  }
+
+  function goTo(index) {
+    current = Math.max(0, Math.min(index, maxIndex()));
+
+    // Each card is 33.333% + gap — let the browser calculate via scrollLeft-style transform
+    const cardEl    = cards[0];
+    const cardWidth = cardEl.offsetWidth;
+    const gap       = 20;
+    track.style.transform = `translateX(-${current * (cardWidth + gap)}px)`;
+
+    // Sync dots
+    document.querySelectorAll('.news-dot').forEach((dot, i) => {
+      dot.classList.toggle('news-dot--active', i === current);
+    });
+  }
+
+  function next() { goTo(current + 1 > maxIndex() ? 0 : current + 1); }
+  function prev() { goTo(current - 1 < 0 ? maxIndex() : current - 1); }
+
+  function startAuto() {
+    stopAuto();
+    autoTimer = setInterval(next, 5000);
+  }
+
+  function stopAuto() {
+    if (autoTimer) clearInterval(autoTimer);
+  }
+
+  // Build dot indicators
+  // One dot per "page" (groups of perView cards)
+  const dotCount = maxIndex() + 1;
+  for (let i = 0; i < dotCount; i++) {
+    const dot = document.createElement('button');
+    dot.className = `news-dot${i === 0 ? ' news-dot--active' : ''}`;
+    dot.addEventListener('click', () => { goTo(i); startAuto(); });
+    dotsEl.appendChild(dot);
+  }
+
+  prevBtn.addEventListener('click', () => { prev(); startAuto(); });
+  nextBtn.addEventListener('click', () => { next(); startAuto(); });
+
+  // Pause auto-play while user hovers
+  track.parentElement.addEventListener('mouseenter', stopAuto);
+  track.parentElement.addEventListener('mouseleave', startAuto);
+
+  // Recalculate on resize (card widths change)
+  window.addEventListener('resize', () => goTo(current));
+
+  goTo(0);
+  startAuto();
+}
+
+initNews();
