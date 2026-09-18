@@ -1,57 +1,59 @@
 /*
  * Typing effect in Hero
- * Cycles through a list of phrases, typing and deleting each one
- * with a blinking cursor to give the "live terminal" feel.
+ * Cycles through phrases, typing and deleting each one.
+ *
+ * Exposed as window.restartTyping so that i18n.js can swap in translated
+ * phrases when the user switches language — no page reload needed.
  */
-(function initTyping() {
+(function() {
   const el = document.getElementById('hero-typed');
   if (!el) return;
 
-  // Phrases to cycle through — edit freely
-  const phrases = [
-    'things for the web.',
-    'landing pages.',
-    'clean interfaces.',
-    'websites that work.',
-  ];
-
+  // Default English phrases — i18n.js will replace these if another language is saved
+  let phrases     = ['things for the web.', 'landing pages.', 'clean interfaces.', 'websites that work.'];
   let phraseIndex = 0;
   let charIndex   = 0;
   let deleting    = false;
+  let timer       = null; // we need to track the timer so restartTyping can clear it
 
   function tick() {
     const current = phrases[phraseIndex];
 
     if (!deleting) {
-      // Type one character
       charIndex++;
       el.textContent = current.slice(0, charIndex);
-
       if (charIndex === current.length) {
-        // Finished typing — pause then start deleting
         deleting = true;
-        setTimeout(tick, 1800);
+        timer = setTimeout(tick, 1800);
         return;
       }
-      setTimeout(tick, 70);
+      timer = setTimeout(tick, 70);
     } else {
-      // Delete one character
       charIndex--;
       el.textContent = current.slice(0, charIndex);
-
       if (charIndex === 0) {
-        // Finished deleting — move to next phrase
         deleting = false;
         phraseIndex = (phraseIndex + 1) % phrases.length;
-        setTimeout(tick, 400);
+        timer = setTimeout(tick, 400);
         return;
       }
-      setTimeout(tick, 35); // delete faster than type
+      timer = setTimeout(tick, 35);
     }
   }
 
-  // Small delay before starting so the page settles first
-  setTimeout(tick, 1000);
+  // i18n.js calls this to switch phrases when the user picks a language
+  window.restartTyping = function(newPhrases) {
+    if (timer) clearTimeout(timer);
+    phrases     = newPhrases;
+    phraseIndex = 0;
+    charIndex   = 0;
+    deleting    = false;
+    el.textContent = '';
+    tick(); // start immediately — no delay on a manual language switch
+  };
+
+  // First run — short delay so the page finishes rendering
+  timer = setTimeout(tick, 1000);
 })();
 
 
@@ -489,3 +491,43 @@ window.addEventListener('scroll', () => {
 backToTopBtn.addEventListener('click', () => {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 });
+
+
+/*
+ * Mobile hamburger menu
+ * Opens a full-screen overlay with nav links.
+ * Locks body scroll while the menu is open so the page doesn't shift underneath.
+ */
+(function initHamburger() {
+  const hamburgerBtn = document.getElementById('hamburger');
+  const mobileMenu   = document.getElementById('mobile-menu');
+  const closeBtn     = document.getElementById('mobile-close');
+  if (!hamburgerBtn || !mobileMenu) return;
+
+  function openMenu() {
+    mobileMenu.classList.add('open');
+    mobileMenu.setAttribute('aria-hidden', 'false');
+    hamburgerBtn.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden'; // prevent scroll behind overlay
+  }
+
+  function closeMenu() {
+    mobileMenu.classList.remove('open');
+    mobileMenu.setAttribute('aria-hidden', 'true');
+    hamburgerBtn.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+  }
+
+  hamburgerBtn.addEventListener('click', openMenu);
+  closeBtn.addEventListener('click', closeMenu);
+
+  // Clicking a link closes the menu and lets the browser scroll to the section
+  mobileMenu.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', closeMenu);
+  });
+
+  // Also close if the user taps the dark backdrop (outside the menu list)
+  mobileMenu.addEventListener('click', (e) => {
+    if (e.target === mobileMenu) closeMenu();
+  });
+})();

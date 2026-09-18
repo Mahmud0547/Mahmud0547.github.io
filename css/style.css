@@ -177,6 +177,70 @@ section {
   font-style: normal;
 }
 
+/* Right side of the nav: language switcher + theme toggle + hamburger */
+.nav__controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+/* Language switcher — three small buttons */
+.lang-switcher {
+  display: flex;
+  gap: 3px;
+}
+
+.lang-btn {
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  color: var(--color-muted);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  padding: 4px 7px;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+
+.lang-btn:hover,
+.lang-btn--active {
+  color: var(--color-accent);
+  border-color: var(--color-accent);
+}
+
+.lang-btn--active {
+  background: rgba(0, 200, 150, 0.08);
+}
+
+/* Hamburger button — visible only on mobile (controlled below in @media) */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  background: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  width: 36px;
+  height: 36px;
+  cursor: pointer;
+  padding: 0;
+  flex-shrink: 0;
+}
+
+.hamburger span {
+  display: block;
+  width: 16px;
+  height: 1.5px;
+  background: var(--color-text);
+  border-radius: 1px;
+  transition: var(--transition);
+}
+
 /* Navigation links */
 .nav__links {
   list-style: none;
@@ -1123,34 +1187,128 @@ section {
 .reveal[data-delay="5"] { transition-delay: 0.40s; }
 
 /* ==========================================================================
+   MOBILE FULL-SCREEN MENU
+   Opens as a dark overlay when the hamburger is tapped.
+   Closes when a nav link is clicked or ✕ is tapped.
+========================================================================== */
+.mobile-menu {
+  position: fixed;
+  inset: 0;
+  background: rgba(7, 7, 17, 0.97);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  z-index: 300;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 48px;
+
+  /* Hidden by default — JS adds .open to show it */
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+
+.mobile-menu.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.mobile-menu__close {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  width: 40px;
+  height: 40px;
+  background: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  color: var(--color-text);
+  font-size: 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color var(--transition);
+}
+
+.mobile-menu__close:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+.mobile-menu__links {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
+}
+
+.mobile-menu__links a {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--color-text);
+  letter-spacing: -0.02em;
+  transition: color var(--transition);
+}
+
+.mobile-menu__links a:hover {
+  color: var(--color-accent);
+}
+
+/* Language switcher inside the overlay — same buttons, bigger spacing */
+.lang-switcher--overlay {
+  gap: 10px;
+}
+
+.lang-switcher--overlay .lang-btn {
+  font-size: 0.85rem;
+  padding: 8px 14px;
+}
+
+/* ==========================================================================
    RESPONSIVE BREAKPOINTS
 ========================================================================== */
 @media (max-width: 768px) {
-  .nav { padding: 16px 20px; }
-  .nav__links { display: none; }  /* could add hamburger menu later */
+  .nav { padding: 14px 18px; }
+
+  /* Hide desktop nav links; hamburger takes over */
+  .nav__links { display: none; }
+
+  /* Show the hamburger button */
+  .hamburger { display: flex; }
+
+  /* Reduce container padding so content breathes on narrow screens */
+  .container { padding: 0 18px; }
+
+  /* Hero: single column, tighter padding — fixes the huge gap below stats */
+  section { padding: 60px 0; }
 
   .hero {
     grid-template-columns: 1fr;
     min-height: auto;
-    padding: 120px 0 60px;
+    padding: 88px 0 36px; /* was 120px 0 60px — big improvement */
+    gap: 32px;
   }
 
-  .hero__terminal { display: none; } /* hide on mobile, show content only */
+  .hero__terminal { display: none; } /* decorative widget — not needed on mobile */
 
-  .about__grid   { grid-template-columns: 1fr; }
-  .about__photo  { height: 220px; }
+  .about__grid    { grid-template-columns: 1fr; }
+  .about__photo   { height: 220px; }
   .projects__grid { grid-template-columns: 1fr; }
 
-  .contact__box  { padding: 36px 24px; }
+  .contact__box   { padding: 32px 20px; }
 
   .footer {
     flex-direction: column;
     gap: 8px;
     text-align: center;
-    padding: 24px;
+    padding: 20px;
   }
 
-  /* Courses: single column on mobile */
+  /* Courses: single column on small screens */
   .courses-grid { grid-template-columns: 1fr; }
 }
 

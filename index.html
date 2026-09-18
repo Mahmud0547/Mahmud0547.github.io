@@ -25,15 +25,50 @@
   ==================================================================== -->
   <nav class="nav">
     <a href="#home" class="nav__logo">Simorgh<em>Dev</em></a>
-    <ul class="nav__links">
-      <li><a href="#about">About</a></li>
-      <li><a href="#skills">Skills</a></li>
-      <li><a href="#projects">Projects</a></li>
-      <li><a href="#courses">Courses</a></li>
-      <li><a href="#contact">Contact</a></li>
+
+    <!-- Desktop nav links — hidden on mobile, replaced by hamburger overlay -->
+    <ul class="nav__links" id="nav-links">
+      <li><a href="#about"    data-i18n="nav.about">About</a></li>
+      <li><a href="#skills"   data-i18n="nav.skills">Skills</a></li>
+      <li><a href="#projects" data-i18n="nav.projects">Projects</a></li>
+      <li><a href="#courses"  data-i18n="nav.courses">Courses</a></li>
+      <li><a href="#contact"  data-i18n="nav.contact">Contact</a></li>
     </ul>
-    <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">🌙</button>
+
+    <!-- Right side controls: language switcher + theme toggle + hamburger -->
+    <div class="nav__controls">
+      <div class="lang-switcher">
+        <button class="lang-btn lang-btn--active" data-lang="en">EN</button>
+        <button class="lang-btn"                  data-lang="ru">RU</button>
+        <button class="lang-btn"                  data-lang="tj">TJ</button>
+      </div>
+      <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">🌙</button>
+      <!-- Hamburger — only visible on mobile -->
+      <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
   </nav>
+
+  <!-- Mobile full-screen overlay menu -->
+  <div class="mobile-menu" id="mobile-menu" aria-hidden="true">
+    <button class="mobile-menu__close" id="mobile-close" aria-label="Close menu">✕</button>
+    <ul class="mobile-menu__links">
+      <li><a href="#about"    data-i18n="nav.about">About</a></li>
+      <li><a href="#skills"   data-i18n="nav.skills">Skills</a></li>
+      <li><a href="#projects" data-i18n="nav.projects">Projects</a></li>
+      <li><a href="#courses"  data-i18n="nav.courses">Courses</a></li>
+      <li><a href="#contact"  data-i18n="nav.contact">Contact</a></li>
+    </ul>
+    <!-- Language switcher inside mobile menu too -->
+    <div class="lang-switcher lang-switcher--overlay">
+      <button class="lang-btn" data-lang="en">EN</button>
+      <button class="lang-btn" data-lang="ru">RU</button>
+      <button class="lang-btn" data-lang="tj">TJ</button>
+    </div>
+  </div>
 
   <!-- ====================================================================
        HERO
@@ -44,39 +79,39 @@
 
         <!-- Left: main content -->
         <div class="hero__left">
-          <span class="hero__tag">Available for freelance work</span>
+          <span class="hero__tag" data-i18n="hero.tag">Available for freelance work</span>
 
           <h1 class="hero__name">
-            Hi, I'm <span class="accent">Mahmud</span>.<br />
-            I build <span class="hero__typed" id="hero-typed"></span>
+            <span data-i18n="hero.greeting">Hi, I'm</span> <span class="accent">Mahmud</span>.<br />
+            <span data-i18n="hero.ibuild">I build</span> <span class="hero__typed" id="hero-typed"></span>
           </h1>
 
-          <p class="hero__subtitle">
+          <p class="hero__subtitle" data-i18n="hero.subtitle">
             Frontend developer from Dushanbe, Tajikistan.
             I create responsive websites with clean code —
             HTML, CSS, JavaScript &amp; Supabase.
           </p>
 
           <div class="hero__cta">
-            <a href="#projects" class="btn btn--primary">See my work</a>
-            <a href="#contact"  class="btn btn--ghost">Contact me</a>
+            <a href="#projects" class="btn btn--primary" data-i18n="hero.cta.work">See my work</a>
+            <a href="#contact"  class="btn btn--ghost"   data-i18n="hero.cta.contact">Contact me</a>
           </div>
 
           <!-- Animated stats row -->
           <div class="hero__stats">
             <div class="hero__stat">
               <span class="hero__stat-num" data-target="3">0</span>
-              <span class="hero__stat-label">Projects</span>
+              <span class="hero__stat-label" data-i18n="hero.stat.projects">Projects</span>
             </div>
             <div class="hero__stat-divider"></div>
             <div class="hero__stat">
               <span class="hero__stat-num" data-target="2">0</span>
-              <span class="hero__stat-label">Platforms</span>
+              <span class="hero__stat-label" data-i18n="hero.stat.platforms">Platforms</span>
             </div>
             <div class="hero__stat-divider"></div>
             <div class="hero__stat">
               <span class="hero__stat-num" data-target="4">0</span>
-              <span class="hero__stat-label">Languages</span>
+              <span class="hero__stat-label" data-i18n="hero.stat.languages">Languages</span>
             </div>
           </div>
         </div>
@@ -129,8 +164,8 @@
   ==================================================================== -->
   <section id="about">
     <div class="container">
-      <div class="section-eyebrow">01 / about</div>
-      <h2 class="section-title">A bit about me</h2>
+      <div class="section-eyebrow" data-i18n="about.eyebrow">01 / about</div>
+      <h2 class="section-title" data-i18n="about.title">A bit about me</h2>
       <div class="section-rule"></div>
 
       <div class="about__grid reveal">
@@ -146,18 +181,18 @@
           </div>
 
         <div class="about__text">
-          <p>
+          <p data-i18n-html="about.p1">
             I'm a <strong>Computer Science student</strong> and frontend developer
             based in Dushanbe, Tajikistan. I build web interfaces and tools using
             HTML, CSS, JavaScript, and Supabase as a backend.
           </p>
-          <p>
+          <p data-i18n-html="about.p2">
             My recent project — <strong>Kamarob Nature Fund</strong> — is a
             multilingual conservation website (EN / RU / DE / TJ) with a live
             Supabase backend, dynamic slug-based routing, and a custom i18n system,
             deployed on GitHub Pages.
           </p>
-          <p>
+          <p data-i18n-html="about.p3">
             I take on <strong>freelance projects</strong> through Fiverr and Upwork
             while continuing to grow as a developer. I write clean, readable code
             that's easy for any developer to pick up and continue.
@@ -170,29 +205,29 @@
           <div class="info-card">
             <div class="info-card__icon">🎓</div>
             <div>
-              <div class="info-card__label">Education</div>
-              <div class="info-card__value">Computer Science Student</div>
+              <div class="info-card__label" data-i18n="card.edu.label">Education</div>
+              <div class="info-card__value" data-i18n="card.edu.value">Computer Science Student</div>
             </div>
           </div>
           <div class="info-card">
             <div class="info-card__icon">📍</div>
             <div>
-              <div class="info-card__label">Location</div>
-              <div class="info-card__value">Dushanbe, Tajikistan</div>
+              <div class="info-card__label" data-i18n="card.loc.label">Location</div>
+              <div class="info-card__value" data-i18n="card.loc.value">Dushanbe, Tajikistan</div>
             </div>
           </div>
           <div class="info-card">
             <div class="info-card__icon">💼</div>
             <div>
-              <div class="info-card__label">Status</div>
-              <div class="info-card__value">Open for freelance work</div>
+              <div class="info-card__label" data-i18n="card.stat.label">Status</div>
+              <div class="info-card__value" data-i18n="card.stat.value">Open for freelance work</div>
             </div>
           </div>
           <div class="info-card">
             <div class="info-card__icon">🌐</div>
             <div>
-              <div class="info-card__label">Languages</div>
-              <div class="info-card__value">Tajik · Russian · English</div>
+              <div class="info-card__label" data-i18n="card.lang.label">Languages</div>
+              <div class="info-card__value" data-i18n="card.lang.value">Tajik · Russian · English</div>
             </div>
           </div>
         </div>
@@ -266,8 +301,8 @@
     <div class="container">
       <div class="news-section__head">
         <div>
-          <div class="section-eyebrow">// updates</div>
-          <h2 class="section-title">News &amp; Updates</h2>
+          <div class="section-eyebrow" data-i18n="news.eyebrow">// updates</div>
+          <h2 class="section-title" data-i18n="news.title">News &amp; Updates</h2>
           <div class="section-rule"></div>
         </div>
         <!-- Prev / Next arrows -->
@@ -297,82 +332,66 @@
   ==================================================================== -->
   <section id="skills" class="skills-section">
     <div class="container">
-      <div class="section-eyebrow">02 / skills</div>
-      <h2 class="section-title">What I work with</h2>
+      <div class="section-eyebrow" data-i18n="skills.eyebrow">02 / skills</div>
+      <h2 class="section-title" data-i18n="skills.title">What I work with</h2>
       <div class="section-rule"></div>
 
       <div class="skills__grid reveal">
 
         <div class="skill-card">
           <div class="skill-card__icon">🌐</div>
-          <div class="skill-card__name">HTML / CSS</div>
-          <div class="skill-card__level">Responsive layouts, CSS Grid &amp; Flexbox</div>
-          <div class="skill-card__bar">
-            <div class="skill-card__fill" style="width: 78%"></div>
-          </div>
+          <div class="skill-card__name"  data-i18n="skill.html.name">HTML / CSS</div>
+          <div class="skill-card__level" data-i18n="skill.html.level">Responsive layouts, CSS Grid &amp; Flexbox</div>
+          <div class="skill-card__bar"><div class="skill-card__fill" style="width: 78%"></div></div>
         </div>
 
         <div class="skill-card">
           <div class="skill-card__icon">⚡</div>
-          <div class="skill-card__name">JavaScript</div>
-          <div class="skill-card__level">ES Modules, DOM, async/await</div>
-          <div class="skill-card__bar">
-            <div class="skill-card__fill" style="width: 62%"></div>
-          </div>
+          <div class="skill-card__name"  data-i18n="skill.js.name">JavaScript</div>
+          <div class="skill-card__level" data-i18n="skill.js.level">ES Modules, DOM, async/await</div>
+          <div class="skill-card__bar"><div class="skill-card__fill" style="width: 62%"></div></div>
         </div>
 
         <div class="skill-card">
           <div class="skill-card__icon">🗄️</div>
-          <div class="skill-card__name">Supabase</div>
-          <div class="skill-card__level">PostgreSQL, RLS, real-time</div>
-          <div class="skill-card__bar">
-            <div class="skill-card__fill" style="width: 55%"></div>
-          </div>
+          <div class="skill-card__name"  data-i18n="skill.sb.name">Supabase</div>
+          <div class="skill-card__level" data-i18n="skill.sb.level">PostgreSQL, RLS, real-time</div>
+          <div class="skill-card__bar"><div class="skill-card__fill" style="width: 55%"></div></div>
         </div>
 
         <div class="skill-card">
           <div class="skill-card__icon">🌍</div>
-          <div class="skill-card__name">i18n</div>
-          <div class="skill-card__level">Multilingual UI, 4-language systems</div>
-          <div class="skill-card__bar">
-            <div class="skill-card__fill" style="width: 65%"></div>
-          </div>
+          <div class="skill-card__name"  data-i18n="skill.i18n.name">i18n</div>
+          <div class="skill-card__level" data-i18n="skill.i18n.level">Multilingual UI, 4-language systems</div>
+          <div class="skill-card__bar"><div class="skill-card__fill" style="width: 65%"></div></div>
         </div>
 
         <div class="skill-card">
           <div class="skill-card__icon">🎨</div>
-          <div class="skill-card__name">UI Design</div>
-          <div class="skill-card__level">Clean, functional interfaces</div>
-          <div class="skill-card__bar">
-            <div class="skill-card__fill" style="width: 60%"></div>
-          </div>
+          <div class="skill-card__name"  data-i18n="skill.ui.name">UI Design</div>
+          <div class="skill-card__level" data-i18n="skill.ui.level">Clean, functional interfaces</div>
+          <div class="skill-card__bar"><div class="skill-card__fill" style="width: 60%"></div></div>
         </div>
 
         <div class="skill-card">
           <div class="skill-card__icon">🐙</div>
-          <div class="skill-card__name">Git / GitHub</div>
-          <div class="skill-card__level">Version control, GitHub Pages</div>
-          <div class="skill-card__bar">
-            <div class="skill-card__fill" style="width: 58%"></div>
-          </div>
+          <div class="skill-card__name"  data-i18n="skill.git.name">Git / GitHub</div>
+          <div class="skill-card__level" data-i18n="skill.git.level">Version control, GitHub Pages</div>
+          <div class="skill-card__bar"><div class="skill-card__fill" style="width: 58%"></div></div>
         </div>
 
         <div class="skill-card">
           <div class="skill-card__icon">🔷</div>
-          <div class="skill-card__name">C#</div>
-          <div class="skill-card__level">OOP fundamentals</div>
-          <div class="skill-card__bar">
-            <div class="skill-card__fill" style="width: 44%"></div>
-          </div>
+          <div class="skill-card__name"  data-i18n="skill.cs.name">C#</div>
+          <div class="skill-card__level" data-i18n="skill.cs.level">OOP fundamentals</div>
+          <div class="skill-card__bar"><div class="skill-card__fill" style="width: 44%"></div></div>
         </div>
 
         <div class="skill-card">
           <div class="skill-card__icon">🤖</div>
-          <div class="skill-card__name">AI Workflows</div>
-          <div class="skill-card__level">Prompt engineering, Claude Code</div>
-          <div class="skill-card__bar">
-            <div class="skill-card__fill" style="width: 72%"></div>
-          </div>
+          <div class="skill-card__name"  data-i18n="skill.ai.name">AI Workflows</div>
+          <div class="skill-card__level" data-i18n="skill.ai.level">Prompt engineering, Claude Code</div>
+          <div class="skill-card__bar"><div class="skill-card__fill" style="width: 72%"></div></div>
         </div>
 
       </div>
@@ -384,8 +403,8 @@
   ==================================================================== -->
   <section id="projects">
     <div class="container">
-      <div class="section-eyebrow">03 / projects</div>
-      <h2 class="section-title">Things I've built</h2>
+      <div class="section-eyebrow" data-i18n="projects.eyebrow">03 / projects</div>
+      <h2 class="section-title"   data-i18n="projects.title">Things I've built</h2>
       <div class="section-rule"></div>
 
       <div class="projects__grid">
@@ -399,8 +418,8 @@
               <a href="https://github.com/Mahmud0547/kamarob-nature-fund"  target="_blank" rel="noopener" class="project-card__link">GitHub →</a>
             </div>
           </div>
-          <div class="project-card__title">Kamarob Nature Fund</div>
-          <p class="project-card__desc">
+          <div class="project-card__title" data-i18n="proj1.title">Kamarob Nature Fund</div>
+          <p class="project-card__desc" data-i18n="proj1.desc">
             Multilingual nature conservation website for a Tajik NGO protecting
             the Kamarob Gorge — a snow leopard habitat. Features 4-language
             UI switching, dynamic project pages with slug-based routing,
@@ -424,8 +443,8 @@
               <a href="https://github.com/Mahmud0547/simorgh-dawn" target="_blank" rel="noopener" class="project-card__link">GitHub →</a>
             </div>
           </div>
-          <div class="project-card__title">Simorgh Dawn</div>
-          <p class="project-card__desc">
+          <div class="project-card__title" data-i18n="proj2.title">Simorgh Dawn</div>
+          <p class="project-card__desc" data-i18n="proj2.desc">
             Rocket flight simulation and Tsiolkovsky equation calculator built
             entirely in the browser. Models real rocket physics — thrust, fuel
             burn rate, and trajectory — with live charts and interactive input.
@@ -443,13 +462,13 @@
           <div class="project-card__header">
             <div class="project-card__icon">⚙️</div>
           </div>
-          <div class="project-card__title">Next Project</div>
-          <p class="project-card__desc">
+          <div class="project-card__title" data-i18n="proj3.title">Next Project</div>
+          <p class="project-card__desc" data-i18n="proj3.desc">
             Something new is in progress. Follow on GitHub or
             Telegram for updates.
           </p>
           <div class="project-card__tags">
-            <span class="tag">Coming soon</span>
+            <span class="tag" data-i18n="tag.soon">Coming soon</span>
           </div>
         </div>
 
@@ -463,9 +482,9 @@
   ==================================================================== -->
   <section id="courses" class="courses-section">
     <div class="container">
-      <div class="section-eyebrow reveal">05 / courses</div>
-      <h2 class="section-title reveal">Certifications</h2>
-      <p class="section-sub reveal">Verified credentials from hands-on learning programs.</p>
+      <div class="section-eyebrow reveal" data-i18n="courses.eyebrow">05 / courses</div>
+      <h2 class="section-title reveal"   data-i18n="courses.title">Certifications</h2>
+      <p class="section-sub reveal"      data-i18n="courses.sub">Verified credentials from hands-on learning programs.</p>
 
       <div class="courses-grid">
 
@@ -477,31 +496,31 @@
           class="course-card reveal" data-delay="1"
         >
           <div class="course-card__header">
-            <span class="course-card__org">freeCodeCamp</span>
-            <span class="course-card__badge">Verified ✓</span>
+            <span class="course-card__org"   data-i18n="c1.org">freeCodeCamp</span>
+            <span class="course-card__badge" data-i18n="c1.badge">Verified ✓</span>
           </div>
-          <h3 class="course-card__title">Responsive Web Design</h3>
-          <p class="course-card__meta">300 hours · March 2026</p>
-          <p class="course-card__desc">
+          <h3 class="course-card__title" data-i18n="c1.title">Responsive Web Design</h3>
+          <p class="course-card__meta"   data-i18n="c1.meta">300 hours · March 2026</p>
+          <p class="course-card__desc"   data-i18n="c1.desc">
             HTML5 semantics, CSS Flexbox &amp; Grid, accessibility, responsive layouts,
             and 5 certification projects built from scratch.
           </p>
-          <span class="course-card__link">View certificate →</span>
+          <span class="course-card__link" data-i18n="c1.link">View certificate →</span>
         </a>
 
         <!-- Placeholder — add your next cert here -->
         <div class="course-card course-card--soon reveal" data-delay="2">
           <div class="course-card__header">
             <span class="course-card__org">freeCodeCamp</span>
-            <span class="course-card__badge course-card__badge--wip">In progress</span>
+            <span class="course-card__badge course-card__badge--wip" data-i18n="c2.badge">In progress</span>
           </div>
-          <h3 class="course-card__title">JavaScript Algorithms &amp; Data Structures</h3>
-          <p class="course-card__meta">300 hours</p>
-          <p class="course-card__desc">
+          <h3 class="course-card__title" data-i18n="c2.title">JavaScript Algorithms &amp; Data Structures</h3>
+          <p class="course-card__meta"   data-i18n="c2.meta">300 hours</p>
+          <p class="course-card__desc"   data-i18n="c2.desc">
             ES6+, functional programming, OOP, regex, debugging,
             and classic algorithm challenges.
           </p>
-          <span class="course-card__link" style="opacity:0.4">Coming soon</span>
+          <span class="course-card__link" data-i18n="c2.link" style="opacity:0.4">Coming soon</span>
         </div>
 
       </div>
@@ -513,13 +532,13 @@
   ==================================================================== -->
   <section id="contact" class="contact-section">
     <div class="container">
-      <div class="section-eyebrow">06 / contact</div>
-      <h2 class="section-title">Let's work together</h2>
+      <div class="section-eyebrow" data-i18n="contact.eyebrow">06 / contact</div>
+      <h2 class="section-title"   data-i18n="contact.title">Let's work together</h2>
       <div class="section-rule"></div>
 
       <div class="contact__box reveal">
-        <h3>Have a project in mind?</h3>
-        <p>
+        <h3 data-i18n="contact.h3">Have a project in mind?</h3>
+        <p data-i18n="contact.p">
           I'm open for freelance projects. Reach out through any platform below
           and I'll get back to you within 24 hours.
         </p>
@@ -540,7 +559,7 @@
   ==================================================================== -->
   <footer class="footer">
     <span class="footer__logo">SimorghDev</span>
-    <span class="footer__copy">Mahmud Faiezov · Dushanbe, Tajikistan · 2026</span>
+    <span class="footer__copy" data-i18n="footer.copy">Mahmud Faiezov · Dushanbe, Tajikistan · 2026</span>
   </footer>
 
   <!-- Cursor glow orb — follows the mouse, moved by JS -->
@@ -549,8 +568,10 @@
   <!-- Back-to-top button — appears after scrolling 300px, smooth scroll to top -->
   <button class="back-to-top" id="back-to-top" aria-label="Back to top">↑</button>
 
-  <!-- JS is in its own file — defer so it runs after HTML is parsed -->
-  <script src="js/main.js" defer></script>
+  <!-- main.js first — it sets window.restartTyping that i18n.js needs -->
+  <script src="js/main.js"  defer></script>
+  <!-- i18n.js second — fetches translations and applies them after main.js runs -->
+  <script src="js/i18n.js"  defer></script>
 
 </body>
 </html>
