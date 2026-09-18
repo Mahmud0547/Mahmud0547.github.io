@@ -1,4 +1,61 @@
 /*
+ * Typing effect in Hero
+ * Cycles through a list of phrases, typing and deleting each one
+ * with a blinking cursor to give the "live terminal" feel.
+ */
+(function initTyping() {
+  const el = document.getElementById('hero-typed');
+  if (!el) return;
+
+  // Phrases to cycle through — edit freely
+  const phrases = [
+    'things for the web.',
+    'landing pages.',
+    'clean interfaces.',
+    'websites that work.',
+  ];
+
+  let phraseIndex = 0;
+  let charIndex   = 0;
+  let deleting    = false;
+
+  function tick() {
+    const current = phrases[phraseIndex];
+
+    if (!deleting) {
+      // Type one character
+      charIndex++;
+      el.textContent = current.slice(0, charIndex);
+
+      if (charIndex === current.length) {
+        // Finished typing — pause then start deleting
+        deleting = true;
+        setTimeout(tick, 1800);
+        return;
+      }
+      setTimeout(tick, 70);
+    } else {
+      // Delete one character
+      charIndex--;
+      el.textContent = current.slice(0, charIndex);
+
+      if (charIndex === 0) {
+        // Finished deleting — move to next phrase
+        deleting = false;
+        phraseIndex = (phraseIndex + 1) % phrases.length;
+        setTimeout(tick, 400);
+        return;
+      }
+      setTimeout(tick, 35); // delete faster than type
+    }
+  }
+
+  // Small delay before starting so the page settles first
+  setTimeout(tick, 1000);
+})();
+
+
+/*
  * Theme Toggle — dark / light mode
  * Saves preference to localStorage so it persists on next visit.
  */
