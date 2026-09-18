@@ -232,6 +232,16 @@ async function initNews() {
     return window.innerWidth <= 768 ? 1 : 3;
   }
 
+  // Calculate and apply card widths based on current viewport
+  function applyCardWidths() {
+    const vw   = track.parentElement.offsetWidth; // actual viewport width
+    const pv   = perView();
+    const gap  = 20;
+    const w    = Math.floor((vw - gap * (pv - 1)) / pv);
+    cards.forEach(c => { c.style.width = w + 'px'; });
+    return w;
+  }
+
   // Max index we can scroll to (don't scroll past the last card)
   function maxIndex() {
     return Math.max(0, total - perView());
@@ -240,11 +250,9 @@ async function initNews() {
   function goTo(index) {
     current = Math.max(0, Math.min(index, maxIndex()));
 
-    // Each card is 33.333% + gap — let the browser calculate via scrollLeft-style transform
-    const cardEl    = cards[0];
-    const cardWidth = cardEl.offsetWidth;
-    const gap       = 20;
-    track.style.transform = `translateX(-${current * (cardWidth + gap)}px)`;
+    const w   = applyCardWidths();
+    const gap = 20;
+    track.style.transform = `translateX(-${current * (w + gap)}px)`;
 
     // Sync dots
     document.querySelectorAll('.news-dot').forEach((dot, i) => {
