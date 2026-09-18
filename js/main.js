@@ -13,27 +13,20 @@ if (localStorage.getItem('theme') === 'light') {
 
 /*
  * Animated counters in Hero stats row
- * Counts up from 0 to target value when the element enters viewport.
+ * Hero is always visible on load — run after a short delay so user sees the animation.
  */
-document.querySelectorAll('.hero__stat-num').forEach(el => {
-  const target  = +el.dataset.target;
-  const duration = 1200; // ms
-  const step     = duration / target;
-
-  const observer = new IntersectionObserver(([entry]) => {
-    if (!entry.isIntersecting) return;
-    observer.disconnect();
-
-    let count = 0;
-    const timer = setInterval(() => {
+setTimeout(() => {
+  document.querySelectorAll('.hero__stat-num').forEach(el => {
+    const target = +el.dataset.target;
+    const step   = 1200 / target; // spread over 1.2 seconds
+    let count    = 0;
+    const timer  = setInterval(() => {
       count++;
       el.textContent = count;
       if (count >= target) clearInterval(timer);
     }, step);
-  }, { threshold: 0.5 });
-
-  observer.observe(el);
-});
+  });
+}, 600); // slight delay so page finishes rendering first
 
 themeBtn.addEventListener('click', () => {
   const isLight = root.getAttribute('data-theme') === 'light';
