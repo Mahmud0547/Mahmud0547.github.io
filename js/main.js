@@ -1,4 +1,30 @@
 /*
+ * Theme Toggle — dark / light mode
+ * Saves preference to localStorage so it persists on next visit.
+ */
+const themeBtn = document.getElementById('theme-toggle');
+const root     = document.documentElement;
+
+// Apply saved preference on load
+if (localStorage.getItem('theme') === 'light') {
+  root.setAttribute('data-theme', 'light');
+  themeBtn.textContent = '☀️';
+}
+
+themeBtn.addEventListener('click', () => {
+  const isLight = root.getAttribute('data-theme') === 'light';
+  if (isLight) {
+    root.removeAttribute('data-theme');
+    themeBtn.textContent = '🌙';
+    localStorage.setItem('theme', 'dark');
+  } else {
+    root.setAttribute('data-theme', 'light');
+    themeBtn.textContent = '☀️';
+    localStorage.setItem('theme', 'light');
+  }
+});
+
+/*
  * Scroll Reveal
  * Watches all elements with class "reveal" and adds "visible"
  * once they enter the viewport. Uses IntersectionObserver for

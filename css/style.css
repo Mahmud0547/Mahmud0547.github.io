@@ -124,6 +124,45 @@ section {
   border-bottom: 1px solid var(--color-border);
 }
 
+/* Theme toggle button */
+.theme-toggle {
+  background: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  color: var(--color-text);
+  font-size: 1rem;
+  width: 36px;
+  height: 36px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color var(--transition);
+  flex-shrink: 0;
+}
+
+.theme-toggle:hover {
+  border-color: var(--color-accent);
+}
+
+/* ==========================================================================
+   LIGHT THEME — applied via [data-theme="light"] on <html>
+========================================================================== */
+[data-theme="light"] {
+  --color-bg:       #f8f9fc;
+  --color-surface:  #ffffff;
+  --color-surface2: #f0f1f5;
+  --color-border:   #dde1ea;
+  --color-text:     #0f1117;
+  --color-muted:    #5a6478;
+  --color-dim:      #9aa0b0;
+}
+
+/* Nav background adjust for light mode */
+[data-theme="light"] .nav {
+  background: rgba(248, 249, 252, 0.88);
+}
+
 /* Logo mark */
 .nav__logo {
   font-family: var(--font-mono);
