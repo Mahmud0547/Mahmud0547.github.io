@@ -396,6 +396,43 @@ initNews();
 
 
 /*
+ * 3D Tilt effect on project & course cards
+ * On mousemove: card tilts toward the cursor direction.
+ * On mouseleave: card snaps back to flat.
+ * Works by reading cursor position relative to the card center
+ * and converting that to rotateX/rotateY values.
+ */
+(function initTilt() {
+  // Skip on touch devices — tilt doesn't make sense without a mouse
+  if (window.matchMedia('(hover: none)').matches) return;
+
+  const MAX_TILT = 10; // max degrees of tilt
+
+  document.querySelectorAll('.project-card:not(.project-card--ghost), .course-card:not(.course-card--soon)').forEach(card => {
+    card.addEventListener('mousemove', (e) => {
+      const rect   = card.getBoundingClientRect();
+      const centerX = rect.left + rect.width  / 2;
+      const centerY = rect.top  + rect.height / 2;
+
+      // Normalise cursor position to -1 … +1
+      const dx = (e.clientX - centerX) / (rect.width  / 2);
+      const dy = (e.clientY - centerY) / (rect.height / 2);
+
+      // rotateY tilts left-right, rotateX tilts up-down (inverted)
+      card.style.transform = `perspective(600px) rotateX(${-dy * MAX_TILT}deg) rotateY(${dx * MAX_TILT}deg) scale(1.02)`;
+      card.style.transition = 'transform 0.08s ease';
+    });
+
+    card.addEventListener('mouseleave', () => {
+      // Snap back smoothly
+      card.style.transform = '';
+      card.style.transition = 'transform 0.4s ease';
+    });
+  });
+})();
+
+
+/*
  * Cursor glow — soft teal orb that follows the mouse
  * Uses requestAnimationFrame so it stays smooth without janking the page.
  * Hidden on touch devices (no cursor there anyway).
