@@ -155,28 +155,47 @@ async function initNews() {
   let ownNews = [];
   let extNews = [];
 
+  // Helper: fetch with timeout so we never hang forever
+  async function fetchWithTimeout(url, ms = 6000) {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), ms);
+    try {
+      const res = await fetch(url, { signal: controller.signal });
+      clearTimeout(timer);
+      return res;
+    } catch (e) {
+      clearTimeout(timer);
+      throw e;
+    }
+  }
+
   // --- 1. Fetch own news (priority) ---
   try {
-    const res  = await fetch('data/news.json');
-    ownNews    = await res.json();
+    const res = await fetchWithTimeout('data/news.json');
+    if (res.ok) ownNews = await res.json();
   } catch {
-    // File missing or empty — that's fine, we fall back to external
+    // File missing or empty — fall back to external only
   }
 
   // --- 2. Fetch external news from Dev.to (free, no API key) ---
+  // Using singular "tag" parameter — the correct Dev.to API format
   try {
-    const res  = await fetch('https://dev.to/api/articles?tags=webdev,javascript,css&per_page=9&top=7');
-    const data = await res.json();
-    extNews = data.map(a => ({
-      title:  a.title,
-      desc:   a.description || a.tag_list.join(', '),
-      url:    a.url,
-      date:   a.published_at ? a.published_at.slice(0, 10) : '',
-      tag:    a.user.name || 'Dev.to',
-      own:    false
-    }));
+    const res  = await fetchWithTimeout('https://dev.to/api/articles?tag=webdev&per_page=9&top=7');
+    if (res.ok) {
+      const data = await res.json();
+      if (Array.isArray(data)) {
+        extNews = data.map(a => ({
+          title: a.title,
+          desc:  a.description || '',
+          url:   a.url,
+          date:  a.published_at ? a.published_at.slice(0, 10) : '',
+          tag:   a.user?.name || 'Dev.to',
+          own:   false
+        }));
+      }
+    }
   } catch {
-    // Dev.to unavailable — we'll show only own news or empty state
+    // Dev.to unavailable or timed out — own news only
   }
 
   // --- 3. Merge: own news first, external fills the rest ---
