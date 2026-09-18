@@ -396,6 +396,48 @@ initNews();
 
 
 /*
+ * Cursor glow — soft teal orb that follows the mouse
+ * Uses requestAnimationFrame so it stays smooth without janking the page.
+ * Hidden on touch devices (no cursor there anyway).
+ */
+(function initCursorGlow() {
+  // Skip on touch-only devices — they have no cursor
+  if (window.matchMedia('(hover: none)').matches) return;
+
+  const orb = document.getElementById('cursor-glow');
+  if (!orb) return;
+
+  let mouseX = 0, mouseY = 0;
+  let orbX   = 0, orbY   = 0;
+  let rafId  = null;
+
+  document.addEventListener('mousemove', (e) => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+    // Show on first move
+    orb.style.opacity = '1';
+
+    if (!rafId) loop();
+  }, { passive: true });
+
+  // Lazy follow — orb trails slightly behind for a soft feel
+  function loop() {
+    orbX += (mouseX - orbX) * 0.1;
+    orbY += (mouseY - orbY) * 0.1;
+    orb.style.left = orbX + 'px';
+    orb.style.top  = orbY + 'px';
+
+    // Keep looping only while still moving
+    if (Math.abs(mouseX - orbX) > 0.5 || Math.abs(mouseY - orbY) > 0.5) {
+      rafId = requestAnimationFrame(loop);
+    } else {
+      rafId = null;
+    }
+  }
+})();
+
+
+/*
  * Back-to-top button
  * Shows the button once the user has scrolled past 300px.
  * Clicking it scrolls smoothly back to the very top.

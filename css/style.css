@@ -829,6 +829,25 @@ section {
 }
 
 /* ==========================================================================
+   CURSOR GLOW
+   A soft teal orb that follows the mouse — fixed div moved via JS.
+   pointer-events: none so it never blocks clicks.
+========================================================================== */
+.cursor-glow {
+  position: fixed;
+  width: 340px;
+  height: 340px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0,200,150,0.13) 0%, transparent 70%);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 0;
+  transition: opacity 0.3s ease;
+  /* Start hidden — JS positions it on first mousemove */
+  opacity: 0;
+}
+
+/* ==========================================================================
    TYPING CURSOR
    The blinking | after the typed text — pure CSS, no JS needed for the blink.
 ========================================================================== */
