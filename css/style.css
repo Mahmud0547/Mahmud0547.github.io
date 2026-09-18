@@ -31,6 +31,22 @@
   padding: 0;
 }
 
+/* ==========================================================================
+   NOISE TEXTURE OVERLAY
+   Fixed layer on top of everything — adds subtle grain depth.
+   opacity kept very low so it's felt, not seen.
+========================================================================== */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-size: 200px 200px;
+}
+
 html {
   scroll-behavior: smooth;
   font-size: 16px;
@@ -142,6 +158,41 @@ section {
 /* ==========================================================================
    HERO
 ========================================================================== */
+
+/* The section needs position:relative so the glow blobs stay inside it */
+#home {
+  position: relative;
+  overflow: hidden;
+}
+
+/* Teal glow — lives behind everything on the left side */
+#home::before {
+  content: '';
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0, 200, 150, 0.13) 0%, transparent 70%);
+  top: 5%;
+  left: -150px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Indigo glow — sits on the right, slightly lower */
+#home::after {
+  content: '';
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(99, 102, 241, 0.11) 0%, transparent 70%);
+  top: 35%;
+  right: -100px;
+  pointer-events: none;
+  z-index: 0;
+}
+
 .hero {
   min-height: 100vh;
   display: grid;
@@ -149,6 +200,8 @@ section {
   align-items: center;
   gap: 64px;
   padding-top: 80px; /* offset for fixed nav */
+  position: relative;
+  z-index: 1; /* sit above the glow blobs */
 }
 
 .hero__left {
@@ -315,6 +368,32 @@ section {
 /* ==========================================================================
    ABOUT
 ========================================================================== */
+
+/* Subtle indigo glow on the about section — mirrors the hero's right glow */
+#about {
+  position: relative;
+  overflow: hidden;
+}
+
+#about::before {
+  content: '';
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(99, 102, 241, 0.07) 0%, transparent 70%);
+  bottom: 0;
+  left: 30%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Make sure the section content sits above the glow */
+#about .container,
+#about .map-widget {
+  position: relative;
+  z-index: 1;
+}
 .about__grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
