@@ -1104,14 +1104,23 @@ section {
 ========================================================================== */
 .reveal {
   opacity: 0;
-  transform: translateY(22px);
-  transition: opacity 0.55s ease, transform 0.55s ease;
+  transform: translateY(32px);
+  /* cubic-bezier gives a natural deceleration — feels hand-crafted, not robotic */
+  transition: opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .reveal.visible {
   opacity: 1;
   transform: none;
 }
+
+/* Stagger delays — add data-delay="1" through "5" on siblings to cascade them */
+.reveal[data-delay="1"] { transition-delay: 0.08s; }
+.reveal[data-delay="2"] { transition-delay: 0.16s; }
+.reveal[data-delay="3"] { transition-delay: 0.24s; }
+.reveal[data-delay="4"] { transition-delay: 0.32s; }
+.reveal[data-delay="5"] { transition-delay: 0.40s; }
 
 /* ==========================================================================
    RESPONSIVE BREAKPOINTS
