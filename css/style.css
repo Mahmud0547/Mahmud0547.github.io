@@ -829,6 +829,56 @@ section {
 }
 
 /* ==========================================================================
+   BACK-TO-TOP BUTTON
+   Fixed in the bottom-right corner, hidden until user scrolls 300px down.
+   JS adds/removes the "visible" class to trigger the fade+slide animation.
+========================================================================== */
+.back-to-top {
+  position: fixed;
+  bottom: 32px;
+  right: 32px;
+  z-index: 1000;
+
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+
+  background: var(--color-accent);
+  color: #000;
+  font-size: 1.1rem;
+  font-weight: 700;
+  line-height: 1;
+
+  border: none;
+  cursor: pointer;
+
+  /* Start invisible and slightly below its resting position */
+  opacity: 0;
+  transform: translateY(12px);
+  pointer-events: none;
+  transition: opacity 240ms ease, transform 240ms ease, background 180ms ease;
+}
+
+/* Shown when JS adds the class */
+.back-to-top.visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.back-to-top:hover {
+  background: #00e0a8; /* slightly brighter teal on hover */
+}
+
+/* On mobile push it slightly lower so it doesn't overlap nav */
+@media (max-width: 600px) {
+  .back-to-top {
+    bottom: 20px;
+    right: 16px;
+  }
+}
+
+/* ==========================================================================
    SKILLS
 ========================================================================== */
 .skills-section {

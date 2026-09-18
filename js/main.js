@@ -336,3 +336,20 @@ async function initNews() {
 }
 
 initNews();
+
+
+/*
+ * Back-to-top button
+ * Shows the button once the user has scrolled past 300px.
+ * Clicking it scrolls smoothly back to the very top.
+ */
+const backToTopBtn = document.getElementById('back-to-top');
+
+window.addEventListener('scroll', () => {
+  // Toggle "visible" class based on scroll position
+  backToTopBtn.classList.toggle('visible', window.scrollY > 300);
+}, { passive: true }); // passive = no janky scroll blocking
+
+backToTopBtn.addEventListener('click', () => {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
