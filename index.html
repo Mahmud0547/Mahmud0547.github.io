@@ -3,522 +3,1219 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SimorghDev — Mahmud</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet" />
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  <meta name="description" content="Mahmud — Frontend Developer from Tajikistan. I build responsive websites with HTML, CSS, JavaScript and Supabase." />
+  <title>Mahmud · Frontend Developer</title>
 
+  <!-- Fonts: Space Grotesk for headings, JetBrains Mono for code elements -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ==========================================================================
+       DESIGN TOKENS — change these to retheme the whole site
+    ========================================================================== */
     :root {
-      --bg: #0a0a0f;
-      --bg2: #12121a;
-      --bg3: #1a1a26;
-      --gold: #f5a623;
-      --gold2: #ffcc66;
-      --text: #e8e8f0;
-      --muted: #8888aa;
-      --border: #2a2a3a;
+      --color-bg:        #070711;
+      --color-surface:   #0f0f1e;
+      --color-surface2:  #171730;
+      --color-border:    #1e1e3a;
+      --color-accent:    #00c896;   /* teal/emerald — primary accent */
+      --color-accent2:   #6366f1;   /* indigo — secondary accent */
+      --color-text:      #e2e8f0;
+      --color-muted:     #7b87a0;
+      --color-dim:       #3a4460;
+
+      --font-sans:  'Space Grotesk', system-ui, sans-serif;
+      --font-mono:  'JetBrains Mono', 'Fira Code', monospace;
+
+      --radius-sm:  6px;
+      --radius-md:  12px;
+      --radius-lg:  20px;
+
+      --transition: 220ms ease;
     }
 
-    html { scroll-behavior: smooth; }
+    /* ==========================================================================
+       RESET & BASE
+    ========================================================================== */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      font-size: 16px;
+    }
 
     body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'Inter', sans-serif;
-      line-height: 1.6;
+      background-color: var(--color-bg);
+      color: var(--color-text);
+      font-family: var(--font-sans);
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
     }
 
-    /* NAV */
-    nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 100;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 18px 48px;
-      background: rgba(10,10,15,0.85);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--border);
-    }
-    .nav-logo {
-      font-family: 'Fira Code', monospace;
-      font-size: 1.1rem;
-      font-weight: 500;
-      color: var(--gold);
+    a {
+      color: inherit;
       text-decoration: none;
     }
-    .nav-logo span { color: var(--text); }
-    nav ul {
-      list-style: none;
-      display: flex;
-      gap: 32px;
-    }
-    nav a {
-      color: var(--muted);
-      text-decoration: none;
-      font-size: 0.9rem;
-      transition: color 0.2s;
-    }
-    nav a:hover { color: var(--gold); }
 
-    /* HERO */
-    .hero {
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: flex-start;
-      padding: 0 48px;
-      max-width: 900px;
+    img {
+      display: block;
+      max-width: 100%;
+    }
+
+    /* ==========================================================================
+       LAYOUT UTILITIES
+    ========================================================================== */
+    .container {
+      max-width: 960px;
       margin: 0 auto;
-      position: relative;
-    }
-    .hero-tag {
-      font-family: 'Fira Code', monospace;
-      font-size: 0.85rem;
-      color: var(--gold);
-      margin-bottom: 16px;
-      opacity: 0;
-      animation: fadeUp 0.6s ease 0.2s forwards;
-    }
-    .hero h1 {
-      font-size: clamp(2.5rem, 6vw, 4.5rem);
-      font-weight: 700;
-      line-height: 1.1;
-      margin-bottom: 20px;
-      opacity: 0;
-      animation: fadeUp 0.6s ease 0.4s forwards;
-    }
-    .hero h1 .gold { color: var(--gold); }
-    .hero p {
-      font-size: 1.15rem;
-      color: var(--muted);
-      max-width: 520px;
-      margin-bottom: 40px;
-      opacity: 0;
-      animation: fadeUp 0.6s ease 0.6s forwards;
-    }
-    .hero-btns {
-      display: flex;
-      gap: 16px;
-      flex-wrap: wrap;
-      opacity: 0;
-      animation: fadeUp 0.6s ease 0.8s forwards;
-    }
-    .btn {
-      padding: 12px 28px;
-      border-radius: 8px;
-      font-size: 0.95rem;
-      font-weight: 500;
-      text-decoration: none;
-      transition: all 0.2s;
-      cursor: pointer;
-      border: none;
-    }
-    .btn-gold {
-      background: var(--gold);
-      color: #000;
-    }
-    .btn-gold:hover { background: var(--gold2); transform: translateY(-2px); }
-    .btn-outline {
-      background: transparent;
-      color: var(--text);
-      border: 1px solid var(--border);
-    }
-    .btn-outline:hover { border-color: var(--gold); color: var(--gold); transform: translateY(-2px); }
-
-    /* BIRD decoration */
-    .hero-deco {
-      position: absolute;
-      right: 0;
-      top: 50%;
-      transform: translateY(-50%);
-      font-size: 12rem;
-      opacity: 0.04;
-      user-select: none;
-      pointer-events: none;
+      padding: 0 32px;
     }
 
-    /* SECTIONS */
     section {
-      padding: 96px 48px;
-      max-width: 900px;
-      margin: 0 auto;
+      padding: 100px 0;
     }
-    .section-label {
-      font-family: 'Fira Code', monospace;
-      font-size: 0.8rem;
-      color: var(--gold);
+
+    /* Section header pattern used in every section */
+    .section-eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      color: var(--color-accent);
+      letter-spacing: 0.12em;
       text-transform: uppercase;
-      letter-spacing: 2px;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
     }
-    h2 {
-      font-size: 2rem;
+
+    .section-title {
+      font-size: clamp(1.75rem, 3vw, 2.25rem);
       font-weight: 700;
+      margin-bottom: 14px;
+    }
+
+    .section-rule {
+      width: 40px;
+      height: 3px;
+      background: var(--color-accent);
+      border-radius: 2px;
       margin-bottom: 48px;
     }
-    .divider {
-      width: 48px;
-      height: 3px;
-      background: var(--gold);
-      border-radius: 2px;
-      margin: 12px 0 48px;
+
+    /* ==========================================================================
+       NAVIGATION
+    ========================================================================== */
+    .nav {
+      position: fixed;
+      inset: 0 0 auto 0;
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 48px;
+      background: rgba(7, 7, 17, 0.82);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--color-border);
     }
 
-    /* ABOUT */
-    .about-grid {
+    /* Logo mark */
+    .nav__logo {
+      font-family: var(--font-mono);
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--color-accent);
+      letter-spacing: -0.02em;
+    }
+
+    .nav__logo em {
+      color: var(--color-text);
+      font-style: normal;
+    }
+
+    /* Navigation links */
+    .nav__links {
+      list-style: none;
+      display: flex;
+      gap: 36px;
+    }
+
+    .nav__links a {
+      font-size: 0.875rem;
+      color: var(--color-muted);
+      transition: color var(--transition);
+    }
+
+    .nav__links a:hover {
+      color: var(--color-accent);
+    }
+
+    /* ==========================================================================
+       HERO
+    ========================================================================== */
+    .hero {
+      min-height: 100vh;
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 48px;
-      align-items: start;
+      align-items: center;
+      gap: 64px;
+      padding-top: 80px; /* offset for fixed nav */
     }
-    .about-text p {
-      color: var(--muted);
-      margin-bottom: 16px;
-      font-size: 1rem;
-    }
-    .about-text p strong { color: var(--text); }
-    .about-stats {
+
+    .hero__left {
       display: flex;
       flex-direction: column;
       gap: 20px;
     }
-    .stat-card {
-      background: var(--bg2);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 20px 24px;
-    }
-    .stat-num {
-      font-size: 1.8rem;
-      font-weight: 700;
-      color: var(--gold);
-    }
-    .stat-label {
-      font-size: 0.85rem;
-      color: var(--muted);
-      margin-top: 4px;
+
+    .hero__tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--color-muted);
+      border: 1px solid var(--color-border);
+      border-radius: 100px;
+      padding: 5px 14px;
+      width: fit-content;
     }
 
-    /* SKILLS */
-    .skills-grid {
+    /* Green pulse dot */
+    .hero__tag::before {
+      content: '';
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--color-accent);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0.3; }
+    }
+
+    .hero__name {
+      font-size: clamp(2.8rem, 6vw, 4.2rem);
+      font-weight: 700;
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+    }
+
+    .hero__name .accent {
+      color: var(--color-accent);
+    }
+
+    .hero__subtitle {
+      font-size: 1.05rem;
+      color: var(--color-muted);
+      max-width: 480px;
+      line-height: 1.7;
+    }
+
+    .hero__cta {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-top: 8px;
+    }
+
+    /* Reusable button styles */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 26px;
+      border-radius: var(--radius-sm);
+      font-family: var(--font-sans);
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      border: none;
+      transition: all var(--transition);
+      text-decoration: none;
+    }
+
+    .btn--primary {
+      background: var(--color-accent);
+      color: #000;
+    }
+
+    .btn--primary:hover {
+      background: #00e0a8;
+      transform: translateY(-2px);
+    }
+
+    .btn--ghost {
+      background: transparent;
+      color: var(--color-text);
+      border: 1px solid var(--color-border);
+    }
+
+    .btn--ghost:hover {
+      border-color: var(--color-accent);
+      color: var(--color-accent);
+      transform: translateY(-2px);
+    }
+
+    /* Terminal widget in hero right column */
+    .hero__terminal {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+    }
+
+    .terminal__bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 16px;
+      background: var(--color-surface2);
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    /* Traffic light dots */
+    .terminal__dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+
+    .terminal__dot--red    { background: #ff5f57; }
+    .terminal__dot--yellow { background: #febc2e; }
+    .terminal__dot--green  { background: #28c840; }
+
+    .terminal__title {
+      margin-left: 8px;
+      font-size: 0.75rem;
+      color: var(--color-muted);
+    }
+
+    .terminal__body {
+      padding: 24px 20px;
+      line-height: 1.9;
+    }
+
+    .terminal__line { display: flex; gap: 10px; }
+
+    .t-prompt { color: var(--color-accent2); }
+    .t-cmd    { color: var(--color-text); }
+    .t-out    { color: var(--color-muted); padding-left: 20px; }
+    .t-accent { color: var(--color-accent); }
+    .t-blank  { height: 12px; }
+
+    /* Blinking cursor */
+    .cursor {
+      display: inline-block;
+      width: 8px;
+      height: 1em;
+      background: var(--color-accent);
+      vertical-align: middle;
+      animation: blink 1s step-end infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0; }
+    }
+
+    /* ==========================================================================
+       ABOUT
+    ========================================================================== */
+    .about__grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: start;
+    }
+
+    .about__text p {
+      color: var(--color-muted);
+      margin-bottom: 18px;
+      font-size: 0.97rem;
+    }
+
+    .about__text p strong {
+      color: var(--color-text);
+      font-weight: 600;
+    }
+
+    .about__cards {
+      display: flex;
+      flex-direction: column;
       gap: 16px;
     }
-    .skill-card {
-      background: var(--bg2);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 20px 24px;
-      transition: border-color 0.2s, transform 0.2s;
+
+    .info-card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      padding: 18px 22px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      transition: border-color var(--transition);
     }
-    .skill-card:hover {
-      border-color: var(--gold);
-      transform: translateY(-4px);
+
+    .info-card:hover {
+      border-color: var(--color-accent);
     }
-    .skill-icon { font-size: 1.8rem; margin-bottom: 10px; }
-    .skill-name {
-      font-weight: 600;
-      font-size: 0.95rem;
+
+    .info-card__icon {
+      font-size: 1.4rem;
+      flex-shrink: 0;
     }
-    .skill-level {
+
+    .info-card__label {
       font-size: 0.78rem;
-      color: var(--muted);
-      margin-top: 4px;
+      color: var(--color-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 2px;
     }
-    .skill-bar {
+
+    .info-card__value {
+      font-size: 0.95rem;
+      font-weight: 500;
+    }
+
+    /* ==========================================================================
+       MAP WIDGET
+    ========================================================================== */
+    .map-widget {
+      margin-top: 48px;
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+    }
+
+    .map-widget__inner {
+      position: relative;
+    }
+
+    /* The SVG map fills the container */
+    .map-widget__svg {
+      width: 100%;
+      height: auto;
+      display: block;
+      opacity: 0.75;
+    }
+
+    /* Animated dashed line between two points */
+    .map-line {
+      stroke: var(--color-accent);
+      stroke-width: 1.5;
+      stroke-dasharray: 6 4;
+      fill: none;
+      animation: dash-move 1.8s linear infinite;
+    }
+
+    @keyframes dash-move {
+      to { stroke-dashoffset: -20; }
+    }
+
+    /* Location dot — home (Tajikistan) */
+    .map-dot--home {
+      fill: var(--color-accent);
+      filter: drop-shadow(0 0 5px var(--color-accent));
+    }
+
+    /* Location dot — visitor */
+    .map-dot--visitor {
+      fill: var(--color-accent2);
+      filter: drop-shadow(0 0 5px var(--color-accent2));
+    }
+
+    .map-widget__caption {
+      padding: 14px 20px;
+      font-size: 0.83rem;
+      color: var(--color-muted);
+      border-top: 1px solid var(--color-border);
+      text-align: center;
+    }
+
+    .map-widget__caption strong {
+      color: var(--color-accent);
+    }
+
+    /* ==========================================================================
+       SKILLS
+    ========================================================================== */
+    .skills-section {
+      background: var(--color-surface);
+      border-top: 1px solid var(--color-border);
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .skills__grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+      gap: 14px;
+    }
+
+    .skill-card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      padding: 18px 20px;
+      transition: border-color var(--transition), transform var(--transition);
+    }
+
+    .skill-card:hover {
+      border-color: var(--color-accent);
+      transform: translateY(-3px);
+    }
+
+    .skill-card__icon  { font-size: 1.5rem; margin-bottom: 8px; }
+    .skill-card__name  { font-size: 0.9rem; font-weight: 600; }
+    .skill-card__level { font-size: 0.75rem; color: var(--color-muted); margin-top: 3px; }
+
+    /* Skill progress bar */
+    .skill-card__bar {
       margin-top: 10px;
-      height: 3px;
-      background: var(--border);
+      height: 2px;
+      background: var(--color-border);
       border-radius: 2px;
       overflow: hidden;
     }
-    .skill-fill {
+
+    .skill-card__fill {
       height: 100%;
-      background: var(--gold);
+      background: linear-gradient(90deg, var(--color-accent), var(--color-accent2));
       border-radius: 2px;
+      /* Width set inline per skill */
     }
 
-    /* PROJECTS */
-    .projects-grid {
+    /* ==========================================================================
+       PROJECTS
+    ========================================================================== */
+    .projects__grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
       gap: 24px;
     }
+
     .project-card {
-      background: var(--bg2);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 28px;
-      transition: border-color 0.2s, transform 0.2s;
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: 30px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      transition: border-color var(--transition), transform var(--transition);
     }
+
     .project-card:hover {
-      border-color: var(--gold);
+      border-color: var(--color-accent);
       transform: translateY(-4px);
     }
-    .project-top {
+
+    .project-card__header {
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
-      margin-bottom: 16px;
     }
-    .project-icon { font-size: 1.8rem; }
-    .project-links { display: flex; gap: 12px; }
-    .project-links a {
-      color: var(--muted);
-      text-decoration: none;
-      font-size: 0.85rem;
-      transition: color 0.2s;
-      border: 1px solid var(--border);
+
+    .project-card__icon { font-size: 1.8rem; }
+
+    .project-card__links {
+      display: flex;
+      gap: 10px;
+    }
+
+    .project-card__link {
+      font-size: 0.8rem;
+      color: var(--color-muted);
+      border: 1px solid var(--color-border);
       padding: 4px 12px;
-      border-radius: 6px;
+      border-radius: var(--radius-sm);
+      transition: all var(--transition);
     }
-    .project-links a:hover { color: var(--gold); border-color: var(--gold); }
-    .project-card h3 {
-      font-size: 1.1rem;
+
+    .project-card__link:hover {
+      color: var(--color-accent);
+      border-color: var(--color-accent);
+    }
+
+    .project-card__title {
+      font-size: 1.05rem;
       font-weight: 600;
-      margin-bottom: 10px;
     }
-    .project-card p {
-      color: var(--muted);
-      font-size: 0.9rem;
-      line-height: 1.6;
-      margin-bottom: 20px;
+
+    .project-card__desc {
+      font-size: 0.88rem;
+      color: var(--color-muted);
+      line-height: 1.65;
     }
-    .project-tags {
+
+    .project-card__tags {
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
-    }
-    .tag {
-      font-family: 'Fira Code', monospace;
-      font-size: 0.75rem;
-      background: var(--bg3);
-      color: var(--gold);
-      padding: 3px 10px;
-      border-radius: 4px;
-      border: 1px solid var(--border);
+      margin-top: auto;
     }
 
-    /* CONTACT */
-    .contact-box {
-      background: var(--bg2);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 48px;
+    .tag {
+      font-family: var(--font-mono);
+      font-size: 0.73rem;
+      background: var(--color-surface2);
+      color: var(--color-accent);
+      padding: 3px 10px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--color-border);
+    }
+
+    /* Placeholder card style */
+    .project-card--ghost {
+      border-style: dashed;
+      opacity: 0.55;
+    }
+
+    /* ==========================================================================
+       CONTACT
+    ========================================================================== */
+    .contact-section {
+      background: var(--color-surface);
+      border-top: 1px solid var(--color-border);
+    }
+
+    .contact__box {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: 56px 48px;
       text-align: center;
     }
-    .contact-box h3 {
-      font-size: 1.6rem;
+
+    .contact__box h3 {
+      font-size: 1.7rem;
       font-weight: 700;
       margin-bottom: 12px;
     }
-    .contact-box p {
-      color: var(--muted);
-      margin-bottom: 32px;
-      max-width: 400px;
-      margin-left: auto;
-      margin-right: auto;
+
+    .contact__box p {
+      color: var(--color-muted);
+      max-width: 420px;
+      margin: 0 auto 36px;
     }
-    .contact-links {
+
+    .contact__links {
       display: flex;
-      justify-content: center;
-      gap: 16px;
       flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
     }
 
-    /* FOOTER */
-    footer {
-      text-align: center;
-      padding: 32px 48px;
-      color: var(--muted);
-      font-size: 0.85rem;
-      border-top: 1px solid var(--border);
-      font-family: 'Fira Code', monospace;
-    }
-    footer span { color: var(--gold); }
-
-    /* ANIMATIONS */
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
+    /* ==========================================================================
+       FOOTER
+    ========================================================================== */
+    .footer {
+      border-top: 1px solid var(--color-border);
+      padding: 28px 48px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      color: var(--color-muted);
     }
 
-    /* RESPONSIVE */
+    .footer__logo { color: var(--color-accent); }
+    .footer__copy { color: var(--color-dim); }
+
+    /* ==========================================================================
+       SCROLL REVEAL — elements start invisible, JS adds .visible
+    ========================================================================== */
+    .reveal {
+      opacity: 0;
+      transform: translateY(22px);
+      transition: opacity 0.55s ease, transform 0.55s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: none;
+    }
+
+    /* ==========================================================================
+       RESPONSIVE BREAKPOINTS
+    ========================================================================== */
     @media (max-width: 768px) {
-      nav { padding: 16px 24px; }
-      nav ul { gap: 20px; }
-      .hero { padding: 0 24px; }
-      section { padding: 64px 24px; }
-      .about-grid { grid-template-columns: 1fr; }
-      .projects-grid { grid-template-columns: 1fr; }
-      .contact-box { padding: 32px 24px; }
+      .nav { padding: 16px 20px; }
+      .nav__links { display: none; }  /* could add hamburger menu later */
+
+      .hero {
+        grid-template-columns: 1fr;
+        min-height: auto;
+        padding: 120px 0 60px;
+      }
+
+      .hero__terminal { display: none; } /* hide on mobile, show content only */
+
+      .about__grid   { grid-template-columns: 1fr; }
+      .projects__grid { grid-template-columns: 1fr; }
+
+      .contact__box  { padding: 36px 24px; }
+
+      .footer {
+        flex-direction: column;
+        gap: 8px;
+        text-align: center;
+        padding: 24px;
+      }
     }
   </style>
 </head>
 <body>
 
-<!-- NAV -->
-<nav>
-  <a href="#" class="nav-logo">Simorgh<span>Dev</span></a>
-  <ul>
-    <li><a href="#about">About</a></li>
-    <li><a href="#skills">Skills</a></li>
-    <li><a href="#projects">Projects</a></li>
-    <li><a href="#contact">Contact</a></li>
-  </ul>
-</nav>
+  <!-- ====================================================================
+       NAVIGATION
+  ==================================================================== -->
+  <nav class="nav">
+    <a href="#home" class="nav__logo">Simorgh<em>Dev</em></a>
+    <ul class="nav__links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
 
-<!-- HERO -->
-<div style="max-width:900px;margin:0 auto;position:relative;">
-  <section class="hero" id="home">
-    <div class="hero-tag">// hello world</div>
-    <h1>Hi, I'm <span class="gold">Mahmud</span>.<br/>I build for the web.</h1>
-    <p>Frontend developer focused on clean interfaces and functional web tools. Based in Tajikistan, working globally.</p>
-    <div class="hero-btns">
-      <a href="#projects" class="btn btn-gold">View my work</a>
-      <a href="#contact" class="btn btn-outline">Get in touch</a>
+  <!-- ====================================================================
+       HERO
+  ==================================================================== -->
+  <section id="home">
+    <div class="container">
+      <div class="hero">
+
+        <!-- Left: main content -->
+        <div class="hero__left">
+          <span class="hero__tag">Available for freelance work</span>
+
+          <h1 class="hero__name">
+            Hi, I'm <span class="accent">Mahmud</span>.<br />
+            I build things<br />for the web.
+          </h1>
+
+          <p class="hero__subtitle">
+            Frontend developer from Dushanbe, Tajikistan.
+            I create responsive websites with clean code —
+            HTML, CSS, JavaScript &amp; Supabase.
+          </p>
+
+          <div class="hero__cta">
+            <a href="#projects" class="btn btn--primary">See my work</a>
+            <a href="#contact"  class="btn btn--ghost">Contact me</a>
+          </div>
+        </div>
+
+        <!-- Right: decorative terminal widget -->
+        <div class="hero__terminal" aria-hidden="true">
+          <div class="terminal__bar">
+            <span class="terminal__dot terminal__dot--red"></span>
+            <span class="terminal__dot terminal__dot--yellow"></span>
+            <span class="terminal__dot terminal__dot--green"></span>
+            <span class="terminal__title">mahmud ~ portfolio</span>
+          </div>
+          <div class="terminal__body">
+            <div class="terminal__line">
+              <span class="t-prompt">~</span>
+              <span class="t-cmd">whoami</span>
+            </div>
+            <div class="terminal__line t-out">
+              <span class="t-accent">Mahmud Faiezov</span>
+            </div>
+            <div class="t-blank"></div>
+            <div class="terminal__line">
+              <span class="t-prompt">~</span>
+              <span class="t-cmd">cat skills.txt</span>
+            </div>
+            <div class="terminal__line t-out">HTML · CSS · JavaScript</div>
+            <div class="terminal__line t-out">Supabase · Git · UI Design</div>
+            <div class="t-blank"></div>
+            <div class="terminal__line">
+              <span class="t-prompt">~</span>
+              <span class="t-cmd">cat status.txt</span>
+            </div>
+            <div class="terminal__line t-out">
+              <span class="t-accent">✓ Open for projects</span>
+            </div>
+            <div class="t-blank"></div>
+            <div class="terminal__line">
+              <span class="t-prompt">~</span>
+              <span class="cursor"></span>
+            </div>
+          </div>
+        </div>
+
+      </div>
     </div>
-    <div class="hero-deco">🦅</div>
   </section>
-</div>
 
-<!-- ABOUT -->
-<section id="about">
-  <div class="section-label">01 / about</div>
-  <h2>Who I am</h2>
-  <div class="divider"></div>
-  <div class="about-grid">
-    <div class="about-text">
-      <p>I'm a <strong>Computer Science student</strong> and frontend developer from Dushanbe, Tajikistan. I build web interfaces and tools using HTML, CSS, JavaScript, and C#.</p>
-      <p>I'm passionate about combining <strong>clean code with real-world problems</strong> — from rocket physics simulations to practical web utilities.</p>
-      <p>Currently taking on freelance projects while expanding my skill set with modern development tools and AI-assisted workflows.</p>
-    </div>
-    <div class="about-stats">
-      <div class="stat-card">
-        <div class="stat-num">CS</div>
-        <div class="stat-label">Computer Science Student</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-num">🌍</div>
-        <div class="stat-label">Dushanbe, Tajikistan — Working Globally</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-num">Open</div>
-        <div class="stat-label">Available for Freelance Projects</div>
-      </div>
-    </div>
-  </div>
-</section>
+  <!-- ====================================================================
+       ABOUT
+  ==================================================================== -->
+  <section id="about">
+    <div class="container">
+      <div class="section-eyebrow">01 / about</div>
+      <h2 class="section-title">A bit about me</h2>
+      <div class="section-rule"></div>
 
-<!-- SKILLS -->
-<section id="skills" style="background:var(--bg2);max-width:100%;padding:96px 0;">
-  <div style="max-width:900px;margin:0 auto;padding:0 48px;">
-    <div class="section-label">02 / skills</div>
-    <h2>What I work with</h2>
-    <div class="divider"></div>
-    <div class="skills-grid">
-      <div class="skill-card">
-        <div class="skill-icon">🌐</div>
-        <div class="skill-name">HTML / CSS</div>
-        <div class="skill-level">Solid foundation</div>
-        <div class="skill-bar"><div class="skill-fill" style="width:75%"></div></div>
-      </div>
-      <div class="skill-card">
-        <div class="skill-icon">⚡</div>
-        <div class="skill-name">JavaScript</div>
-        <div class="skill-level">Intermediate</div>
-        <div class="skill-bar"><div class="skill-fill" style="width:55%"></div></div>
-      </div>
-      <div class="skill-card">
-        <div class="skill-icon">🔷</div>
-        <div class="skill-name">C#</div>
-        <div class="skill-level">Fundamentals & OOP</div>
-        <div class="skill-bar"><div class="skill-fill" style="width:45%"></div></div>
-      </div>
-      <div class="skill-card">
-        <div class="skill-icon">🎨</div>
-        <div class="skill-name">UI Design</div>
-        <div class="skill-level">Clean & functional</div>
-        <div class="skill-bar"><div class="skill-fill" style="width:60%"></div></div>
-      </div>
-      <div class="skill-card">
-        <div class="skill-icon">🐙</div>
-        <div class="skill-name">Git / GitHub</div>
-        <div class="skill-level">Version control</div>
-        <div class="skill-bar"><div class="skill-fill" style="width:50%"></div></div>
-      </div>
-      <div class="skill-card">
-        <div class="skill-icon">🤖</div>
-        <div class="skill-name">AI-Assisted Dev</div>
-        <div class="skill-level">Vibe coding workflow</div>
-        <div class="skill-bar"><div class="skill-fill" style="width:70%"></div></div>
+      <div class="about__grid reveal">
+
+        <!-- Text block -->
+        <div class="about__text">
+          <p>
+            I'm a <strong>Computer Science student</strong> and frontend developer
+            based in Dushanbe, Tajikistan. I build web interfaces and tools using
+            HTML, CSS, JavaScript, and Supabase as a backend.
+          </p>
+          <p>
+            My recent project — <strong>Kamarob Nature Fund</strong> — is a
+            multilingual conservation website (EN / RU / DE / TJ) with a live
+            Supabase backend, dynamic slug-based routing, and a custom i18n system,
+            deployed on GitHub Pages.
+          </p>
+          <p>
+            I take on <strong>freelance projects</strong> through Fiverr and Upwork
+            while continuing to grow as a developer. I write clean, readable code
+            that's easy for any developer to pick up and continue.
+          </p>
+        </div>
+
+        <!-- Info cards column -->
+        <div class="about__cards">
+          <div class="info-card">
+            <div class="info-card__icon">🎓</div>
+            <div>
+              <div class="info-card__label">Education</div>
+              <div class="info-card__value">Computer Science Student</div>
+            </div>
+          </div>
+          <div class="info-card">
+            <div class="info-card__icon">📍</div>
+            <div>
+              <div class="info-card__label">Location</div>
+              <div class="info-card__value">Dushanbe, Tajikistan</div>
+            </div>
+          </div>
+          <div class="info-card">
+            <div class="info-card__icon">💼</div>
+            <div>
+              <div class="info-card__label">Status</div>
+              <div class="info-card__value">Open for freelance work</div>
+            </div>
+          </div>
+          <div class="info-card">
+            <div class="info-card__icon">🌐</div>
+            <div>
+              <div class="info-card__label">Languages</div>
+              <div class="info-card__value">Tajik · Russian · English</div>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
-  </div>
-</section>
+      <!-- Interactive map: shows distance from Tajikistan to visitor's location -->
+      <div class="map-widget reveal">
+        <div class="map-widget__inner">
+          <!--
+            Simplified world map as SVG paths.
+            Home pin = Dushanbe, Tajikistan (roughly x=640, y=148 on this viewBox).
+            Visitor pin is placed dynamically by JS after IP lookup.
+          -->
+          <svg
+            id="world-map"
+            class="map-widget__svg"
+            viewBox="0 0 1000 500"
+            xmlns="http://www.w3.org/2000/svg"
+            aria-hidden="true"
+          >
+            <!-- Ocean background -->
+            <rect width="1000" height="500" fill="#0a0a18" />
 
-<!-- PROJECTS -->
-<section id="projects">
-  <div class="section-label">03 / projects</div>
-  <h2>What I've built</h2>
-  <div class="divider"></div>
-  <div class="projects-grid">
-    <div class="project-card">
-      <div class="project-top">
-        <div class="project-icon">🚀</div>
-        <div class="project-links">
-          <a href="https://github.com/Mahmud0547/simorgh-dawn" target="_blank">GitHub →</a>
+            <!-- Rough continent shapes — not pixel-perfect, just readable -->
+            <!-- North America -->
+            <path d="M120,80 L210,70 L240,90 L250,130 L230,160 L220,200 L190,230 L160,250 L140,240 L120,210 L100,180 L90,140 L100,100 Z" fill="#1a1a30" stroke="#2a2a45" stroke-width="0.8"/>
+            <!-- Greenland -->
+            <path d="M230,40 L270,35 L280,55 L265,70 L240,68 L225,55 Z" fill="#1a1a30" stroke="#2a2a45" stroke-width="0.8"/>
+            <!-- South America -->
+            <path d="M180,270 L220,260 L240,280 L245,320 L240,370 L220,400 L195,410 L175,390 L165,350 L165,300 L170,275 Z" fill="#1a1a30" stroke="#2a2a45" stroke-width="0.8"/>
+            <!-- Europe -->
+            <path d="M430,65 L480,60 L500,75 L510,95 L495,115 L470,120 L450,115 L435,100 L425,80 Z" fill="#1a1a30" stroke="#2a2a45" stroke-width="0.8"/>
+            <!-- Africa -->
+            <path d="M440,140 L490,130 L520,145 L535,180 L540,230 L530,280 L510,320 L490,340 L465,335 L445,305 L430,260 L425,210 L430,165 Z" fill="#1a1a30" stroke="#2a2a45" stroke-width="0.8"/>
+            <!-- Asia (large) -->
+            <path d="M510,60 L650,50 L760,65 L800,85 L810,120 L790,155 L750,165 L700,160 L660,175 L620,170 L580,155 L545,140 L515,115 L505,85 Z" fill="#1a1a30" stroke="#2a2a45" stroke-width="0.8"/>
+            <!-- South/Southeast Asia -->
+            <path d="M620,170 L680,165 L720,180 L730,210 L710,230 L680,235 L650,225 L630,205 L615,185 Z" fill="#1a1a30" stroke="#2a2a45" stroke-width="0.8"/>
+            <!-- Australia -->
+            <path d="M750,280 L820,270 L855,285 L865,315 L855,345 L825,360 L790,358 L760,340 L745,310 Z" fill="#1a1a30" stroke="#2a2a45" stroke-width="0.8"/>
+
+            <!-- Line between home and visitor (hidden until JS runs) -->
+            <line id="map-connection-line" class="map-line" x1="0" y1="0" x2="0" y2="0" visibility="hidden" />
+
+            <!-- Home dot: Dushanbe, Tajikistan -->
+            <circle id="dot-home" class="map-dot--home" cx="645" cy="148" r="5" />
+            <text x="655" y="145" fill="#00c896" font-size="9" font-family="sans-serif">Tajikistan</text>
+
+            <!-- Visitor dot (placed by JS) -->
+            <circle id="dot-visitor" class="map-dot--visitor" cx="0" cy="0" r="5" visibility="hidden" />
+            <text id="label-visitor" x="0" y="0" fill="#6366f1" font-size="9" font-family="sans-serif" visibility="hidden"></text>
+          </svg>
+        </div>
+        <p class="map-widget__caption" id="map-caption">
+          📍 Based in <strong>Tajikistan</strong> — loading your location…
+        </p>
+      </div>
+
+  </section>
+
+  <!-- ====================================================================
+       SKILLS
+  ==================================================================== -->
+  <section id="skills" class="skills-section">
+    <div class="container">
+      <div class="section-eyebrow">02 / skills</div>
+      <h2 class="section-title">What I work with</h2>
+      <div class="section-rule"></div>
+
+      <div class="skills__grid reveal">
+
+        <div class="skill-card">
+          <div class="skill-card__icon">🌐</div>
+          <div class="skill-card__name">HTML / CSS</div>
+          <div class="skill-card__level">Responsive layouts, CSS Grid & Flexbox</div>
+          <div class="skill-card__bar">
+            <div class="skill-card__fill" style="width: 78%"></div>
+          </div>
+        </div>
+
+        <div class="skill-card">
+          <div class="skill-card__icon">⚡</div>
+          <div class="skill-card__name">JavaScript</div>
+          <div class="skill-card__level">ES Modules, DOM, async/await</div>
+          <div class="skill-card__bar">
+            <div class="skill-card__fill" style="width: 62%"></div>
+          </div>
+        </div>
+
+        <div class="skill-card">
+          <div class="skill-card__icon">🗄️</div>
+          <div class="skill-card__name">Supabase</div>
+          <div class="skill-card__level">PostgreSQL, RLS, real-time</div>
+          <div class="skill-card__bar">
+            <div class="skill-card__fill" style="width: 55%"></div>
+          </div>
+        </div>
+
+        <div class="skill-card">
+          <div class="skill-card__icon">🌍</div>
+          <div class="skill-card__name">i18n</div>
+          <div class="skill-card__level">Multilingual UI, 4-language systems</div>
+          <div class="skill-card__bar">
+            <div class="skill-card__fill" style="width: 65%"></div>
+          </div>
+        </div>
+
+        <div class="skill-card">
+          <div class="skill-card__icon">🎨</div>
+          <div class="skill-card__name">UI Design</div>
+          <div class="skill-card__level">Clean, functional interfaces</div>
+          <div class="skill-card__bar">
+            <div class="skill-card__fill" style="width: 60%"></div>
+          </div>
+        </div>
+
+        <div class="skill-card">
+          <div class="skill-card__icon">🐙</div>
+          <div class="skill-card__name">Git / GitHub</div>
+          <div class="skill-card__level">Version control, GitHub Pages</div>
+          <div class="skill-card__bar">
+            <div class="skill-card__fill" style="width: 58%"></div>
+          </div>
+        </div>
+
+        <div class="skill-card">
+          <div class="skill-card__icon">🔷</div>
+          <div class="skill-card__name">C#</div>
+          <div class="skill-card__level">OOP fundamentals</div>
+          <div class="skill-card__bar">
+            <div class="skill-card__fill" style="width: 44%"></div>
+          </div>
+        </div>
+
+        <div class="skill-card">
+          <div class="skill-card__icon">🤖</div>
+          <div class="skill-card__name">AI Workflows</div>
+          <div class="skill-card__level">Prompt engineering, Claude Code</div>
+          <div class="skill-card__bar">
+            <div class="skill-card__fill" style="width: 72%"></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================================================================
+       PROJECTS
+  ==================================================================== -->
+  <section id="projects">
+    <div class="container">
+      <div class="section-eyebrow">03 / projects</div>
+      <h2 class="section-title">Things I've built</h2>
+      <div class="section-rule"></div>
+
+      <div class="projects__grid reveal">
+
+        <!-- Project 1: Kamarob Nature Fund -->
+        <div class="project-card">
+          <div class="project-card__header">
+            <div class="project-card__icon">🌿</div>
+            <div class="project-card__links">
+              <a href="https://mahmud0547.github.io/kamarob-nature-fund/" target="_blank" rel="noopener" class="project-card__link">Live ↗</a>
+              <a href="https://github.com/Mahmud0547/kamarob-nature-fund"  target="_blank" rel="noopener" class="project-card__link">GitHub →</a>
+            </div>
+          </div>
+          <div class="project-card__title">Kamarob Nature Fund</div>
+          <p class="project-card__desc">
+            Multilingual nature conservation website for a Tajik NGO protecting
+            the Kamarob Gorge — a snow leopard habitat. Features 4-language
+            UI switching, dynamic project pages with slug-based routing,
+            and a Supabase backend with Row Level Security.
+          </p>
+          <div class="project-card__tags">
+            <span class="tag">HTML</span>
+            <span class="tag">CSS</span>
+            <span class="tag">JavaScript</span>
+            <span class="tag">Supabase</span>
+            <span class="tag">i18n</span>
+            <span class="tag">GitHub Pages</span>
+          </div>
+        </div>
+
+        <!-- Project 2: Simorgh Dawn -->
+        <div class="project-card">
+          <div class="project-card__header">
+            <div class="project-card__icon">🚀</div>
+            <div class="project-card__links">
+              <a href="https://github.com/Mahmud0547/simorgh-dawn" target="_blank" rel="noopener" class="project-card__link">GitHub →</a>
+            </div>
+          </div>
+          <div class="project-card__title">Simorgh Dawn</div>
+          <p class="project-card__desc">
+            Rocket flight simulation and Tsiolkovsky equation calculator built
+            entirely in the browser. Models real rocket physics — thrust, fuel
+            burn rate, and trajectory — with live charts and interactive input.
+          </p>
+          <div class="project-card__tags">
+            <span class="tag">HTML</span>
+            <span class="tag">JavaScript</span>
+            <span class="tag">Physics</span>
+            <span class="tag">Simulation</span>
+          </div>
+        </div>
+
+        <!-- Placeholder: next project -->
+        <div class="project-card project-card--ghost">
+          <div class="project-card__header">
+            <div class="project-card__icon">⚙️</div>
+          </div>
+          <div class="project-card__title">Next Project</div>
+          <p class="project-card__desc">
+            Something new is in progress. Follow on GitHub or
+            Telegram for updates.
+          </p>
+          <div class="project-card__tags">
+            <span class="tag">Coming soon</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================================================================
+       CONTACT
+  ==================================================================== -->
+  <section id="contact" class="contact-section">
+    <div class="container">
+      <div class="section-eyebrow">04 / contact</div>
+      <h2 class="section-title">Let's work together</h2>
+      <div class="section-rule"></div>
+
+      <div class="contact__box reveal">
+        <h3>Have a project in mind?</h3>
+        <p>
+          I'm open for freelance projects. Reach out through any platform below
+          and I'll get back to you within 24 hours.
+        </p>
+        <div class="contact__links">
+          <a href="https://www.fiverr.com/s/3A8051m"                         target="_blank" rel="noopener" class="btn btn--primary">Fiverr</a>
+          <a href="https://www.upwork.com/freelancers/~01b20f000a77d7d8e3"   target="_blank" rel="noopener" class="btn btn--ghost">Upwork</a>
+          <a href="https://t.me/Simorgh_Dev"                                  target="_blank" rel="noopener" class="btn btn--ghost">Telegram</a>
+          <a href="https://github.com/Mahmud0547"                             target="_blank" rel="noopener" class="btn btn--ghost">GitHub</a>
+          <a href="https://www.linkedin.com/in/mahmud-faiezov"               target="_blank" rel="noopener" class="btn btn--ghost">LinkedIn</a>
         </div>
       </div>
-      <h3>Simorgh Dawn</h3>
-      <p>Rocket flight simulation and Tsiolkovsky equation calculator. Models real rocket physics — thrust, fuel burn, trajectory — in the browser.</p>
-      <div class="project-tags">
-        <span class="tag">HTML</span>
-        <span class="tag">JavaScript</span>
-        <span class="tag">Physics</span>
-        <span class="tag">Simulation</span>
-      </div>
     </div>
+  </section>
 
-    <div class="project-card" style="border-style:dashed;opacity:0.6;">
-      <div class="project-top">
-        <div class="project-icon">⚙️</div>
-      </div>
-      <h3>Next Project</h3>
-      <p>Currently building something new. Check back soon or follow on GitHub for updates.</p>
-      <div class="project-tags">
-        <span class="tag">In progress</span>
-      </div>
-    </div>
-  </div>
-</section>
+  <!-- ====================================================================
+       FOOTER
+  ==================================================================== -->
+  <footer class="footer">
+    <span class="footer__logo">SimorghDev</span>
+    <span class="footer__copy">Mahmud Faiezov · Dushanbe, Tajikistan · 2026</span>
+  </footer>
 
-<!-- CONTACT -->
-<section id="contact" style="background:var(--bg2);max-width:100%;padding:96px 0;">
-  <div style="max-width:900px;margin:0 auto;padding:0 48px;">
-    <div class="section-label">04 / contact</div>
-    <h2>Let's work together</h2>
-    <div class="divider"></div>
-    <div class="contact-box">
-      <h3>Have a project in mind?</h3>
-      <p>I'm available for freelance work. Send me a message and let's build something.</p>
-      <div class="contact-links">
-        <a href="https://github.com/Mahmud0547" target="_blank" class="btn btn-outline">GitHub</a>
-        <a href="https://www.upwork.com" target="_blank" class="btn btn-outline">Upwork</a>
-        <a href="mailto:amiralMahmud11@outlook.com" class="btn btn-gold">Email me</a>
-      </div>
-    </div>
-  </div>
-</section>
+  <!-- ====================================================================
+       JAVASCRIPT — scroll reveal animation
+       Uses IntersectionObserver: efficient, no scroll event listeners
+  ==================================================================== -->
+  <script>
+    /*
+     * Scroll Reveal
+     * Watches all elements with class "reveal" and adds "visible"
+     * once they enter the viewport. Uses IntersectionObserver for
+     * performance — no scroll event listener needed.
+     */
+    const revealObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            // Stop observing after reveal — no need to re-trigger
+            revealObserver.unobserve(entry.target);
+          }
+        });
+      },
+      {
+        threshold: 0.12, // trigger when 12% of element is visible
+      }
+    );
 
-<!-- FOOTER -->
-<footer>
-  <span>SimorghDev</span> · Built with HTML & CSS · Mahmud, 2026
-</footer>
+    // Attach observer to every .reveal element on the page
+    document.querySelectorAll('.reveal').forEach((el) => {
+      revealObserver.observe(el);
+    });
+
+    /*
+     * Active nav link highlight
+     * Tracks which section is in view and visually marks the nav link.
+     */
+    const sections   = document.querySelectorAll('section[id]');
+    const navLinks   = document.querySelectorAll('.nav__links a');
+
+    const navObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+
+          navLinks.forEach((link) => {
+            const isActive = link.getAttribute('href') === '#' + entry.target.id;
+            link.style.color = isActive ? 'var(--color-accent)' : '';
+          });
+        });
+      },
+      {
+        rootMargin: '-40% 0px -55% 0px', // trigger near the middle of the viewport
+      }
+    );
+
+    sections.forEach((section) => navObserver.observe(section));
+
+
+  /*
+   * Interactive Map — Distance from Tajikistan to Visitor
+   *
+   * Uses ip-api.com to get the visitor's approximate location (city/country).
+   * We never get their exact address — just a general geographic coordinate.
+   * Then we calculate the great-circle distance to Dushanbe and draw a line
+   * on the SVG map.
+   */
+
+  // Dushanbe coordinates (home base)
+  const HOME = { lat: 38.56, lon: 68.77, svgX: 645, svgY: 148 };
+
+  // Convert a lat/lon to approximate SVG coordinates for our 1000x500 viewBox
+  // This is a simple equirectangular projection — good enough for a decorative map
+  function latLonToSvg(lat, lon) {
+    const x = ((lon + 180) / 360) * 1000;
+    const y = ((90 - lat) / 180) * 500;
+    return { x: Math.round(x), y: Math.round(y) };
+  }
+
+  // Haversine formula — distance between two lat/lon points in km
+  function getDistanceKm(lat1, lon1, lat2, lon2) {
+    const R = 6371;
+    const dLat = ((lat2 - lat1) * Math.PI) / 180;
+    const dLon = ((lon2 - lon1) * Math.PI) / 180;
+    const a =
+      Math.sin(dLat / 2) ** 2 +
+      Math.cos((lat1 * Math.PI) / 180) *
+      Math.cos((lat2 * Math.PI) / 180) *
+      Math.sin(dLon / 2) ** 2;
+    return Math.round(R * 2 * Math.asin(Math.sqrt(a)));
+  }
+
+  async function initMap() {
+    const caption    = document.getElementById('map-caption');
+    const line       = document.getElementById('map-connection-line');
+    const dotVisitor = document.getElementById('dot-visitor');
+    const labelVisitor = document.getElementById('label-visitor');
+
+    try {
+      // ip-api.com is free, no key needed, returns city + country + coords
+      const res  = await fetch('https://ip-api.com/json/?fields=lat,lon,city,country');
+      const data = await res.json();
+
+      if (!data.lat) throw new Error('No location data');
+
+      const visitor = latLonToSvg(data.lat, data.lon);
+      const distKm  = getDistanceKm(HOME.lat, HOME.lon, data.lat, data.lon).toLocaleString();
+      const place   = data.city ? `${data.city}, ${data.country}` : data.country;
+
+      // Place visitor dot on the map
+      dotVisitor.setAttribute('cx', visitor.x);
+      dotVisitor.setAttribute('cy', visitor.y);
+      dotVisitor.setAttribute('visibility', 'visible');
+
+      // Label next to visitor dot
+      labelVisitor.setAttribute('x', visitor.x + 8);
+      labelVisitor.setAttribute('y', visitor.y - 6);
+      labelVisitor.setAttribute('visibility', 'visible');
+      labelVisitor.textContent = place;
+
+      // Draw the dashed line connecting home to visitor
+      line.setAttribute('x1', HOME.svgX);
+      line.setAttribute('y1', HOME.svgY);
+      line.setAttribute('x2', visitor.x);
+      line.setAttribute('y2', visitor.y);
+      line.setAttribute('visibility', 'visible');
+
+      // Update caption
+      caption.innerHTML = `📍 I'm in <strong>Tajikistan</strong> — roughly <strong>${distKm} km</strong> from you in ${place}`;
+
+    } catch {
+      // If the lookup fails just show a static message — no broken UI
+      caption.innerHTML = `📍 Based in <strong>Tajikistan</strong>, working with clients worldwide`;
+    }
+  }
+
+  initMap();
+  </script>
 
 </body>
 </html>
