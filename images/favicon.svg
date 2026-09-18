@@ -1,10 +1,28 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-  <!-- Dark background circle -->
-  <rect width="32" height="32" rx="8" fill="#070711"/>
-  <!-- Teal accent bracket left -->
-  <text x="4" y="23" font-family="monospace" font-size="18" font-weight="700" fill="#00c896">&lt;</text>
-  <!-- White "M" initial -->
-  <text x="11" y="23" font-family="'Space Grotesk', monospace" font-size="15" font-weight="700" fill="#e2e8f0">M</text>
-  <!-- Teal accent bracket right — slightly smaller -->
-  <text x="23" y="23" font-family="monospace" font-size="18" font-weight="700" fill="#00c896">&gt;</text>
+  <!-- Dark rounded background -->
+  <rect width="32" height="32" rx="7" fill="#070711"/>
+
+  <defs>
+    <!-- Teal → indigo gradient matching the site's hero glow -->
+    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%"   stop-color="#00c896"/>
+      <stop offset="100%" stop-color="#6366f1"/>
+    </linearGradient>
+
+    <!-- Soft outer glow filter -->
+    <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="1" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Simorgh star — 5-pointed, gradient fill, subtle glow -->
+  <polygon
+    points="16,3 18.9,11.8 28,11.8 20.6,17.2 23.5,26 16,20.6 8.5,26 11.4,17.2 4,11.8 13.1,11.8"
+    fill="url(#grad)"
+    filter="url(#glow)"
+  />
 </svg>
