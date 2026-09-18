@@ -585,23 +585,30 @@ section {
   color: var(--color-accent);
 }
 
-/* Viewport clips the sliding track */
+/* Viewport: scroll-snap — no JS width calculation needed */
 .news-viewport {
-  overflow: hidden;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;       /* Firefox */
+  -ms-overflow-style: none;    /* IE */
   position: relative;
 }
 
-/* Track holds all cards in a row, slides via transform */
+.news-viewport::-webkit-scrollbar {
+  display: none;               /* Chrome/Safari */
+}
+
+/* Track: simple flex row */
 .news-track {
   display: flex;
   gap: 20px;
-  transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
-  will-change: transform;
+  padding-bottom: 4px; /* small buffer so shadow isn't clipped */
 }
 
-/* Width is set by JS — flex just prevents shrinking */
+/* Each card: fixed 300px — 3 fit on desktop, scroll on mobile */
 .news-card {
-  flex: 0 0 auto;
+  flex: 0 0 300px;
+  scroll-snap-align: start;
   background: var(--color-surface);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
@@ -689,8 +696,7 @@ section {
 
 /* Skeleton placeholders shown while loading */
 .news-skeleton {
-  flex: 0 0 auto;
-  width: 300px;
+  flex: 0 0 300px;
   height: 200px;
   background: linear-gradient(
     90deg,

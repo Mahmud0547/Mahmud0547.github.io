@@ -240,61 +240,30 @@ async function initNews() {
     track.appendChild(card);
   });
 
-  // --- 5. Carousel logic ---
-  const cards      = track.querySelectorAll('.news-card');
-  const total      = cards.length;
-  let current      = 0;
-  let autoTimer    = null;
-
-  // How many cards fit in view at once
-  function perView() {
-    return window.innerWidth <= 768 ? 1 : 3;
-  }
-
-  // Calculate and apply card widths based on current viewport
-  function applyCardWidths() {
-    const vw   = track.parentElement.offsetWidth; // actual viewport width
-    const pv   = perView();
-    const gap  = 20;
-    const w    = Math.floor((vw - gap * (pv - 1)) / pv);
-    cards.forEach(c => { c.style.width = w + 'px'; });
-    return w;
-  }
-
-  // Max index we can scroll to (don't scroll past the last card)
-  function maxIndex() {
-    return Math.max(0, total - perView());
-  }
+  // --- 5. Carousel logic (scroll-snap based — no JS width math needed) ---
+  const CARD_W  = 300 + 20; // card width + gap
+  let current   = 0;
+  let autoTimer = null;
+  const viewport = track.parentElement;
+  const total    = track.querySelectorAll('.news-card').length;
 
   function goTo(index) {
-    current = Math.max(0, Math.min(index, maxIndex()));
+    current = Math.max(0, Math.min(index, total - 1));
+    viewport.scrollTo({ left: current * CARD_W, behavior: 'smooth' });
 
-    const w   = applyCardWidths();
-    const gap = 20;
-    track.style.transform = `translateX(-${current * (w + gap)}px)`;
-
-    // Sync dots
     document.querySelectorAll('.news-dot').forEach((dot, i) => {
       dot.classList.toggle('news-dot--active', i === current);
     });
   }
 
-  function next() { goTo(current + 1 > maxIndex() ? 0 : current + 1); }
-  function prev() { goTo(current - 1 < 0 ? maxIndex() : current - 1); }
+  function next() { goTo(current + 1 >= total ? 0 : current + 1); }
+  function prev() { goTo(current - 1 < 0 ? total - 1 : current - 1); }
 
-  function startAuto() {
-    stopAuto();
-    autoTimer = setInterval(next, 5000);
-  }
+  function startAuto() { stopAuto(); autoTimer = setInterval(next, 5000); }
+  function stopAuto()  { if (autoTimer) clearInterval(autoTimer); }
 
-  function stopAuto() {
-    if (autoTimer) clearInterval(autoTimer);
-  }
-
-  // Build dot indicators
-  // One dot per "page" (groups of perView cards)
-  const dotCount = maxIndex() + 1;
-  for (let i = 0; i < dotCount; i++) {
+  // Build dot indicators (one per card)
+  for (let i = 0; i < total; i++) {
     const dot = document.createElement('button');
     dot.className = `news-dot${i === 0 ? ' news-dot--active' : ''}`;
     dot.addEventListener('click', () => { goTo(i); startAuto(); });
@@ -304,14 +273,9 @@ async function initNews() {
   prevBtn.addEventListener('click', () => { prev(); startAuto(); });
   nextBtn.addEventListener('click', () => { next(); startAuto(); });
 
-  // Pause auto-play while user hovers
-  track.parentElement.addEventListener('mouseenter', stopAuto);
-  track.parentElement.addEventListener('mouseleave', startAuto);
+  viewport.addEventListener('mouseenter', stopAuto);
+  viewport.addEventListener('mouseleave', startAuto);
 
-  // Recalculate on resize (card widths change)
-  window.addEventListener('resize', () => goTo(current));
-
-  goTo(0);
   startAuto();
 }
 
