@@ -838,8 +838,10 @@
             id="world-map"
             class="map-widget__svg"
             viewBox="0 0 1000 500"
+            preserveAspectRatio="xMidYMid meet"
             xmlns="http://www.w3.org/2000/svg"
             aria-hidden="true"
+            style="max-height: 260px;"
           >
             <!-- Ocean background -->
             <rect width="1000" height="500" fill="#0a0a18" />
@@ -1178,7 +1180,8 @@
 
     try {
       // ip-api.com is free, no key needed, returns city + country + coords
-      const res  = await fetch('https://ip-api.com/json/?fields=lat,lon,city,country');
+      // ipapi.co works better on mobile Safari than ip-api.com
+      const res  = await fetch('https://ipapi.co/json/');
       const data = await res.json();
 
       if (!data.lat) throw new Error('No location data');
