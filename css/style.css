@@ -169,12 +169,12 @@ section {
 #home::before {
   content: '';
   position: absolute;
-  width: 600px;
-  height: 600px;
+  width: 700px;
+  height: 700px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(0, 200, 150, 0.13) 0%, transparent 70%);
-  top: 5%;
-  left: -150px;
+  background: radial-gradient(circle, rgba(0, 200, 150, 0.22) 0%, transparent 65%);
+  top: 0%;
+  left: -200px;
   pointer-events: none;
   z-index: 0;
 }
@@ -183,12 +183,12 @@ section {
 #home::after {
   content: '';
   position: absolute;
-  width: 500px;
-  height: 500px;
+  width: 600px;
+  height: 600px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(99, 102, 241, 0.11) 0%, transparent 70%);
-  top: 35%;
-  right: -100px;
+  background: radial-gradient(circle, rgba(99, 102, 241, 0.18) 0%, transparent 65%);
+  top: 30%;
+  right: -150px;
   pointer-events: none;
   z-index: 0;
 }
@@ -424,10 +424,10 @@ section {
 
 .about__photo {
   width: 100%;
-  height: 280px;
+  height: 320px;
   object-fit: cover;
-  /* Keep the face + eagle in frame */
-  object-position: center 15%;
+  /* Push down to show face + eagle, not the ceiling */
+  object-position: center 40%;
   display: block;
 }
 
