@@ -177,25 +177,38 @@ async function initNews() {
     // File missing or empty — fall back to external only
   }
 
-  // --- 2. Fetch external news from Dev.to (free, no API key) ---
-  // Using singular "tag" parameter — the correct Dev.to API format
+  // --- 2. Fetch external news via HackerNews public API (no CORS issues) ---
+  // Gets top stories, filters for web/JS/CSS/frontend topics
   try {
-    const res  = await fetchWithTimeout('https://dev.to/api/articles?tag=webdev&per_page=9&top=7');
-    if (res.ok) {
-      const data = await res.json();
-      if (Array.isArray(data)) {
-        extNews = data.map(a => ({
-          title: a.title,
-          desc:  a.description || '',
-          url:   a.url,
-          date:  a.published_at ? a.published_at.slice(0, 10) : '',
-          tag:   a.user?.name || 'Dev.to',
+    const topRes  = await fetchWithTimeout('https://hacker-news.firebaseio.com/v0/topstories.json');
+    if (topRes.ok) {
+      const ids = (await topRes.json()).slice(0, 30); // check first 30 stories
+
+      // Fetch story details in parallel
+      const stories = await Promise.all(
+        ids.map(id =>
+          fetchWithTimeout(`https://hacker-news.firebaseio.com/v0/item/${id}.json`)
+            .then(r => r.ok ? r.json() : null)
+            .catch(() => null)
+        )
+      );
+
+      // Keep only stories relevant to web dev
+      const keywords = ['javascript', 'css', 'html', 'web', 'frontend', 'react', 'node', 'typescript', 'browser', 'api', 'developer'];
+      extNews = stories
+        .filter(s => s && s.title && s.url && keywords.some(k => s.title.toLowerCase().includes(k)))
+        .slice(0, 8)
+        .map(s => ({
+          title: s.title,
+          desc:  `${s.score || 0} points · ${s.descendants || 0} comments on Hacker News`,
+          url:   s.url,
+          date:  s.time ? new Date(s.time * 1000).toISOString().slice(0, 10) : '',
+          tag:   'Hacker News',
           own:   false
         }));
-      }
     }
   } catch {
-    // Dev.to unavailable or timed out — own news only
+    // HN unavailable — show own news only
   }
 
   // --- 3. Merge: own news first, external fills the rest ---
