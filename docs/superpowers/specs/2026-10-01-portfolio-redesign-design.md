@@ -1,7 +1,7 @@
 # Портфолио SimorghDev — техническое задание
 
 **Дата:** 2026-10-01
-**Статус:** на согласовании
+**Статус:** утверждено 2026-10-01
 **Макеты:** https://www.figma.com/design/BOuiP0pgPWP4uCtYquclVm (фреймы «Home — Desktop 1440» и «Home — Mobile 390»)
 
 ---
@@ -22,8 +22,8 @@
 | Адрес | Содержание |
 |---|---|
 | `/` | Главная на английском (основной язык для клиентов) |
-| `/ru/`, `/tg/` | Главная на русском и таджикском (`tg` — код таджикского языка по ISO 639-1) |
-| `/work/simorgh/` (+ `/ru/…`, `/tg/…`) | Подробный кейс Simorgh: задача, архитектура со схемой, решения, результат, чему научился |
+| `/ru/`, `/tj/` | Главная на русском и таджикском. В адресах — `tj` (привычно клиентам); в атрибутах `lang` и `hreflang` — `tg`, официальный код таджикского языка по ISO 639-1, который ожидают поисковики |
+| `/work/simorgh/` (+ `/ru/…`, `/tj/…`) | Подробный кейс Simorgh: задача, архитектура со схемой, решения, результат, чему научился |
 | `/privacy/` | Политика конфиденциальности: что форма отправляет и куда |
 | `/404` | Страница «не найдено» в стиле сайта |
 
@@ -65,7 +65,7 @@ API Simorgh на Azure (FastAPI за Caddy, HTTPS)
 
 ### 4.1 Сайт
 - **Next.js 16 (App Router) + TypeScript (strict) + Tailwind CSS v4**, `output: 'export'`: сайт собирается в готовые HTML-страницы. Нет своего сервера — нет серверных уязвимостей, максимальная скорость.
-- Тексты на трёх языках — в файлах словарей (`messages/en.json`, `ru.json`, `tg.json`), страницы для каждого языка генерируются при сборке.
+- Тексты на трёх языках — в файлах словарей (`messages/en.json`, `ru.json`, `tj.json`), страницы для каждого языка генерируются при сборке.
 - Шрифты подключаются через `next/font` и **раздаются с нашего домена**: браузер посетителя не обращается к Google Fonts.
 - Нет сторонних трекеров. Определение местоположения посетителя (ipapi.co со старого сайта) **удаляется**.
 
@@ -137,7 +137,7 @@ API Simorgh на Azure (FastAPI за Caddy, HTTPS)
 app/            страницы (App Router)
 components/     компоненты интерфейса
 content/        кейсы (MDX)
-messages/       словари en / ru / tg
+messages/       словари en / ru / tj
 lib/            утилиты (запросы к API, форматирование)
 public/         изображения, _headers, robots
 docs/
@@ -158,9 +158,17 @@ tests/          тесты
 
 ## 10. Что нужно от владельца
 
-- [ ] Аккаунт **Cloudflare** (бесплатный, без карты) — хостинг и Turnstile.
-- [ ] Ссылки: Telegram (username), LinkedIn, Instagram, профиль Fiverr, профиль Upwork.
-- [ ] Адреса сайтов Kamarob Nature Fund и Simorgh Dawn — для скриншотов.
+- [x] Аккаунт **Cloudflare** (бесплатный, без карты) — хостинг и Turnstile. Создан 2026-09-19.
+- [x] Ссылки:
+  - Telegram: https://t.me/Simorgh_Dev
+  - LinkedIn: https://www.linkedin.com/in/mahmud-faiezov
+  - Instagram: https://www.instagram.com/mahmud.simorghdev
+  - Fiverr: https://www.fiverr.com/s/3A8051m
+  - Upwork: https://www.upwork.com/freelancers/~01b20f000a77d7d8e3
+  - GitHub: https://github.com/Mahmud0547
+- [x] Адреса сайтов для скриншотов:
+  - Kamarob Nature Fund: https://mahmud0547.github.io/kamarob-nature-fund/
+  - Simorgh Dawn: https://mahmud0547.github.io/simorgh-dawn/
 - [ ] Перевод на таджикский: черновик готовлю я, финальную проверку делает владелец как носитель языка.
 
 ## 11. Вне рамок этого этапа
