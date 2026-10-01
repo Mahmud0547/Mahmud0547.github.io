@@ -2,6 +2,7 @@ import type { Locale } from "@/lib/i18n";
 import { Header } from "./Header";
 import { Hero } from "./Hero";
 import { TrustStrip } from "./TrustStrip";
+import { Work } from "./Work";
 
 export function HomePage({ locale }: { locale: Locale }) {
   return (
@@ -10,6 +11,7 @@ export function HomePage({ locale }: { locale: Locale }) {
       <main id="main">
         <Hero locale={locale} />
         <TrustStrip locale={locale} />
+        <Work locale={locale} />
       </main>
     </>
   );

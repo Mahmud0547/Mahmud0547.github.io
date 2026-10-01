@@ -31,3 +31,29 @@ test("trust strip lists three promises", async ({ page }) => {
   const strip = page.getByRole("list", { name: "Why clients can trust the work" });
   await expect(strip.getByRole("listitem")).toHaveCount(3);
 });
+
+test("work section shows the case and two projects with real links", async ({ page }) => {
+  await page.goto("/");
+  const work = page.locator("#work");
+  await expect(work.getByRole("heading", { level: 2, name: "Selected work" })).toBeVisible();
+  await expect(work.getByRole("heading", { level: 3 })).toHaveText(["Simorgh News", "Kamarob Nature Fund", "Simorgh Dawn"]);
+  await expect(work).toContainText("558 articles processed");
+  await expect(work.getByRole("link", { name: /Live site/ }).first()).toHaveAttribute(
+    "href",
+    "https://mahmud0547.github.io/kamarob-nature-fund/",
+  );
+  await expect(work.getByRole("link", { name: "All projects on GitHub" })).toHaveAttribute("href", "https://github.com/Mahmud0547");
+  for (const img of await work.locator("img").all()) {
+    await expect(img).toHaveAttribute("alt", /.+/);
+  }
+  await expect(work.getByRole("link", { name: "Read the case study" })).toHaveCount(0);
+});
+
+test("external links open safely in a new tab", async ({ page }) => {
+  await page.goto("/");
+  const external = page.locator('a[href^="http"]');
+  for (const link of await external.all()) {
+    await expect(link).toHaveAttribute("target", "_blank");
+    await expect(link).toHaveAttribute("rel", /noopener/);
+  }
+});
