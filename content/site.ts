@@ -11,6 +11,12 @@ export const links = {
 export const simorghTags = ["Python", "FastAPI", "aiogram", "Next.js", "Docker", "Azure"];
 
 export const projects = {
+  kursi: {
+    live: "https://kursi-tojik.pages.dev/en/",
+    code: "https://github.com/Mahmud0547/kursi-tojik",
+    image: "/work/kursi.webp",
+    tags: ["Cloudflare Workers", "D1", "TypeScript", "Telegram bot"],
+  },
   kamarob: {
     live: "https://mahmud0547.github.io/kamarob-nature-fund/",
     code: "https://github.com/Mahmud0547/kamarob-nature-fund",

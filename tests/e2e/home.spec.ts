@@ -36,11 +36,11 @@ test("work section shows the case and two projects with real links", async ({ pa
   await page.goto("/");
   const work = page.locator("#work");
   await expect(work.getByRole("heading", { level: 2, name: "Selected work" })).toBeVisible();
-  await expect(work.getByRole("heading", { level: 3 })).toHaveText(["Simorgh News", "Kamarob Nature Fund", "Simorgh Dawn"]);
+  await expect(work.getByRole("heading", { level: 3 })).toHaveText(["Simorgh News", "Kursi Tojik", "Kamarob Nature Fund", "Simorgh Dawn"]);
   await expect(work).toContainText("558 articles processed");
   await expect(work.getByRole("link", { name: /Live site/ }).first()).toHaveAttribute(
     "href",
-    "https://mahmud0547.github.io/kamarob-nature-fund/",
+    "https://kursi-tojik.pages.dev/en/",
   );
   await expect(work.getByRole("link", { name: "All projects on GitHub" })).toHaveAttribute("href", "https://github.com/Mahmud0547");
   for (const img of await work.locator("img").all()) {

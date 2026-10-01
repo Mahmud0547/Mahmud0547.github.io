@@ -73,8 +73,8 @@ export function Work({ locale }: { locale: Locale }) {
         </div>
       </article>
 
-      <div className="mt-7 grid gap-7 lg:mt-10 lg:grid-cols-2 lg:gap-6">
-        {(["kamarob", "dawn"] as const).map((key) => {
+      <div className="mt-7 grid gap-7 lg:mt-10 lg:grid-cols-3 lg:gap-6">
+        {(["kursi", "kamarob", "dawn"] as const).map((key) => {
           const project = projects[key];
           const copy = t[key];
           return (
@@ -85,7 +85,7 @@ export function Work({ locale }: { locale: Locale }) {
                 width={1280}
                 height={800}
                 loading="lazy"
-                sizes="(min-width: 1024px) 628px, 100vw"
+                sizes="(min-width: 1024px) 410px, 100vw"
                 className="h-[170px] w-full object-cover object-top lg:h-[220px]"
               />
               <div className="flex flex-col gap-2.5 px-5 pb-[22px] pt-5 lg:gap-3 lg:px-8 lg:pb-8 lg:pt-7">
