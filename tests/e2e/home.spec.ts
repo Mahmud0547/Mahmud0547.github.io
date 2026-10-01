@@ -46,7 +46,7 @@ test("work section shows the case and two projects with real links", async ({ pa
   for (const img of await work.locator("img").all()) {
     await expect(img).toHaveAttribute("alt", /.+/);
   }
-  await expect(work.getByRole("link", { name: "Read the case study" })).toHaveCount(0);
+  await expect(work.getByRole("link", { name: "Read the case study" })).toHaveAttribute("href", "/work/simorgh/");
 });
 
 test("external links open safely in a new tab", async ({ page }) => {
@@ -116,9 +116,9 @@ test("contact lists the three questions and every channel", async ({ page }) => 
   }
 });
 
-test("footer shows the current year and no privacy link yet", async ({ page }) => {
+test("footer shows the current year and the privacy link", async ({ page }) => {
   await page.goto("/");
   const footer = page.getByRole("contentinfo");
   await expect(footer).toContainText(`© ${new Date().getFullYear()} Mahmud Faiezov`);
-  await expect(footer.getByRole("link", { name: "Privacy" })).toHaveCount(0);
+  await expect(footer.getByRole("link", { name: "Privacy" })).toHaveAttribute("href", "/privacy/");
 });

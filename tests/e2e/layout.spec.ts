@@ -1,6 +1,16 @@
 import { expect, test } from "@playwright/test";
 
 const pages = ["/", "/ru/", "/tj/"];
+const innerPages = ["/work/simorgh/", "/ru/work/simorgh/", "/tj/work/simorgh/", "/privacy/", "/tj/privacy/", "/no-such-page/"];
+
+for (const path of innerPages) {
+  test(`no horizontal scroll at 320px on ${path}`, async ({ page }) => {
+    await page.setViewportSize({ width: 320, height: 800 });
+    await page.goto(path);
+    const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
+    expect(overflow).toBeLessThanOrEqual(0);
+  });
+}
 
 for (const path of pages) {
   test(`no horizontal scroll at 320px on ${path}`, async ({ page }) => {

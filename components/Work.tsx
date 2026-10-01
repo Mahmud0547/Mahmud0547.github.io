@@ -1,7 +1,8 @@
 import Image from "next/image";
+import Link from "next/link";
 import { links, projects, simorghTags } from "@/content/site";
 import { formatCount } from "@/lib/format";
-import { format, getMessages, type Locale } from "@/lib/i18n";
+import { format, getMessages, localePath, type Locale } from "@/lib/i18n";
 import { getSnapshot } from "@/lib/stats";
 import { Section } from "./Section";
 
@@ -53,6 +54,12 @@ export function Work({ locale }: { locale: Locale }) {
             ))}
           </dl>
           <Tags items={simorghTags} />
+          <Link
+            href={localePath(locale, "/work/simorgh/")}
+            className="rounded-xl border-[1.5px] border-lapis px-5 py-3 text-base font-semibold text-lapis hover:bg-lapis/8"
+          >
+            {t.readCase}
+          </Link>
         </div>
         <div className="relative order-first h-[220px] overflow-hidden bg-haze lg:order-2 lg:h-auto lg:min-h-[640px]">
           <Image

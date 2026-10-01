@@ -37,3 +37,6 @@ export const packages = [
   { price: 140, recommended: true },
   { price: 320, recommended: false },
 ] as const;
+
+/** Date of the last change to the privacy page text. */
+export const privacyUpdated = "2026-10-01T12:00:00Z";

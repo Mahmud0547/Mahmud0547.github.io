@@ -44,6 +44,7 @@
     "lead": "Real systems, running in production, with the code on GitHub.",
     "allProjects": "All projects on GitHub",
     "caseLabel": "Case study",
+    "readCase": "Read the case study",
     "screenshotAlt": "Screenshot of {name}",
     "live": "Live site",
     "code": "Source code",
@@ -148,8 +149,86 @@
       "privacy": "Privacy"
     }
   },
+  "case": {
+    "title": "Simorgh News: an AI newsroom for a Telegram channel",
+    "lead": "How one person runs a news channel with an AI pipeline, a human review step and a server that never sleeps.",
+    "problemTitle": "The problem",
+    "problem": "Running a news channel alone means reading dozens of sources and rewriting posts every day. It eats hours, and posting stops whenever you are busy.",
+    "approachTitle": "How it works",
+    "steps": [
+      {
+        "title": "Collect",
+        "text": "RSS feeds from BBC and Al Jazeera are collected every 30 minutes into a database."
+      },
+      {
+        "title": "Write",
+        "text": "An LLM rewrites an English article into a Russian post in the channel's voice. If a free model is overloaded, the next one in the chain takes over."
+      },
+      {
+        "title": "Review",
+        "text": "Drafts wait in a web panel and in a Telegram bot. The editor approves, edits or rejects them."
+      },
+      {
+        "title": "Publish",
+        "text": "Approved posts go to the channel in one click."
+      }
+    ],
+    "diagramTitle": "Architecture",
+    "diagramLabel": "Architecture: RSS feeds go to the collector, which stores articles in a database. An LLM writes drafts. The editor reviews them in the web panel or the Telegram bot, and approved posts go to the Telegram channel.",
+    "diagram": {
+      "feeds": "RSS feeds",
+      "collector": "Collector",
+      "database": "Database",
+      "llm": "LLM",
+      "review": "Web panel + bot",
+      "channel": "Telegram channel"
+    },
+    "decisionsTitle": "Decisions that mattered",
+    "decisions": [
+      "A human stays in the loop: nothing is published without approval.",
+      "Answers that are not in Russian are rejected automatically, because models sometimes leak their reasoning in English.",
+      "Any OpenAI-compatible provider works through configuration, so changing providers needs no code changes.",
+      "One small cloud server runs the API, the bot, the panel and HTTPS behind Caddy, with Docker Compose."
+    ],
+    "resultTitle": "Result",
+    "result": "Running 24/7 since September 2026: {articles} articles collected and {published} posts published. Publishing a post takes one click.",
+    "learnedTitle": "What I learned",
+    "learned": "Free AI services change often, so the system must not depend on any single one. Real numbers and a simple review step build more trust than any amount of automation.",
+    "stackTitle": "Stack",
+    "back": "Back to all work",
+    "ctaTitle": "Want something like this?",
+    "ctaText": "Tell me what you do by hand today, and I will suggest how a bot can take it over.",
+    "ctaButton": "Describe your task"
+  },
+  "privacy": {
+    "title": "Privacy",
+    "updated": "Last updated: {date}",
+    "sections": [
+      {
+        "title": "What this site collects",
+        "text": "Nothing by default: no cookies, no analytics and no trackers. Fonts and images are served from this site."
+      },
+      {
+        "title": "The contact form",
+        "text": "When you send a message, your name, email and text go to my Telegram through my server. They are not stored in a database and are never shared."
+      },
+      {
+        "title": "Bot protection",
+        "text": "The form uses Cloudflare Turnstile to block spam. It loads only when you start filling in the form and is processed by Cloudflare under its own privacy policy."
+      },
+      {
+        "title": "Live numbers",
+        "text": "The home page asks my server for public statistics about the Simorgh project. No personal data is sent."
+      },
+      {
+        "title": "Questions",
+        "text": "If you have questions about your data or want a message deleted, write to me on Telegram."
+      }
+    ]
+  },
   "footer": {
-    "copyright": "© {year} Mahmud Faiezov. Built with Next.js, hosted on Cloudflare."
+    "copyright": "© {year} Mahmud Faiezov. Built with Next.js, hosted on Cloudflare.",
+    "privacy": "Privacy"
   },
   "notFound": {
     "title": "Page not found",
