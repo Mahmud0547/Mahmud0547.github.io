@@ -10,4 +10,6 @@ export const sourceSerif = Source_Serif_4({
   subsets: ["latin", "cyrillic", "cyrillic-ext"],
   variable: "--font-source-serif",
   display: "swap",
+  // Only used below the first screen: do not compete with Onest for the hero headline.
+  preload: false,
 });
