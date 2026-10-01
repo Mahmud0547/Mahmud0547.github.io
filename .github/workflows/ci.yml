@@ -25,6 +25,7 @@ jobs:
       - run: npm audit --omit=dev --audit-level=high
       - run: npm run build:test
       - run: node scripts/check-js-budget.mjs
+      - run: node scripts/headers.mjs --check
       - run: npx playwright install --with-deps chromium
       - run: npm run test:e2e
       - run: npx lhci autorun

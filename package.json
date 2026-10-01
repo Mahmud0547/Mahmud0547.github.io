@@ -6,6 +6,7 @@
     "dev": "next dev",
     "prebuild": "node scripts/fetch-stats.mjs",
     "build": "next build",
+    "postbuild": "node scripts/headers.mjs",
     "build:test": "STATS_SNAPSHOT_FROZEN=1 NEXT_PUBLIC_API_URL=http://localhost:4173/api npm run build",
     "lint": "eslint .",
     "typecheck": "next typegen && tsc --noEmit",
