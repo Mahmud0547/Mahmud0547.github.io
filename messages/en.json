@@ -58,9 +58,13 @@
       "resultLabel": "Result",
       "result": "Running 24/7 on a cloud server since September 2026. {count} articles processed; publishing a post takes one click."
     },
+    "kursi": {
+      "name": "Kursi Tojik",
+      "summary": "Official Tajik somoni rates on the web and in Telegram: own database, scheduled collection from the National Bank, three languages."
+    },
     "kamarob": {
       "name": "Kamarob Nature Fund",
-      "summary": "A four-language website for a Tajik NGO that protects snow leopard habitat in the Kamarob Gorge."
+      "summary": "A demo website for nonprofits in Tajikistan, with my own photos and video from the Kamarob Gorge."
     },
     "dawn": {
       "name": "Simorgh Dawn",
