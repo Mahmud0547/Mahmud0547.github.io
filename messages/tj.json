@@ -25,6 +25,7 @@
   "pipeline": {
     "title": "Simorgh, таҳририяи ман бо зеҳни сунъӣ",
     "updated": "Навсозӣ: {date}",
+    "live": "Зинда",
     "collect": { "title": "Ҷамъоварӣ", "text": "Хабарҳои BBC ва Al Jazeera, ҳар 30 дақиқа", "metric": "{count} мақола" },
     "write": { "title": "Навиштан", "text": "LLM мақолаи англисиро ба паёми русӣ табдил медиҳад" },
     "review": { "title": "Санҷиш", "text": "Тасдиқ, таҳрир ё рад кардан дар панели веб ё дар Telegram", "metric": "{count} санҷида шуд" },

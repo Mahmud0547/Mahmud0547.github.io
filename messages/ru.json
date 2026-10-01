@@ -25,6 +25,7 @@
   "pipeline": {
     "title": "Simorgh, моя ИИ-редакция",
     "updated": "Обновлено {date}",
+    "live": "В эфире",
     "collect": { "title": "Сбор", "text": "Ленты BBC и Al Jazeera, каждые 30 минут", "metric": "{count} статей" },
     "write": { "title": "Текст", "text": "LLM превращает английскую статью в пост на русском" },
     "review": { "title": "Проверка", "text": "Одобрить, отредактировать или отклонить в веб-панели или в Telegram", "metric": "{count} проверено" },

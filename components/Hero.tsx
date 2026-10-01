@@ -1,10 +1,11 @@
 import Image from "next/image";
 import { getMessages, localePath, type Locale } from "@/lib/i18n";
 import { getSnapshot } from "@/lib/stats";
-import { Pipeline } from "./Pipeline";
+import { LivePipeline } from "./LivePipeline";
 
 export function Hero({ locale }: { locale: Locale }) {
-  const t = getMessages(locale).hero;
+  const messages = getMessages(locale);
+  const t = messages.hero;
   const home = localePath(locale);
   return (
     <div className="dark-surface bg-deep pb-12 pt-8 lg:pb-[104px] lg:pt-[72px]">
@@ -31,7 +32,7 @@ export function Hero({ locale }: { locale: Locale }) {
           </div>
         </div>
         <div>
-          <Pipeline locale={locale} stats={getSnapshot()} />
+          <LivePipeline locale={locale} t={messages.pipeline} snapshot={getSnapshot()} />
         </div>
       </div>
     </div>

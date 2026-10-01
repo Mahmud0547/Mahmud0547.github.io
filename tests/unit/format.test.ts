@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { formatCount, formatDate, formatPrice } from "@/lib/format";
+import { formatCount, formatDate, formatPrice, shortSource } from "@/lib/format";
 
 const spaces = (text: string) => text.replace(/[  ]/g, " ");
 
@@ -27,5 +27,16 @@ describe("formatPrice", () => {
   it("shows whole US dollars", () => {
     expect(formatPrice(50, "en")).toBe("$50");
     expect(spaces(formatPrice(140, "ru"))).toBe("140 $");
+  });
+});
+
+describe("shortSource", () => {
+  it.each([
+    ["Al Jazeera – Breaking News, World News and Video from Al Jazeera", "Al Jazeera"],
+    ["BBC News - World", "BBC News"],
+    ["BBC News", "BBC News"],
+    ["Reuters — Top stories", "Reuters"],
+  ])("shortens %s", (source, expected) => {
+    expect(shortSource(source)).toBe(expected);
   });
 });

@@ -50,3 +50,23 @@
     scroll-behavior: smooth;
   }
 }
+
+@media (prefers-reduced-motion: no-preference) {
+  .pipeline-packet {
+    animation: pipeline-packet 1.4s ease-in-out infinite;
+  }
+}
+
+@keyframes pipeline-packet {
+  from {
+    opacity: 0;
+    transform: translateY(0);
+  }
+  20% {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+    transform: translateY(var(--packet-distance, 20px));
+  }
+}

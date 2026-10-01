@@ -25,6 +25,7 @@
   "pipeline": {
     "title": "Simorgh, my AI newsroom",
     "updated": "Updated {date}",
+    "live": "Live",
     "collect": { "title": "Collect", "text": "BBC and Al Jazeera feeds, every 30 minutes", "metric": "{count} articles" },
     "write": { "title": "Write", "text": "An LLM turns an English article into a Russian post" },
     "review": { "title": "Review", "text": "Approve, edit or reject in the web panel or in Telegram", "metric": "{count} reviewed" },
