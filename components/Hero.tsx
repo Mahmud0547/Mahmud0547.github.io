@@ -9,12 +9,12 @@ export function Hero({ locale }: { locale: Locale }) {
   return (
     <div className="dark-surface bg-deep pb-12 pt-8 lg:pb-[104px] lg:pt-[72px]">
       <div className="container-page grid items-center gap-[22px] lg:grid-cols-[minmax(0,640px)_minmax(0,576px)] lg:justify-between lg:gap-16">
-        <div className="flex flex-col items-start gap-[22px] lg:gap-7">
+        <div className="flex min-w-0 flex-col items-start gap-[22px] lg:gap-7">
           <p className="flex items-center gap-2 rounded-full bg-white/8 px-3 py-1.5 text-[13px] font-medium text-mist lg:text-sm">
             <Image src="/icons/status-dot.svg" alt="" width={8} height={8} />
             {t.status}
           </p>
-          <h1 className="text-[40px] font-extrabold leading-[1.04] tracking-[-0.03em] text-white lg:text-[68px] lg:leading-[1.02]">
+          <h1 className="text-[clamp(32px,10vw,40px)] font-extrabold [overflow-wrap:break-word] leading-[1.04] tracking-[-0.03em] text-white lg:text-[68px] lg:leading-[1.02]">
             {t.title}
           </h1>
           <p className="max-w-[580px] text-[17px] leading-normal text-mist lg:text-xl">{t.lead}</p>

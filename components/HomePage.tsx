@@ -1,10 +1,12 @@
 import type { Locale } from "@/lib/i18n";
+import { About } from "./About";
+import { Contact } from "./Contact";
+import { Footer } from "./Footer";
 import { Header } from "./Header";
 import { Hero } from "./Hero";
-import { TrustStrip } from "./TrustStrip";
-import { About } from "./About";
 import { Process } from "./Process";
 import { Services } from "./Services";
+import { TrustStrip } from "./TrustStrip";
 import { Work } from "./Work";
 
 export function HomePage({ locale }: { locale: Locale }) {
@@ -18,7 +20,9 @@ export function HomePage({ locale }: { locale: Locale }) {
         <Services locale={locale} />
         <Process locale={locale} />
         <About locale={locale} />
+        <Contact locale={locale} />
       </main>
+      <Footer locale={locale} />
     </>
   );
 }

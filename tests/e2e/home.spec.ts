@@ -97,3 +97,28 @@ test("about text uses the serif font", async ({ page }) => {
   const family = await page.locator("#about p.font-serif").first().evaluate((el) => getComputedStyle(el).fontFamily);
   expect(family).toMatch(/source.?serif/i);
 });
+
+test("contact lists the three questions and every channel", async ({ page }) => {
+  await page.goto("/");
+  const contact = page.locator("#contact");
+  await expect(contact.getByRole("heading", { level: 2 })).toHaveText("Tell me what you want to automate");
+  await expect(contact.locator("ol > li")).toHaveCount(3);
+  const expected = {
+    Telegram: "https://t.me/Simorgh_Dev",
+    GitHub: "https://github.com/Mahmud0547",
+    LinkedIn: "https://www.linkedin.com/in/mahmud-faiezov",
+    Instagram: "https://www.instagram.com/mahmud.simorghdev",
+    Fiverr: "https://www.fiverr.com/s/3A8051m",
+    Upwork: "https://www.upwork.com/freelancers/~01b20f000a77d7d8e3",
+  };
+  for (const [name, href] of Object.entries(expected)) {
+    await expect(contact.getByRole("link", { name, exact: true })).toHaveAttribute("href", href);
+  }
+});
+
+test("footer shows the current year and no privacy link yet", async ({ page }) => {
+  await page.goto("/");
+  const footer = page.getByRole("contentinfo");
+  await expect(footer).toContainText(`© ${new Date().getFullYear()} Mahmud Faiezov`);
+  await expect(footer.getByRole("link", { name: "Privacy" })).toHaveCount(0);
+});

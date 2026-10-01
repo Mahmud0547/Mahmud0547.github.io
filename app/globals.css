@@ -15,6 +15,7 @@
   --color-panel: #1f3479;
   --color-mint: #3fd3b4;
   --color-haze: #dce3ef;
+  --color-darker: #101f4f;
 
   --font-sans: var(--font-onest), ui-sans-serif, system-ui, sans-serif;
   --font-serif: var(--font-source-serif), ui-serif, Georgia, serif;
