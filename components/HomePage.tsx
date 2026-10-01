@@ -1,13 +1,15 @@
-import { getMessages, type Locale } from "@/lib/i18n";
+import type { Locale } from "@/lib/i18n";
 import { Header } from "./Header";
+import { Hero } from "./Hero";
+import { TrustStrip } from "./TrustStrip";
 
 export function HomePage({ locale }: { locale: Locale }) {
-  const t = getMessages(locale);
   return (
     <>
       <Header locale={locale} path="/" />
       <main id="main">
-        <h1>{t.hero.title}</h1>
+        <Hero locale={locale} />
+        <TrustStrip locale={locale} />
       </main>
     </>
   );
