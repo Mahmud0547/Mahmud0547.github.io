@@ -1,186 +1,187 @@
-# Портфолио SimorghDev — техническое задание
+# SimorghDev portfolio — design specification
 
-**Дата:** 2026-10-01
-**Статус:** утверждено 2026-10-01
-**Макеты:** https://www.figma.com/design/BOuiP0pgPWP4uCtYquclVm (фреймы «Home — Desktop 1440» и «Home — Mobile 390»)
+**Date:** 2026-10-01
+**Status:** approved 2026-10-01, implemented and launched 2026-10-01
+**Mockups:** https://www.figma.com/design/BOuiP0pgPWP4uCtYquclVm (frames "Home — Desktop 1440" and "Home — Mobile 390")
 
 ---
 
-## 1. Цель
+## 1. Goal
 
-Сайт-портфолио, который **привлекает внимание, вызывает доверие и приводит заказы** на услугу «Telegram-боты и ИИ-автоматизация», в первую очередь от клиентов из США и Европы.
+A portfolio site that **gets attention, earns trust and brings orders** for "Telegram bots and AI automation", mainly from clients in the US and Europe.
 
-**Критерии успеха:**
-- посетитель за 10 секунд понимает, что вы делаете, и видит доказательство (живая система Simorgh);
-- путь к заказу — максимум один клик (Fiverr, Upwork, форма или Telegram);
-- сайт находят в Google по запросам вроде «telegram bot developer», «AI automation developer»;
-- Lighthouse на мобильном: Accessibility, Best Practices, SEO — не ниже 95, Performance — не ниже 90 (уточнено 2026-10-01, см. ADR 0004);
-- на сайте нет ни одного утверждения, которое нельзя подтвердить (никаких выдуманных цифр, отзывов, клиентов).
+**Success criteria:**
+- within 10 seconds a visitor understands what I do and sees proof (the live Simorgh system);
+- the path to an order is at most one click (Fiverr, Upwork, the form or Telegram);
+- the site is found on Google for queries like "telegram bot developer" and "AI automation developer";
+- Lighthouse on mobile: Accessibility, Best Practices and SEO at least 95, Performance at least 90 (adjusted 2026-10-01, see ADR 0004);
+- the site makes no claim that cannot be verified (no invented numbers, reviews or clients).
 
-## 2. Страницы
+## 2. Pages
 
-| Адрес | Содержание |
+| Path | Content |
 |---|---|
-| `/` | Главная на английском (основной язык для клиентов) |
-| `/ru/`, `/tj/` | Главная на русском и таджикском. В адресах — `tj` (привычно клиентам); в атрибутах `lang` и `hreflang` — `tg`, официальный код таджикского языка по ISO 639-1, который ожидают поисковики |
-| `/work/simorgh/` (+ `/ru/…`, `/tj/…`) | Подробный кейс Simorgh: задача, архитектура со схемой, решения, результат, чему научился |
-| `/privacy/` | Политика конфиденциальности: что форма отправляет и куда |
-| `/404` | Страница «не найдено» в стиле сайта |
+| `/` | Home in English (the main language for clients) |
+| `/ru/`, `/tj/` | Home in Russian and Tajik. URLs use `tj` (familiar to clients); `lang` and `hreflang` use `tg`, the ISO 639-1 code search engines expect |
+| `/work/simorgh/` (+ `/ru/…`, `/tj/…`) | Simorgh case study: problem, architecture diagram, decisions, result, lessons learned |
+| `/privacy/` | Privacy policy: what the form sends and where |
+| `/404` | "Not found" page in the site's style |
 
-Разделы главной (по макету): шапка → первый экран с живой схемой → полоса доверия → работы → услуги → как я работаю → обо мне → контакты → подвал.
+Home sections (as in the mockup): header → hero with the live pipeline → trust strip → work → services → process → about → contact → footer.
 
-**Блог** в этот этап не входит. Структура контента (MDX-файлы в репозитории) позволит добавить его позже без переделки.
+A **blog** is out of scope for now. Content kept in the repository allows adding one later without a rewrite.
 
-## 3. Дизайн
+## 3. Design
 
-Источник истины — макеты в Figma. Токены:
+The Figma mockups are the source of truth. Tokens:
 
-| Токен | Значение | Роль |
+| Token | Value | Role |
 |---|---|---|
-| `deep` | `#172A66` | фон первого экрана, «Как я работаю», контактов |
-| `lapis` | `#233C8C` | основной акцент, кнопки, ссылки |
-| `saffron` | `#E0A526` | главная кнопка, активный шаг схемы |
-| `turquoise` | `#17807E` | галочки, «опубликовано» |
-| `paper` / `white` | `#F3F4F7` / `#FFFFFF` | светлые разделы |
-| `ink` / `soft` | `#151827` / `#5B6072` | основной и вторичный текст |
+| `deep` | `#172A66` | background of the hero, process and contact sections |
+| `lapis` | `#233C8C` | primary accent, buttons, links |
+| `saffron` | `#E0A526` | main call to action, active pipeline step |
+| `turquoise` | `#17807E` | check marks, "published" |
+| `paper` / `white` | `#F3F4F7` / `#FFFFFF` | light sections |
+| `ink` / `soft` | `#151827` / `#5B6072` | primary and secondary text |
 
-**Шрифты:** Onest (интерфейс и заголовки) и Source Serif 4 (тексты кейсов и «Обо мне»). Оба проверены: **поддерживают все таджикские буквы** (ғ ӣ қ ӯ ҳ ҷ). Literata из первой версии макета заменена, потому что в ней нет восьми таджикских букв.
+**Fonts:** Onest (UI and headings) and Source Serif 4 (case study and About text). Both **support every Tajik letter** (ғ ӣ қ ӯ ҳ ҷ). Literata from the first mockup was replaced because it lacks eight Tajik letters.
 
-**Движение:** одна осмысленная анимация — «новость» бежит по живой схеме от шага к шагу. Других автоматических анимаций нет. При системной настройке «уменьшить движение» (`prefers-reduced-motion`) анимация отключается, схема показывается статично.
+**Motion:** one meaningful animation — a "news item" travels through the live pipeline step by step. No other automatic animation. With the system setting "reduce motion" (`prefers-reduced-motion`) the animation is off and the pipeline is static.
 
-## 4. Архитектура
+## 4. Architecture
 
 ```
-Посетитель
+Visitor
    │
    ▼
-Cloudflare Pages  ── статические HTML/CSS/JS (Next.js static export)
+Cloudflare Pages  ── static HTML/CSS/JS (Next.js static export)
    │
-   │  fetch (только 2 публичных адреса)
+   │  fetch (two public endpoints only)
    ▼
-API Simorgh на Azure (FastAPI за Caddy, HTTPS)
-   ├── GET  /public/stats     → цифры для живой схемы
-   └── POST /public/contact   → проверка → сообщение в Telegram владельцу
+Simorgh API on Azure (FastAPI behind Caddy, HTTPS)
+   ├── GET  /public/stats     → numbers for the live pipeline
+   └── POST /public/contact   → validation → Telegram message to the owner
 ```
 
-### 4.1 Сайт
-- **Next.js 16 (App Router) + TypeScript (strict) + Tailwind CSS v4**, `output: 'export'`: сайт собирается в готовые HTML-страницы. Нет своего сервера — нет серверных уязвимостей, максимальная скорость.
-- Тексты на трёх языках — в файлах словарей (`messages/en.json`, `ru.json`, `tj.json`), страницы для каждого языка генерируются при сборке.
-- Шрифты подключаются через `next/font` и **раздаются с нашего домена**: браузер посетителя не обращается к Google Fonts.
-- Нет сторонних трекеров. Определение местоположения посетителя (ipapi.co со старого сайта) **удаляется**.
+### 4.1 Site
+- **Next.js 16 (App Router) + TypeScript (strict) + Tailwind CSS v4**, `output: 'export'`: the site is built into plain HTML pages. No server of our own means no server-side vulnerabilities and maximum speed.
+- Texts in three languages live in dictionaries (`messages/en.json`, `ru.json`, `tj.json`); pages for each language are generated at build time.
+- Fonts are loaded with `next/font` and **served from our own domain**: the visitor's browser never contacts Google Fonts.
+- No third-party trackers. Visitor geolocation (ipapi.co on the old site) is **removed**.
 
-### 4.2 Живая схема (`GET /public/stats`)
-Новый публичный адрес в API Simorgh. Отдаёт только безопасные агрегаты:
+### 4.2 Live pipeline (`GET /public/stats`)
+A new public endpoint in the Simorgh API. It returns only safe aggregates:
 ```json
 { "articles": 558, "reviewed": 12, "published": 7,
   "latest": { "source": "BBC News", "title": "…" }, "updated_at": "…" }
 ```
-- Ответ кэшируется на сервере на 60 секунд — сайт не нагружает базу.
-- Если API недоступен, схема показывает цифры, сохранённые **при сборке сайта**, и вместо «Live» — «Updated <дата>». Сайт никогда не ломается из-за API.
-- **Честность:** анимация бегущей новости иллюстрирует процесс; реальные — цифры и заголовок последней новости. Подпись под схемой говорит именно это.
+- The answer is cached on the server for 60 seconds, so the site does not load the database.
+- If the API is unavailable, the pipeline shows the numbers saved **at build time** and "Updated <date>" instead of "Live". The site never breaks because of the API.
+- **Honesty:** the travelling news item illustrates the process; the numbers and the latest headline are real. The caption under the pipeline says exactly that.
 
-### 4.3 Форма связи (`POST /public/contact`)
-Поля: имя (до 100 символов), email, сообщение (20–2000 символов). Путь заявки: проверка на сайте → проверка на сервере → сообщение в Telegram владельцу через бота Simorgh. **Сообщения не хранятся в базе.**
+### 4.3 Contact form (`POST /public/contact`)
+Fields: name (up to 100 characters), email, message (20–2000 characters). Path: validation in the browser → validation on the server → Telegram message to the owner through the Simorgh bot. **Messages are not stored in the database.**
 
-Защита от спама и злоупотреблений — см. раздел 5.
+Spam and abuse protection — see section 5.
 
-Если отправка не удалась, форма показывает понятную ошибку и прямую ссылку на Telegram.
+If sending fails, the form shows a clear error and a direct link to Telegram.
 
-## 5. Безопасность
+## 5. Security
 
-### Сайт (заголовки через файл `_headers` Cloudflare Pages)
-- **Content-Security-Policy**: скрипты и стили только со своего домена и Cloudflare Turnstile; запросы только к своему API; запрет встраивания сайта в чужие страницы (`frame-ancestors 'none'`).
-- **Strict-Transport-Security** (только HTTPS), **X-Content-Type-Options: nosniff**, **Referrer-Policy: strict-origin-when-cross-origin**, **Permissions-Policy** (камера, микрофон, геолокация запрещены).
-- Ни одного секрета в коде сайта: всё, что попадает в браузер, считается публичным.
+### Site (headers via the Cloudflare Pages `_headers` file)
+- **Content-Security-Policy**: scripts and styles only from our own domain and Cloudflare Turnstile; requests only to our API; the site cannot be embedded in other pages (`frame-ancestors 'none'`).
+- **Strict-Transport-Security** (HTTPS only), **X-Content-Type-Options: nosniff**, **Referrer-Policy: strict-origin-when-cross-origin**, **Permissions-Policy** (camera, microphone and geolocation off).
+- No secrets in the site's code: everything that reaches the browser is public.
 
 ### API
-- **CORS**: публичные адреса принимают запросы только с домена портфолио.
-- **Ограничение частоты**: не больше 5 заявок в час с одного IP, `stats` — не больше 60 запросов в минуту.
-- **Cloudflare Turnstile** (бесплатная проверка «человек ли это», без картинок и без слежки): токен проверяется **на сервере** секретным ключом.
-- **Ловушка для ботов (honeypot)**: скрытое поле, которое люди не видят; заполнено — заявка молча отбрасывается.
-- **Проверка входных данных** через Pydantic; текст заявки экранируется перед отправкой в Telegram.
-- Публичные адреса не дают доступа к черновикам, панели и данным модерации.
-- Заголовки безопасности добавляются и в Caddy (API).
+- **CORS**: public endpoints accept browser requests only from the portfolio domain.
+- **Rate limits**: at most 5 messages per hour per IP; `stats` at most 60 requests per minute.
+- **Cloudflare Turnstile** (a free "are you human" check without puzzles or tracking): the token is verified **on the server** with the secret key.
+- **Honeypot**: a hidden field people never see; if it is filled in, the message is silently dropped.
+- **Input validation** with Pydantic; the message text is escaped before it is sent to Telegram.
+- Public endpoints give no access to drafts, the panel or moderation data.
+- Security headers are also added by Caddy (API).
 
-### Репозиторий
-- **Dependabot** — автоматические обновления библиотек с исправлениями уязвимостей.
-- **CodeQL** (бесплатный анализ кода GitHub) и `npm audit` в CI.
-- `SECURITY.md` — как сообщить об уязвимости.
+### Repository
+- **Dependabot** — automatic dependency updates with security fixes.
+- **CodeQL** (GitHub's free code analysis) and `npm audit` in CI.
+- `SECURITY.md` — how to report a vulnerability.
 
 ## 6. SEO
 
-- Уникальные `title` и `description` на каждой странице и языке.
-- `hreflang` между языковыми версиями, `canonical` на каждой странице.
-- `sitemap.xml` и `robots.txt` генерируются при сборке.
-- Структурированные данные (JSON-LD): `Person` и `ProfessionalService` — Google понимает, кто вы и что предлагаете.
-- Картинки для превью ссылок (Open Graph) для главной и кейса.
-- Семантическая разметка: один `h1` на странице, правильная иерархия заголовков.
-- Домен: старт на адресе Cloudflare Pages (`*.pages.dev`), затем `.com` после первого заказа (~$11/год на Cloudflare или Porkbun). Сайт с первого дня готов к смене домена. Старый адрес `mahmud0547.github.io` перенаправляет на новый.
+- Unique `title` and `description` on every page and language.
+- `hreflang` between language versions and `canonical` on every page.
+- `sitemap.xml` and `robots.txt` generated at build time.
+- Structured data (JSON-LD): `Person` and `ProfessionalService`, so Google understands who I am and what I offer.
+- Link preview (Open Graph) image.
+- Semantic markup: one `h1` per page and a correct heading hierarchy.
+- Domain: launch on the Cloudflare Pages address (`*.pages.dev`), then a `.com` after the first order (about $11/year at Cloudflare or Porkbun). The site is ready for a domain change from day one. The old address `mahmud0547.github.io` redirects to the new one.
 
-## 7. Доступность
+## 7. Accessibility
 
-- Контраст текста — не ниже WCAG AA.
-- Вся навигация и форма работают с клавиатуры, видимый фокус.
-- `alt` у всех содержательных изображений, подписи у полей формы.
-- Уважение `prefers-reduced-motion`.
+- Text contrast at least WCAG AA.
+- All navigation and the form work with a keyboard, with a visible focus.
+- `alt` on every meaningful image, labels on every form field.
+- `prefers-reduced-motion` is respected.
 
-## 8. Производительность
+## 8. Performance
 
-- JavaScript главной — до 200 КБ (gzip): ~160 КБ занимает сам Next.js (уточнено 2026-10-01, см. ADR 0004).
-- LCP (время появления основного содержимого) — до 2 секунд на мобильном.
-- Изображения в WebP/AVIF, с размерами, ленивой загрузкой ниже первого экрана.
+- Home page JavaScript up to 200 KB gzip: Next.js itself takes about 160 KB (adjusted 2026-10-01, see ADR 0004).
+- LCP (time until the main content appears) under 2 seconds on mobile.
+- Images in WebP/AVIF with explicit sizes, lazy-loaded below the first screen.
 
-## 9. Инженерные стандарты
+## 9. Engineering standards
 
-Структура репозитория:
+Repository layout:
 ```
-app/            страницы (App Router)
-components/     компоненты интерфейса
-content/        кейсы (MDX)
-messages/       словари en / ru / tj
-lib/            утилиты (запросы к API, форматирование)
-public/         изображения, _headers, robots
+app/            routes (App Router)
+components/     UI components
+content/        links, projects, prices, stats snapshot
+messages/       en / ru / tj dictionaries
+lib/            helpers (API calls, formatting, SEO)
+public/         images and static files
+scripts/        build and check scripts
 docs/
-  architecture.md       схема системы и потоки данных
-  adr/                  записи архитектурных решений (почему так)
-  specs/                технические задания
-tests/          тесты
+  architecture.md       system diagram and data flows
+  adr/                  architecture decision records (why it is built this way)
+  specs/                design specifications
+tests/          tests
 ```
 
-- **README** — что это, скриншот, стек, как запустить, как развернуть.
-- **ADR** — первые записи: «Статический экспорт вместо сервера», «Cloudflare Pages вместо GitHub Pages», «Source Serif 4 вместо Literata».
-- **SECURITY.md**, **CHANGELOG.md**, **LICENSE** (MIT для кода; тексты и фотографии — все права защищены).
-- **Коммиты** по Conventional Commits (`feat:`, `fix:`, `docs:`…).
-- **CI (GitHub Actions)** на каждое изменение: проверка типов, линтер, тесты (Vitest — утилиты; Playwright — проверка, что главная и форма работают), сборка, Lighthouse CI с порогом 95.
-- **Предпросмотр**: каждая ветка получает свой адрес на Cloudflare Pages.
+- **README** — what it is, a screenshot, stack, how to run and deploy.
+- **ADRs** — first records: "Static export instead of a server", "Cloudflare Pages instead of GitHub Pages", "Source Serif 4 instead of Literata".
+- **SECURITY.md**, **CHANGELOG.md**, **LICENSE** (MIT for code; texts and photos all rights reserved).
+- **Commits** follow Conventional Commits (`feat:`, `fix:`, `docs:`…).
+- **CI (GitHub Actions)** on every change: type check, lint, tests (Vitest for helpers; Playwright for pages and the form), build, Lighthouse CI.
+- **Previews**: a branch can be deployed to its own Cloudflare Pages address.
 
-Те же стандарты затем применяются к репозиторию Simorgh (отдельная задача).
+The same standards then apply to the Simorgh repository (a separate task).
 
-## 10. Что нужно от владельца
+## 10. What the owner provides
 
-- [x] Аккаунт **Cloudflare** (бесплатный, без карты) — хостинг и Turnstile. Создан 2026-09-19.
-- [x] Ссылки:
+- [x] A **Cloudflare** account (free, no card) for hosting and Turnstile. Created 2026-09-19.
+- [x] Links:
   - Telegram: https://t.me/Simorgh_Dev
   - LinkedIn: https://www.linkedin.com/in/mahmud-faiezov
   - Instagram: https://www.instagram.com/mahmud.simorghdev
   - Fiverr: https://www.fiverr.com/s/3A8051m
   - Upwork: https://www.upwork.com/freelancers/~01b20f000a77d7d8e3
   - GitHub: https://github.com/Mahmud0547
-- [x] Адреса сайтов для скриншотов:
+- [x] Sites for screenshots:
   - Kamarob Nature Fund: https://mahmud0547.github.io/kamarob-nature-fund/
   - Simorgh Dawn: https://mahmud0547.github.io/simorgh-dawn/
-- [ ] Перевод на таджикский: черновик готовлю я, финальную проверку делает владелец как носитель языка.
+- [ ] Tajik translation: a draft is provided; the owner, a native speaker, does the final review.
 
-## 11. Вне рамок этого этапа
+## 11. Out of scope
 
-Блог, CMS, аналитика посетителей, оплата на сайте, личный кабинет клиента, отзывы (появятся после первых реальных заказов).
+Blog, CMS, visitor analytics, payments on the site, client accounts, reviews (they will appear after the first real orders).
 
-## 12. Этапы
+## 12. Stages
 
-1. Каркас проекта, токены, шрифты, CI, документация.
-2. Главная страница по макету (десктоп и мобильный), три языка.
-3. Публичные адреса API (`stats`, `contact`) + защита.
-4. Живая схема и форма на сайте.
-5. Страница кейса Simorgh, privacy, 404.
-6. SEO, заголовки безопасности, проверка Lighthouse.
-7. Запуск на Cloudflare Pages, перенаправление со старого адреса.
+1. Project skeleton, tokens, fonts, CI, documentation.
+2. Home page from the mockup (desktop and mobile), three languages.
+3. Public API endpoints (`stats`, `contact`) and their protection.
+4. Live pipeline and contact form on the site.
+5. Simorgh case study, privacy page, 404.
+6. SEO, security headers, Lighthouse checks.
+7. Launch on Cloudflare Pages and the redirect from the old address.
