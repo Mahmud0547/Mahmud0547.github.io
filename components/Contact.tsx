@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { links } from "@/content/site";
-import { getMessages, type Locale } from "@/lib/i18n";
+import { getMessages, localePath, type Locale } from "@/lib/i18n";
+import { ContactForm } from "./ContactForm";
 
 const external = { target: "_blank", rel: "noopener noreferrer" } as const;
 
@@ -49,8 +50,9 @@ export function Contact({ locale }: { locale: Locale }) {
             ))}
           </ul>
         </div>
-        {/* Contact form arrives in plan 2 (Turnstile + Simorgh API). */}
-        <div data-slot="contact-form" className="lg:w-[520px] lg:shrink-0" />
+        <div data-slot="contact-form" className="lg:w-[520px] lg:shrink-0">
+          <ContactForm t={t.form} telegram={links.telegram} privacyHref={localePath(locale, "/privacy/")} />
+        </div>
       </div>
     </section>
   );
