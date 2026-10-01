@@ -1,0 +1,142 @@
+{
+  "meta": {
+    "title": "Mahmud Faiezov — Telegram bots and AI automation",
+    "description": "I design, build and deploy Telegram bots and AI automation that run 24/7. Fixed price, clear scope, source code included."
+  },
+  "nav": {
+    "skip": "Skip to content",
+    "main": "Main",
+    "work": "Work",
+    "services": "Services",
+    "about": "About",
+    "contact": "Contact",
+    "hire": "Hire me",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "language": "Language"
+  },
+  "hero": {
+    "status": "Available for new projects",
+    "title": "Telegram bots and AI automation that run 24/7",
+    "lead": "I'm Mahmud, a developer from Dushanbe. I design, build and deploy bots that answer customers, write content and move data between your tools. You get clean code you own.",
+    "primary": "See my work",
+    "secondary": "Order a bot"
+  },
+  "pipeline": {
+    "title": "Simorgh, my AI newsroom",
+    "updated": "Updated {date}",
+    "collect": { "title": "Collect", "text": "BBC and Al Jazeera feeds, every 30 minutes", "metric": "{count} articles" },
+    "write": { "title": "Write", "text": "An LLM turns an English article into a Russian post" },
+    "review": { "title": "Review", "text": "Approve, edit or reject in the web panel or in Telegram", "metric": "{count} reviewed" },
+    "publish": { "title": "Publish", "text": "Approved posts go straight to the channel", "metric": "{count} published" },
+    "latest": "Latest from {source}",
+    "caption": "Numbers and the latest headline come from the production server."
+  },
+  "trustLabel": "Why clients can trust the work",
+  "trust": [
+    "Payment protected by Fiverr and Upwork",
+    "Full source code with every order",
+    "Dushanbe, UTC+5: overlaps with the European workday"
+  ],
+  "work": {
+    "title": "Selected work",
+    "lead": "Real systems, running in production, with the code on GitHub.",
+    "allProjects": "All projects on GitHub",
+    "caseLabel": "Case study",
+    "screenshotAlt": "Screenshot of {name}",
+    "live": "Live site",
+    "code": "Source code",
+    "simorgh": {
+      "name": "Simorgh News",
+      "summary": "An AI newsroom that turns world news into ready-to-publish Telegram posts.",
+      "problemLabel": "Problem",
+      "problem": "Running a news channel alone means hours of reading sources and rewriting posts every day.",
+      "solutionLabel": "Solution",
+      "solution": "A pipeline collects articles every 30 minutes, an LLM drafts posts in Russian, and the editor approves them in a web panel or right in Telegram.",
+      "resultLabel": "Result",
+      "result": "Running 24/7 on a cloud server since September 2026. {count} articles processed; publishing a post takes one click."
+    },
+    "kamarob": {
+      "name": "Kamarob Nature Fund",
+      "summary": "A four-language website for a Tajik NGO that protects snow leopard habitat in the Kamarob Gorge."
+    },
+    "dawn": {
+      "name": "Simorgh Dawn",
+      "summary": "A rocket flight simulator in the browser: thrust, fuel burn and trajectory with live charts."
+    }
+  },
+  "services": {
+    "title": "Services",
+    "lead": "Fixed price, clear scope, source code included. Order through Fiverr or Upwork: the payment is held safely until you accept the work.",
+    "recommended": "Recommended",
+    "fiverr": "Order on Fiverr",
+    "upwork": "Order on Upwork",
+    "packages": [
+      {
+        "name": "AI Starter Bot",
+        "terms": "3 days, 1 revision",
+        "features": ["AI replies with GPT, DeepSeek or Claude", "Up to 5 commands", "Buttons and menus"]
+      },
+      {
+        "name": "AI Bot + Database",
+        "terms": "5 days, 2 revisions",
+        "features": ["Everything in Starter", "Database for users and orders", "Replies in several languages", "Conversation flows"]
+      },
+      {
+        "name": "Full AI System",
+        "terms": "10 days, 3 revisions",
+        "features": ["Everything in AI Bot + Database", "Web admin panel with login", "Cloud deployment, running 24/7", "HTTPS and backups"]
+      }
+    ],
+    "review": {
+      "title": "Not sure which package fits?",
+      "text": "Describe the task you want to automate. I will suggest the simplest setup that works, free and with no obligation.",
+      "cta": "Describe your task"
+    }
+  },
+  "process": {
+    "title": "How I work",
+    "lead": "Four steps, the same on every project. You always know what is happening and what comes next.",
+    "steps": [
+      { "title": "Plan", "text": "You describe the idea. I reply with a short plan: features, conversation flow and timeline. Work starts after you confirm." },
+      { "title": "Build", "text": "I develop the bot, connect the AI model and the database, and share progress along the way." },
+      { "title": "Test", "text": "You try the bot in Telegram. I fix issues and apply your revisions." },
+      { "title": "Deliver", "text": "You get the source code and setup instructions. On the Full AI System plan, the bot is deployed and running." }
+    ]
+  },
+  "about": {
+    "title": "Hi, I'm Mahmud",
+    "paragraphs": [
+      "I study Computer Science at MISIS in Dushanbe and build automation systems for people who would rather not do the same task twice. My first production system, Simorgh, has been running on a cloud server since September 2026.",
+      "I keep things simple on purpose: fewer moving parts, clear code, and documentation good enough that another developer can take over tomorrow."
+    ],
+    "photoAlt": "Mahmud Faiezov with an eagle",
+    "facts": [
+      { "label": "Based in", "value": "Dushanbe, UTC+5" },
+      { "label": "Languages", "value": "Tajik, Russian, English" },
+      { "label": "Studying", "value": "Computer Science, MISIS" }
+    ],
+    "skillGroups": { "backend": "Backend", "frontend": "Frontend", "ai": "AI", "infrastructure": "Infrastructure" },
+    "certificate": {
+      "name": "Responsive Web Design, freeCodeCamp",
+      "details": "300 hours, March 2026",
+      "verify": "Verify certificate"
+    }
+  },
+  "contact": {
+    "title": "Tell me what you want to automate",
+    "lead": "I reply within 24 hours. A good first message answers three questions:",
+    "questions": [
+      "What do you or your team do by hand today?",
+      "Where does the information live: Telegram, a website, a spreadsheet?",
+      "What should happen when the bot is done?"
+    ]
+  },
+  "footer": {
+    "copyright": "© {year} Mahmud Faiezov. Built with Next.js, hosted on Cloudflare."
+  },
+  "notFound": {
+    "title": "Page not found",
+    "home": "Back to the home page"
+  }
+}

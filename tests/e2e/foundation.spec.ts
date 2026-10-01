@@ -44,3 +44,18 @@ test("body uses the design tokens", async ({ page }) => {
   expect(body.color).toBe("rgb(21, 24, 39)");
   expect(body.background).toBe("rgb(243, 244, 247)");
 });
+
+for (const [path, lang] of [["/", "en"], ["/ru/", "ru"], ["/tj/", "tg"]] as const) {
+  test(`${path} is served with lang="${lang}"`, async ({ page }) => {
+    const response = await page.goto(path);
+    expect(response?.status()).toBe(200);
+    await expect(page.locator("html")).toHaveAttribute("lang", lang);
+  });
+}
+
+for (const path of ["/en/", "/tg/", "/de/"]) {
+  test(`${path} is not a page`, async ({ page }) => {
+    const response = await page.goto(path);
+    expect(response?.status()).toBe(404);
+  });
+}
