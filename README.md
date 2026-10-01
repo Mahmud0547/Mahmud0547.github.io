@@ -33,7 +33,7 @@ npx lhci autorun
 | `content/` | links, projects, skills, prices, stats snapshot |
 | `messages/` | EN / RU / TJ dictionaries |
 | `lib/` | i18n and formatting helpers |
-| `docs/` | architecture, decisions (ADR), specs and plans |
+| `docs/` | architecture, decisions (ADR) and specs |
 
 ## Deploy
 

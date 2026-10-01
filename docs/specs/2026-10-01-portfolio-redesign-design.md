@@ -143,7 +143,7 @@ public/         изображения, _headers, robots
 docs/
   architecture.md       схема системы и потоки данных
   adr/                  записи архитектурных решений (почему так)
-  superpowers/specs/    технические задания
+  specs/                технические задания
 tests/          тесты
 ```
 
