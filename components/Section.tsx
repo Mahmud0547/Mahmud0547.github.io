@@ -3,6 +3,7 @@ export function Section({
   title,
   lead,
   dark = false,
+  className = "",
   action,
   children,
 }: {
@@ -10,6 +11,7 @@ export function Section({
   title: string;
   lead?: string;
   dark?: boolean;
+  className?: string;
   action?: React.ReactNode;
   children: React.ReactNode;
 }) {
@@ -17,7 +19,7 @@ export function Section({
     <section
       id={id}
       aria-labelledby={`${id}-title`}
-      className={`scroll-mt-4 pb-[72px] pt-16 lg:pb-[120px] lg:pt-28 ${dark ? "dark-surface bg-deep text-white" : ""}`}
+      className={`scroll-mt-4 pb-[72px] pt-16 lg:pb-[120px] lg:pt-28 ${dark ? "dark-surface bg-deep text-white" : ""} ${className}`}
     >
       <div className="container-page">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between lg:gap-6">

@@ -57,3 +57,17 @@ test("external links open safely in a new tab", async ({ page }) => {
     await expect(link).toHaveAttribute("rel", /noopener/);
   }
 });
+
+test("services list three packages with order links", async ({ page }) => {
+  await page.goto("/");
+  const services = page.locator("#services");
+  await expect(services.getByRole("heading", { level: 3 })).toHaveText(["AI Starter Bot", "AI Bot + Database", "Full AI System"]);
+  await expect(services).toContainText("$50");
+  await expect(services).toContainText("$140");
+  await expect(services).toContainText("$320");
+  await expect(services.getByRole("link", { name: "Order on Fiverr" })).toHaveCount(3);
+  await expect(services.getByRole("link", { name: "Order on Upwork" })).toHaveCount(3);
+  await expect(services.getByRole("link", { name: "Order on Fiverr" }).first()).toHaveAttribute("href", "https://www.fiverr.com/s/3A8051m");
+  await expect(services.getByText("Recommended")).toHaveCount(1);
+  await expect(services.getByRole("link", { name: "Describe your task" })).toHaveAttribute("href", "/#contact");
+});
