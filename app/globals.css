@@ -1,0 +1,72 @@
+@import "tailwindcss";
+
+@theme {
+  --color-deep: #172a66;
+  --color-lapis: #233c8c;
+  --color-saffron: #e0a526;
+  --color-turquoise: #17807e;
+  --color-paper: #f3f4f7;
+  --color-white: #ffffff;
+  --color-ink: #151827;
+  --color-soft: #5b6072;
+  --color-line: #dfe2ea;
+  --color-mist: #c9d2ee;
+  --color-dim: #9fb0dd;
+  --color-panel: #1f3479;
+  --color-mint: #3fd3b4;
+  --color-haze: #dce3ef;
+  --color-darker: #101f4f;
+
+  --font-sans: var(--font-onest), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-source-serif), ui-serif, Georgia, serif;
+}
+
+@utility container-page {
+  margin-inline: auto;
+  width: 100%;
+  max-width: 1440px;
+  padding-inline: 20px;
+
+  @media (width >= 48rem) {
+    padding-inline: 40px;
+  }
+
+  @media (width >= 80rem) {
+    padding-inline: 80px;
+  }
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-lapis);
+  outline-offset: 3px;
+}
+
+.dark-surface :focus-visible {
+  outline-color: var(--color-saffron);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .pipeline-packet {
+    animation: pipeline-packet 1.4s ease-in-out infinite;
+  }
+}
+
+@keyframes pipeline-packet {
+  from {
+    opacity: 0;
+    transform: translateY(0);
+  }
+  20% {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+    transform: translateY(var(--packet-distance, 20px));
+  }
+}
