@@ -11,6 +11,7 @@
   --color-soft: #5b6072;
   --color-line: #dfe2ea;
   --color-mist: #c9d2ee;
+  --color-dim: #9fb0dd;
 
   --font-sans: var(--font-onest), ui-sans-serif, system-ui, sans-serif;
   --font-serif: var(--font-source-serif), ui-serif, Georgia, serif;
