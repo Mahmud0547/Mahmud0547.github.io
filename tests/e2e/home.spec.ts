@@ -71,3 +71,29 @@ test("services list three packages with order links", async ({ page }) => {
   await expect(services.getByText("Recommended")).toHaveCount(1);
   await expect(services.getByRole("link", { name: "Describe your task" })).toHaveAttribute("href", "/#contact");
 });
+
+test("process lists four numbered steps", async ({ page }) => {
+  await page.goto("/");
+  const steps = page.locator("#process ol > li");
+  await expect(steps).toHaveCount(4);
+  await expect(page.locator("#process h3")).toHaveText(["Plan", "Build", "Test", "Deliver"]);
+});
+
+test("about shows photo, facts, skills and the certificate", async ({ page }) => {
+  await page.goto("/");
+  const about = page.locator("#about");
+  await expect(about.getByRole("heading", { level: 2 })).toHaveText("Hi, I'm Mahmud");
+  await expect(about.getByRole("img", { name: "Mahmud Faiezov with an eagle" })).toBeVisible();
+  await expect(about.locator("dt")).toHaveText(["Based in", "Languages", "Studying"]);
+  await expect(about.getByRole("listitem").filter({ hasText: "FastAPI" })).toHaveCount(1);
+  await expect(about.getByRole("link", { name: "Verify certificate" })).toHaveAttribute(
+    "href",
+    "https://freecodecamp.org/certification/makha_0547/responsive-web-design-v9",
+  );
+});
+
+test("about text uses the serif font", async ({ page }) => {
+  await page.goto("/");
+  const family = await page.locator("#about p.font-serif").first().evaluate((el) => getComputedStyle(el).fontFamily);
+  expect(family).toMatch(/source.?serif/i);
+});
