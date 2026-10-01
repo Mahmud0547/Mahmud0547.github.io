@@ -39,13 +39,12 @@ export function MobileMenu({
         type="button"
         aria-expanded={open}
         aria-controls="mobile-menu"
-        aria-label={open ? closeLabel : openLabel}
         onClick={() => setOpen((value) => !value)}
         className="flex items-center gap-2.5 text-white"
       >
-        <span aria-hidden="true" className="rounded-full bg-white/12 px-2.5 py-1.5 text-[13px] font-semibold">
-          {current}
-        </span>
+        <span className="rounded-full bg-white/12 px-2.5 py-1.5 text-[13px] font-semibold">{current}</span>
+        {/* Name = visible "EN" + this text, so voice control users can say what they see (WCAG 2.5.3). */}
+        <span className="sr-only">{open ? closeLabel : openLabel}</span>
         <span aria-hidden="true" className="grid size-10 place-items-center rounded-[10px] bg-white/8">
           <svg width="20" height="20" viewBox="0 0 20 20">
             {open ? (

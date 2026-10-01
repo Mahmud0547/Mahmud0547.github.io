@@ -46,7 +46,7 @@ export function Pipeline({ locale, stats }: { locale: Locale; stats: Stats }) {
         })}
       </ol>
       {stats.latest && (
-        <div className="flex flex-col gap-[3px] rounded-xl bg-white/6 px-3.5 py-3 lg:rounded-[14px] lg:px-4 lg:py-3.5">
+        <div className="flex flex-col gap-[3px] rounded-xl bg-white/4 px-3.5 py-3 lg:rounded-[14px] lg:px-4 lg:py-3.5">
           <p className="text-xs font-semibold text-saffron">{format(t.latest, { source: stats.latest.source })}</p>
           <p className="text-sm font-medium leading-[1.35] text-white lg:text-[15px]">{stats.latest.title}</p>
         </div>
