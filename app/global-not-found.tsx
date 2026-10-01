@@ -7,7 +7,7 @@ import { getMessages } from "@/lib/i18n";
 
 const t = getMessages("en");
 
-export const metadata: Metadata = { title: `${t.notFound.title} | SimorghDev`, robots: { index: false } };
+export const metadata: Metadata = { title: `${t.notFound.title} | SimorghDev` };
 
 export default function GlobalNotFound() {
   return (

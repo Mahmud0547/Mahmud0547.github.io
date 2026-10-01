@@ -1,8 +1,10 @@
 import type { Locale } from "@/lib/i18n";
+import { personJsonLd } from "@/lib/seo";
 import { About } from "./About";
 import { Contact } from "./Contact";
 import { Footer } from "./Footer";
 import { Header } from "./Header";
+import { JsonLd } from "./JsonLd";
 import { Hero } from "./Hero";
 import { Process } from "./Process";
 import { Services } from "./Services";
@@ -23,6 +25,7 @@ export function HomePage({ locale }: { locale: Locale }) {
         <Contact locale={locale} />
       </main>
       <Footer locale={locale} />
+      <JsonLd data={personJsonLd(locale)} />
     </>
   );
 }
