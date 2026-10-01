@@ -18,10 +18,10 @@ export const projects = {
     tags: ["Cloudflare Workers", "D1", "TypeScript", "Telegram bot"],
   },
   kamarob: {
-    live: "https://mahmud0547.github.io/kamarob-nature-fund/",
+    live: "https://kamarob.simorgh-dev.workers.dev/en",
     code: "https://github.com/Mahmud0547/kamarob-nature-fund",
     image: "/work/kamarob.webp",
-    tags: ["JavaScript", "Supabase", "i18n"],
+    tags: ["Next.js", "Supabase", "Realtime chat", "Admin panel"],
   },
   dawn: {
     live: "https://mahmud0547.github.io/simorgh-dawn/",
