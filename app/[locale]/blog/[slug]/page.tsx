@@ -14,13 +14,14 @@ export function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const article = articleBySlug((await params).slug);
+  const { locale, slug } = await params;
+  const article = isLocale(locale) ? articleBySlug(slug, locale) : undefined;
   return article ? articleMetadata(article) : {};
 }
 
 export default async function Page({ params }: Props) {
   const { locale, slug } = await params;
-  const article = articleBySlug(slug);
+  const article = isLocale(locale) ? articleBySlug(slug, locale) : undefined;
   if (!isLocale(locale) || !article) notFound();
   return <BlogArticle locale={locale} article={article} />;
 }

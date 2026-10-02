@@ -236,7 +236,7 @@
     "lead": "Notes from real projects: bots, AI automation and web platforms.",
     "read": "Read",
     "back": "All articles",
-    "englishNote": "Articles are written in English.",
+    "englishNote": "Some articles are in English only.",
     "minutes": "{count} min read"
   },
   "footer": {

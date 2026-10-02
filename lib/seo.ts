@@ -35,19 +35,39 @@ export function sitemapEntries(): MetadataRoute.Sitemap {
     locales.map((locale) => ({ url: absolute(locale, path), alternates: { languages: languageLinks(path) } })),
   );
   // Articles are in English; only the English URL is listed (the others point to it as canonical).
-  const articles = allArticles().map((a) => ({ url: absolute("en", `/blog/${a.slug}/`), lastModified: a.date }));
+  // Each article once per language it is written in; untranslated copies point their canonical to English.
+  const articles = allArticles().flatMap((a) =>
+    a.languages.map((lang) => ({ url: absolute(lang, `/blog/${a.slug}/`), lastModified: a.date })),
+  );
   return [...pages, ...articles];
 }
 
-/** Metadata for an article: one canonical English URL for every language version of the page. */
-export function articleMetadata(article: { slug: string; title: string; description: string; date: string }): Metadata {
-  const url = absolute("en", `/blog/${article.slug}/`);
+/**
+ * Metadata for an article. A translated article has its own canonical URL and hreflang links to its other languages;
+ * a page showing the English text under another locale points its canonical to the English URL.
+ */
+export function articleMetadata(article: { slug: string; lang: Locale; languages: Locale[]; title: string; description: string; date: string }): Metadata {
+  const path = `/blog/${article.slug}/`;
+  const url = absolute(article.lang, path);
+  const languages =
+    article.languages.length > 1
+      ? Object.fromEntries([...article.languages.map((l) => [htmlLang[l], absolute(l, path)]), ["x-default", absolute("en", path)]])
+      : undefined;
   return {
     metadataBase: new URL(config.siteUrl),
     title: `${article.title} | SimorghDev`,
     description: article.description,
-    alternates: { canonical: url },
-    openGraph: { title: article.title, description: article.description, url, siteName: "SimorghDev", type: "article", publishedTime: article.date, images: [ogImage] },
+    alternates: { canonical: url, ...(languages ? { languages } : {}) },
+    openGraph: {
+      title: article.title,
+      description: article.description,
+      url,
+      siteName: "SimorghDev",
+      type: "article",
+      locale: ogLocale[article.lang],
+      publishedTime: article.date,
+      images: [ogImage],
+    },
     twitter: { card: "summary_large_image", title: article.title, description: article.description, images: [ogImage.url] },
     verification: { google: config.googleVerification },
   };

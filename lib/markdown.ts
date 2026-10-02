@@ -8,33 +8,74 @@ export type Inline =
   | { type: "text" | "strong" | "em" | "code"; text: string }
   | { type: "link"; text: string; href: string };
 
+export interface QuizQuestion {
+  question: string;
+  options: { text: string; correct: boolean }[];
+  explanation: string;
+}
+
 export type Block =
   | { type: "h2" | "h3" | "p" | "quote"; text: string }
   | { type: "ul" | "ol"; items: string[] }
-  | { type: "code"; text: string };
+  | { type: "code"; text: string; lang: string }
+  | { type: "table"; head: string[]; rows: string[][] }
+  | { type: "demo"; name: string }
+  | { type: "quiz"; questions: QuizQuestion[] };
+
+/**
+ * A quiz block:
+ *   ? Question
+ *   - wrong answer
+ *   + right answer
+ *   ! explanation shown after answering
+ * Questions are separated by a blank line.
+ */
+export function parseQuiz(text: string): QuizQuestion[] {
+  return text
+    .split(/\n\s*\n/)
+    .map((chunk) => chunk.split("\n").map((l) => l.trim()).filter(Boolean))
+    .filter((lines) => lines.length > 0)
+    .map((lines) => {
+      const question = lines.find((l) => l.startsWith("? "))?.slice(2) ?? "";
+      const options = lines.filter((l) => /^[-+] /.test(l)).map((l) => ({ text: l.slice(2), correct: l.startsWith("+") }));
+      const explanation = lines.find((l) => l.startsWith("! "))?.slice(2) ?? "";
+      if (!question || options.length < 2 || options.filter((o) => o.correct).length !== 1) {
+        throw new Error(`Invalid quiz question: ${lines.join(" | ")}`);
+      }
+      return { question, options, explanation };
+    });
+}
 
 export function parseBlocks(source: string): Block[] {
   const blocks: Block[] = [];
   const text = source.replace(/\r\n/g, "\n");
   // Code fences first, so blank lines inside code do not split it.
-  const parts = text.split(/^```[a-z]*\n([\s\S]*?)^```$/m);
-  parts.forEach((part, index) => {
-    if (index % 2 === 1) {
-      blocks.push({ type: "code", text: part.replace(/\n$/, "") });
-      return;
+  const parts = text.split(/^```([a-z]*)\n([\s\S]*?)^```$/m);
+  // split() with two capture groups yields: text, lang, code, text, lang, code, …
+  for (let index = 0; index < parts.length; index += 3) {
+    const part = parts[index] ?? "";
+    if (index > 0) {
+      const lang = parts[index - 2] ?? "";
+      const code = (parts[index - 1] ?? "").replace(/\n$/, "");
+      blocks.push(lang === "quiz" ? { type: "quiz", questions: parseQuiz(code) } : { type: "code", text: code, lang });
     }
     for (const chunk of part.split(/\n{2,}/)) {
       const lines = chunk.split("\n").map((l) => l.trim()).filter(Boolean);
       if (lines.length === 0) continue;
       const first = lines[0]!;
-      if (first.startsWith("### ")) blocks.push({ type: "h3", text: first.slice(4) });
+      const demo = /^\{\{demo:([a-z-]+)\}\}$/.exec(first);
+      if (demo && lines.length === 1) blocks.push({ type: "demo", name: demo[1]! });
+      else if (first.startsWith("### ")) blocks.push({ type: "h3", text: first.slice(4) });
       else if (first.startsWith("## ")) blocks.push({ type: "h2", text: first.slice(3) });
-      else if (lines.every((l) => /^[-*] /.test(l))) blocks.push({ type: "ul", items: lines.map((l) => l.slice(2)) });
+      else if (lines.length >= 3 && lines.every((l) => l.startsWith("|")) && /^\|[\s:|-]+\|$/.test(lines[1]!)) {
+        const cells = (l: string) => l.replace(/^\||\|$/g, "").split("|").map((c) => c.trim());
+        blocks.push({ type: "table", head: cells(first), rows: lines.slice(2).map(cells) });
+      } else if (lines.every((l) => /^[-*] /.test(l))) blocks.push({ type: "ul", items: lines.map((l) => l.slice(2)) });
       else if (lines.every((l) => /^\d+\. /.test(l))) blocks.push({ type: "ol", items: lines.map((l) => l.replace(/^\d+\. /, "")) });
       else if (lines.every((l) => l.startsWith(">"))) blocks.push({ type: "quote", text: lines.map((l) => l.replace(/^>\s?/, "")).join(" ") });
       else blocks.push({ type: "p", text: lines.join(" ") });
     }
-  });
+  }
   return blocks;
 }
 

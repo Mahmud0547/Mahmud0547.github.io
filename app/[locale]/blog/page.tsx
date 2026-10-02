@@ -15,5 +15,5 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function Page({ params }: Props) {
   const { locale } = await params;
   if (!isLocale(locale)) return null;
-  return <BlogIndex locale={locale} articles={allArticles()} />;
+  return <BlogIndex locale={locale} articles={allArticles(locale)} />;
 }

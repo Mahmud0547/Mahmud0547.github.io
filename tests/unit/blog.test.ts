@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { allArticles, parseArticle } from "@/lib/blog";
+import { allArticles, articleBySlug, parseArticle } from "@/lib/blog";
+import type { Locale } from "@/lib/locale";
 import { parseBlocks, parseInline } from "@/lib/markdown";
 
 describe("parseArticle", () => {
@@ -55,5 +56,59 @@ describe("markdown", () => {
       { type: "text", text: " " },
       { type: "text", text: "y" },
     ]);
+  });
+});
+
+describe("interactive blocks", () => {
+  it("reads a demo placeholder on its own line", () => {
+    expect(parseBlocks("Text\n\n{{demo:bot-flow}}\n\nMore")).toEqual([
+      { type: "p", text: "Text" },
+      { type: "demo", name: "bot-flow" },
+      { type: "p", text: "More" },
+    ]);
+  });
+
+  it("keeps the language of a code fence", () => {
+    expect(parseBlocks("```python\nprint(1)\n```")).toEqual([{ type: "code", text: "print(1)", lang: "python" }]);
+  });
+
+  it("reads a quiz with one right answer per question", () => {
+    const [block] = parseBlocks("```quiz\n? Q1\n- a\n+ b\n! because\n\n? Q2\n+ x\n- y\n```");
+    expect(block).toEqual({
+      type: "quiz",
+      questions: [
+        { question: "Q1", options: [{ text: "a", correct: false }, { text: "b", correct: true }], explanation: "because" },
+        { question: "Q2", options: [{ text: "x", correct: true }, { text: "y", correct: false }], explanation: "" },
+      ],
+    });
+  });
+
+  it("rejects a quiz question without exactly one right answer", () => {
+    expect(() => parseBlocks("```quiz\n? Q\n- a\n- b\n```")).toThrow(/Invalid quiz/);
+    expect(() => parseBlocks("```quiz\n? Q\n+ a\n+ b\n```")).toThrow(/Invalid quiz/);
+  });
+
+  it("reads a table", () => {
+    expect(parseBlocks("| | A | B |\n|---|---|---|\n| x | 1 | 2 |")).toEqual([{ type: "table", head: ["", "A", "B"], rows: [["x", "1", "2"]] }]);
+  });
+});
+
+describe("translations", () => {
+  it("serves a translation where one exists and English otherwise", () => {
+    const tj = allArticles("tj");
+    const bot = tj.find((a) => a.slug === "how-a-telegram-bot-works")!;
+    expect(bot.lang).toBe("tj");
+    expect(bot.languages).toEqual(["en", "ru", "tj"]);
+    expect(tj.find((a) => a.slug === "official-data-you-can-trust")!.lang).toBe("en");
+  });
+
+  it("has the same interactive blocks in every language of an article", () => {
+    for (const article of allArticles()) {
+      const shape = (lang: Locale) =>
+        parseBlocks(articleBySlug(article.slug, lang)!.body)
+          .filter((b) => b.type === "demo" || b.type === "quiz")
+          .map((b) => (b.type === "demo" ? b.name : `quiz:${b.questions.length}`));
+      for (const lang of article.languages) expect(shape(lang)).toEqual(shape("en"));
+    }
   });
 });
