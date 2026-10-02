@@ -48,16 +48,14 @@ export function BotFlowDemo({ locale }: { locale: Locale }) {
   const last = f.steps.length - 1;
   const message = f.messages[choice]!;
   const [from, to] = hops[step]!;
+  // Playing stops by itself on the last step: there is nothing left to advance to.
+  const running = playing && step < last;
 
   useEffect(() => {
-    if (!playing) return;
-    if (step >= last) {
-      setPlaying(false);
-      return;
-    }
+    if (!running) return;
     const id = window.setTimeout(() => setStep((s) => Math.min(s + 1, last)), STEP_MS);
     return () => window.clearTimeout(id);
-  }, [playing, step, last]);
+  }, [running, step, last]);
 
   const button = "rounded-full border border-line bg-white px-4 py-2 text-sm font-semibold hover:border-lapis disabled:opacity-40";
 
@@ -119,12 +117,19 @@ export function BotFlowDemo({ locale }: { locale: Locale }) {
           {f.next} →
         </button>
         {step === last ? (
-          <button type="button" className={button} onClick={() => setStep(0)}>
+          <button
+            type="button"
+            className={button}
+            onClick={() => {
+              setPlaying(false);
+              setStep(0);
+            }}
+          >
             ↺ {f.restart}
           </button>
         ) : (
-          <button type="button" className={button} onClick={() => setPlaying((p) => !p)} aria-pressed={playing}>
-            {playing ? `⏸ ${f.pause}` : `▶ ${f.play}`}
+          <button type="button" className={button} onClick={() => setPlaying(!running)} aria-pressed={running}>
+            {running ? `⏸ ${f.pause}` : `▶ ${f.play}`}
           </button>
         )}
       </div>
