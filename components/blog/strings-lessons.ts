@@ -43,7 +43,7 @@ const en = {
     exampleTexts: [
       "В Душанбе открылась новая библиотека на 20 000 книг. Вход свободный.",
       "Okay, the user wants a post in Russian. Let me think about the structure first.",
-      "Дар Душанбе китобхонаи нав бо 20 000 китоб кушода шуд.",
+      "Ҳуҷҷатҳои ҳисоботӣ ҷамъ шуданд ва ба ҳамаи шарикон фиристода шуданд.",
     ],
     letters: "Letters",
     russian: "Russian letters",

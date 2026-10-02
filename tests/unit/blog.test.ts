@@ -109,7 +109,7 @@ describe("translations", () => {
     const bot = tj.find((a) => a.slug === "how-a-telegram-bot-works")!;
     expect(bot.lang).toBe("tj");
     expect(bot.languages).toEqual(["en", "ru", "tj"]);
-    expect(tj.find((a) => a.slug === "official-data-you-can-trust")!.lang).toBe("en");
+    for (const a of tj) expect(a.lang).toBe(a.languages.includes("tj") ? "tj" : "en");
   });
 
   it("has the same interactive blocks in every language of an article", () => {

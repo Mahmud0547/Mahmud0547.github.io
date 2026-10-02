@@ -1,31 +1,7 @@
-import type { ComponentType } from "react";
 import type { Locale } from "@/lib/locale";
 import { parseBlocks, parseInline } from "@/lib/markdown";
-import { AccessDemo } from "./blog/AccessDemo";
-import { AmountDemo } from "./blog/AmountDemo";
-import { BotFlowDemo } from "./blog/BotFlowDemo";
-import { BotPlayground } from "./blog/BotPlayground";
-import { ChainDemo } from "./blog/ChainDemo";
-import { EditorDemo } from "./blog/EditorDemo";
-import { LettersDemo } from "./blog/LettersDemo";
-import { LinkDemo } from "./blog/LinkDemo";
-import { NominalDemo } from "./blog/NominalDemo";
-import { OutageDemo } from "./blog/OutageDemo";
+import { Demo } from "./blog/Demo";
 import { Quiz } from "./blog/Quiz";
-
-/** Interactive blocks an article can place with {{demo:name}} on its own line. */
-const demos: Record<string, ComponentType<{ locale: Locale }>> = {
-  "bot-flow": BotFlowDemo,
-  "bot-playground": BotPlayground,
-  "amount": AmountDemo,
-  "editor": EditorDemo,
-  "letters": LettersDemo,
-  "chain": ChainDemo,
-  "nominal": NominalDemo,
-  "outage": OutageDemo,
-  "access": AccessDemo,
-  "signed-link": LinkDemo,
-};
 
 const external = { target: "_blank", rel: "noopener noreferrer" } as const;
 
@@ -106,11 +82,9 @@ export function Markdown({ source, locale = "en", labels }: { source: string; lo
                 </table>
               </div>
             );
-          case "demo": {
-            const Demo = demos[block.name];
-            if (!Demo) throw new Error(`Unknown demo "${block.name}"`);
-            return <Demo key={i} locale={locale} />;
-          }
+          case "demo":
+            // Interactive blocks an article places with {{demo:name}} on its own line.
+            return <Demo key={i} name={block.name} locale={locale} />;
           case "quiz":
             return <Quiz key={i} locale={locale} questions={block.questions} />;
           case "code":

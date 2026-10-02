@@ -51,11 +51,11 @@ export function NominalDemo({ locale }: { locale: Locale }) {
       <div className="grid gap-2 sm:grid-cols-2" aria-live="polite">
         <div className="rounded-xl border-2 border-[#c2410c] bg-white p-4">
           <p className="text-sm font-semibold text-[#9a3412]">✗ {t.wrong}</p>
-          <p className="break-all font-mono">{fmt(safe)} × {fmt(rate.value)} = {fmt(safe * rate.value)} TJS</p>
+          <p className="font-mono">{fmt(safe)} × {fmt(rate.value)} = {fmt(safe * rate.value)} TJS</p>
         </div>
         <div className="rounded-xl border-2 border-turquoise bg-white p-4">
           <p className="text-sm font-semibold text-[#0d5e5c]">✓ {t.right}</p>
-          <p className="break-all font-mono">{fmt(safe)} × {fmt(rate.value)} ÷ {rate.nominal} = {fmt(toSomoni(safe, rate.value, rate.nominal))} TJS</p>
+          <p className="font-mono">{fmt(safe)} × {fmt(rate.value)} ÷ {rate.nominal} = {fmt(toSomoni(safe, rate.value, rate.nominal))} TJS</p>
         </div>
       </div>
       <p className="text-sm text-soft">{t.note}</p>

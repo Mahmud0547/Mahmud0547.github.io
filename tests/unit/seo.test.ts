@@ -47,9 +47,9 @@ describe("sitemapEntries", () => {
         "/privacy/", "/ru/privacy/", "/tj/privacy/",
         "/blog/", "/ru/blog/", "/tj/blog/",
         "/blog/how-a-telegram-bot-works/", "/ru/blog/how-a-telegram-bot-works/", "/tj/blog/how-a-telegram-bot-works/",
-        "/blog/ai-newsroom-human-in-the-loop/",
-        "/blog/official-data-you-can-trust/",
-        "/blog/access-rules-in-the-database/",
+        "/blog/ai-newsroom-human-in-the-loop/", "/ru/blog/ai-newsroom-human-in-the-loop/", "/tj/blog/ai-newsroom-human-in-the-loop/",
+        "/blog/official-data-you-can-trust/", "/ru/blog/official-data-you-can-trust/", "/tj/blog/official-data-you-can-trust/",
+        "/blog/access-rules-in-the-database/", "/ru/blog/access-rules-in-the-database/", "/tj/blog/access-rules-in-the-database/",
       ].map((p) => `${site}${p}`).sort(),
     );
   });
