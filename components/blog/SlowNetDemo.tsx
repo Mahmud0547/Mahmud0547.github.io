@@ -2,6 +2,7 @@
 
 import { useState, useSyncExternalStore } from "react";
 import { homePage, loadSeconds, partsFor, type Network } from "@/lib/demos";
+import { formatNumber } from "@/lib/format";
 import type { Locale } from "@/lib/locale";
 import { DemoFrame } from "./DemoFrame";
 import { demoStrings } from "./strings";
@@ -24,7 +25,7 @@ function useConnection(): Connection | null | "" {
 
 export function SlowNetDemo({ locale }: { locale: Locale }) {
   const t = lessonStrings[locale].slowNet;
-  const number = new Intl.NumberFormat(locale === "tj" ? "tg" : locale, { maximumFractionDigits: 1 });
+  const number = { format: (n: number) => formatNumber(n, locale, { maximumFractionDigits: 1 }) };
   const [network, setNetwork] = useState<Network>("3g");
   const connection = useConnection();
 

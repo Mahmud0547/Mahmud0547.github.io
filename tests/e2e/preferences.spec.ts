@@ -155,7 +155,7 @@ test.describe("light version", () => {
 });
 
 test.describe("head script position", () => {
-  for (const path of ["/", "/tj/blog/how-a-telegram-bot-works/"]) {
+  for (const path of ["/", "/ru/", "/tj/", "/tj/blog/how-a-telegram-bot-works/", "/tj/blog/websites-for-slow-internet/"]) {
     test(`runs before the stylesheet and hydrates without errors on ${path}`, async ({ page }) => {
       const errors: string[] = [];
       page.on("console", (message) => {
