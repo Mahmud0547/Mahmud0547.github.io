@@ -5,6 +5,7 @@ import { formatDate } from "@/lib/format";
 import { format, getMessages, localePath, type Locale, type Messages } from "@/lib/i18n";
 import { htmlLang } from "@/lib/locale";
 import { outline } from "@/lib/markdown";
+import { articleImage } from "@/lib/seo";
 import { CourseProgress, type LessonLink } from "./blog/CourseProgress";
 import { LessonDone } from "./blog/LessonDone";
 import { ReadingProgress } from "./blog/ReadingProgress";
@@ -205,6 +206,7 @@ export function BlogArticle({ locale, article, lessons = [] }: { locale: Locale;
           description: article.description,
           datePublished: article.date,
           inLanguage: lang,
+          image: articleImage(article).url,
           url,
           mainEntityOfPage: url,
           author: { "@type": "Person", name: "Mahmud Faiezov", url: config.siteUrl },
