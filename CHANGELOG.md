@@ -12,6 +12,7 @@ All notable changes to this project are documented here. The format follows [Kee
 - Performance budgets matched to the Next.js runtime (ADR 0004).
 - Dark theme with a switcher: Light, Same as the device, Dark; remembered in the browser and applied before the first paint.
 - Light version for slow internet: switches on by itself on 2G/3G or data saver, turns off motion, and loads photos and lesson exercises only on tap.
+- Lesson 5 of “How it works”: a website for slow internet, with a load-time simulator built on this site's real page sizes, in English, Russian and Tajik.
 
 ### Removed
 - Visitor geolocation via ipapi.co and Google Fonts requests.

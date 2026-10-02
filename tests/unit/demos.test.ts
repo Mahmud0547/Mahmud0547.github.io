@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { cyrillicCheck, matchRule, parseAmount, pythonCode, runChain, toSomoni, tryAccess } from "@/lib/demos";
+import { cyrillicCheck, homePage, loadSeconds, matchRule, parseAmount, partsFor, pythonCode, runChain, toSomoni, tryAccess } from "@/lib/demos";
 
 describe("matchRule", () => {
   const rules = [
@@ -93,5 +93,31 @@ describe("tryAccess", () => {
   });
   it("never lets anyone make themselves admin", () => {
     expect(tryAccess("admin", "makeAdmin", "database", "api")).toBe("refused");
+  });
+});
+
+describe("lesson 5: slow internet", () => {
+  it("downloads everything in the full version and skips photos in the light one", () => {
+    expect(partsFor(homePage, false).map((p) => p.id)).toEqual(["html", "css", "fonts", "js", "photos"]);
+    expect(partsFor(homePage, true).map((p) => p.id)).toEqual(["html", "css", "fonts", "js"]);
+  });
+
+  it("estimates load time from size, speed and round trips", () => {
+    // 613 KB over 700 kbit/s plus three round trips of 270 ms.
+    expect(loadSeconds(homePage, "3g", false)).toBeCloseTo((613 * 8) / 700 + 0.81, 5);
+    // The light version skips the photo wave: 271 KB and two round trips.
+    expect(loadSeconds(homePage, "3g", true)).toBeCloseTo((271 * 8) / 700 + 0.54, 5);
+  });
+
+  it("the light version is always faster, and slower networks are always slower", () => {
+    for (const net of ["4g", "3g", "2g"] as const) {
+      expect(loadSeconds(homePage, net, true)).toBeLessThan(loadSeconds(homePage, net, false));
+    }
+    expect(loadSeconds(homePage, "4g", false)).toBeLessThan(loadSeconds(homePage, "3g", false));
+    expect(loadSeconds(homePage, "3g", false)).toBeLessThan(loadSeconds(homePage, "2g", false));
+  });
+
+  it("matches the real build closely enough to quote in the lesson", () => {
+    expect(homePage.reduce((sum, p) => sum + p.kb, 0)).toBe(613);
   });
 });

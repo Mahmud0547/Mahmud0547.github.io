@@ -50,6 +50,7 @@ describe("sitemapEntries", () => {
         "/blog/ai-newsroom-human-in-the-loop/", "/ru/blog/ai-newsroom-human-in-the-loop/", "/tj/blog/ai-newsroom-human-in-the-loop/",
         "/blog/official-data-you-can-trust/", "/ru/blog/official-data-you-can-trust/", "/tj/blog/official-data-you-can-trust/",
         "/blog/access-rules-in-the-database/", "/ru/blog/access-rules-in-the-database/", "/tj/blog/access-rules-in-the-database/",
+        "/blog/websites-for-slow-internet/", "/ru/blog/websites-for-slow-internet/", "/tj/blog/websites-for-slow-internet/",
       ].map((p) => `${site}${p}`).sort(),
     );
   });

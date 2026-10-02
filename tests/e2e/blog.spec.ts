@@ -6,24 +6,25 @@ const LESSONS = [
   "How an AI newsroom works — and why a person still has the last word",
   "Where exchange rates come from — and how to build a site people can trust",
   "Who can see what: why access rules belong in the database",
+  "A website for slow internet: what a page really downloads",
 ];
 
 test("the blog shows the course with its lessons in order", async ({ page }) => {
   await page.goto("/blog/");
   await expect(page.locator("h1")).toHaveText("Blog");
   const course = page.getByRole("region", { name: "How it works" });
-  await expect(course.getByRole("listitem")).toHaveCount(4);
+  await expect(course.getByRole("listitem")).toHaveCount(5);
   for (const [i, title] of LESSONS.entries()) {
-    await expect(course.getByRole("listitem").nth(i)).toContainText(`Lesson ${i + 1} of 4`);
+    await expect(course.getByRole("listitem").nth(i)).toContainText(`Lesson ${i + 1} of 5`);
     await expect(course.getByRole("listitem").nth(i)).toContainText(title);
   }
-  await expect(course.getByText("0 of 4 lessons finished")).toBeVisible();
+  await expect(course.getByText("0 of 5 lessons finished")).toBeVisible();
 });
 
 test("a lesson has its header, what you will learn, code and structured data", async ({ page }) => {
   await page.goto("/blog/access-rules-in-the-database/");
   await expect(page.locator("h1")).toHaveText(LESSONS[3]!);
-  await expect(page.getByText("How it works · Lesson 4 of 4")).toBeVisible();
+  await expect(page.getByText("How it works · Lesson 4 of 5")).toBeVisible();
   await expect(page.getByText("Intermediate", { exact: true })).toBeVisible();
   await expect(page.getByRole("region", { name: /In this lesson you will learn/ }).getByRole("listitem")).toHaveCount(5);
   await expect(page.locator("article pre code").first()).toContainText("create policy");
@@ -39,7 +40,7 @@ test("finishing a lesson is remembered in the course list", async ({ page }) => 
   await page.getByRole("link", { name: /Next lesson/ }).click();
   await expect(page).toHaveURL(/\/blog\/ai-newsroom-human-in-the-loop\/$/);
   await page.goto("/blog/");
-  await expect(page.getByText("1 of 4 lessons finished")).toBeVisible();
+  await expect(page.getByText("1 of 5 lessons finished")).toBeVisible();
 });
 
 test("the contents link to the sections of the lesson", async ({ page, isMobile }) => {
@@ -63,7 +64,7 @@ test("Russian blog keeps the Russian interface and Russian lessons", async ({ pa
   await page.getByRole("link", { name: /Как работает ИИ-редакция/ }).click();
   await expect(page).toHaveURL(/\/ru\/blog\/ai-newsroom-human-in-the-loop\/$/);
   await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", "https://simorghdev.pages.dev/ru/blog/ai-newsroom-human-in-the-loop/");
-  await expect(page.getByText("Как это работает · Урок 2 из 4")).toBeVisible();
+  await expect(page.getByText("Как это работает · Урок 2 из 5")).toBeVisible();
 });
 
 test("header links to the blog", async ({ page, isMobile }) => {
@@ -182,7 +183,30 @@ test("lesson 4: rules in the app leak, rules in the database refuse; links expir
   await expect(link.getByText(/this link has expired/)).toBeVisible();
 });
 
-const LESSON_PATHS = ["/blog/ai-newsroom-human-in-the-loop/", "/blog/official-data-you-can-trust/", "/blog/access-rules-in-the-database/"];
+test("lesson 5: the light version of the page is ready sooner and skips the photos", async ({ page }) => {
+  await page.goto("/blog/websites-for-slow-internet/");
+  const demo = await demoBlock(page, "How long does this page take?");
+  const seconds = async (label: string) =>
+    Number((await demo.getByText(label, { exact: true }).locator("..").locator("span").nth(1).innerText()).replace(/[^\d.]/g, ""));
+
+  await demo.getByRole("button", { name: "3G" }).click();
+  await expect(demo.getByRole("button", { name: "3G" })).toHaveAttribute("aria-pressed", "true");
+  const full3g = await seconds("Full version");
+  const lite3g = await seconds("Light version");
+  expect(lite3g).toBeLessThan(full3g);
+  await expect(demo.getByText(/downloads 342 KB less/)).toBeVisible();
+
+  await demo.getByRole("button", { name: "2G" }).click();
+  expect(await seconds("Full version")).toBeGreaterThan(full3g);
+  await expect(demo.getByRole("row", { name: /Photos/ })).toContainText("waits for a tap");
+});
+
+const LESSON_PATHS = [
+  "/blog/ai-newsroom-human-in-the-loop/",
+  "/blog/official-data-you-can-trust/",
+  "/blog/access-rules-in-the-database/",
+  "/blog/websites-for-slow-internet/",
+];
 
 for (const path of ["/blog/", "/tj/blog/", BOT, `/tj${BOT}`, ...LESSON_PATHS, ...LESSON_PATHS.map((p) => `/tj${p}`)]) {
   test(`no WCAG A/AA violations on ${path}`, async ({ page }) => {
