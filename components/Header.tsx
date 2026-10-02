@@ -12,6 +12,7 @@ export function navItems(locale: Locale): NavItem[] {
     { href: `${home}#work`, label: t.nav.work },
     { href: `${home}#services`, label: t.nav.services },
     { href: `${home}#about`, label: t.nav.about },
+    { href: localePath(locale, "/blog/"), label: t.nav.blog },
     { href: `${home}#contact`, label: t.nav.contact },
   ];
 }

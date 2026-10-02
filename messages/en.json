@@ -9,6 +9,7 @@
     "work": "Work",
     "services": "Services",
     "about": "About",
+    "blog": "Blog",
     "contact": "Contact",
     "hire": "Hire me",
     "openMenu": "Open menu",
@@ -229,6 +230,14 @@
         "text": "If you have questions about your data or want a message deleted, write to me on Telegram."
       }
     ]
+  },
+  "blog": {
+    "title": "Blog",
+    "lead": "Notes from real projects: bots, AI automation and web platforms.",
+    "read": "Read",
+    "back": "All articles",
+    "englishNote": "Some articles are in English only.",
+    "minutes": "{count} min read"
   },
   "footer": {
     "copyright": "© {year} Mahmud Faiezov. Built with Next.js, hosted on Cloudflare.",
