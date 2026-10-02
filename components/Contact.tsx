@@ -7,6 +7,7 @@ const external = { target: "_blank", rel: "noopener noreferrer" } as const;
 
 const channels = [
   ["Telegram", links.telegram],
+  ["Telegram channel", links.channel],
   ["GitHub", links.github],
   ["LinkedIn", links.linkedin],
   ["Instagram", links.instagram],

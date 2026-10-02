@@ -57,7 +57,7 @@ test("shows a helpful error when the server fails", async ({ page }) => {
   await form.getByRole("button", { name: "Send message" }).click();
   const alert = page.locator("#contact").getByRole("alert");
   await expect(alert).toContainText("Could not send");
-  await expect(alert.getByRole("link", { name: "Telegram" })).toHaveAttribute("href", "https://t.me/Simorgh_Dev");
+  await expect(alert.getByRole("link", { name: "Telegram" })).toHaveAttribute("href", "https://t.me/SimorghDev");
   await expect(form.getByRole("button", { name: "Send message" })).toBeEnabled();
   await expect.poll(() => page.evaluate(() => (window as unknown as { __turnstileResets?: number }).__turnstileResets)).toBe(1);
 });

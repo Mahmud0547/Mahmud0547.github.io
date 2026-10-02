@@ -25,6 +25,7 @@ export function pageMetadata({ locale, path, title, description }: { locale: Loc
     alternates: { canonical: url, languages: { ...languageLinks(path), "x-default": absolute("en", path) } },
     openGraph: { title, description, url, siteName: "SimorghDev", locale: ogLocale[locale], type: "website", images: [ogImage] },
     twitter: { card: "summary_large_image", title, description, images: [ogImage.url] },
+    verification: { google: config.googleVerification },
   };
 }
 
@@ -49,7 +50,7 @@ export function personJsonLd(locale: Locale): Record<string, unknown> {
         url: home,
         image: `${config.siteUrl}/images/mahmud.webp`,
         address: { "@type": "PostalAddress", addressLocality: "Dushanbe", addressCountry: "TJ" },
-        sameAs: [links.github, links.linkedin, links.instagram, links.fiverr, links.upwork, links.telegram],
+        sameAs: [links.github, links.linkedin, links.instagram, links.fiverr, links.upwork, links.telegram, links.channel],
       },
       {
         "@type": "ProfessionalService",
