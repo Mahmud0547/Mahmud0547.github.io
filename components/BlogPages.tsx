@@ -16,8 +16,13 @@ type BlogText = Messages["blog"];
 
 const languageNames: Record<Locale, string> = { en: "English", ru: "Русский", tj: "Тоҷикӣ" };
 
-/** Link to an article. Slugs are already limited to [a-z0-9-] by lib/blog.ts; encoding keeps any other value inert. */
-const articlePath = (locale: Locale, slug: string) => localePath(locale, `/blog/${encodeURIComponent(slug)}/`);
+const SLUG = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+
+/** Link to an article. Slugs come from file names; anything but [a-z0-9-] is refused at build time. */
+function articlePath(locale: Locale, slug: string): string {
+  if (!SLUG.test(slug)) throw new Error(`Unsafe article slug: ${slug}`);
+  return localePath(locale, `/blog/${slug}/`);
+}
 
 function lessonLinks(locale: Locale, lessons: Article[], t: BlogText): LessonLink[] {
   return lessons.map((a) => ({
@@ -107,7 +112,7 @@ export function BlogArticle({ locale, article, lessons = [] }: { locale: Locale;
   const course = article.series && lessons.length > 0 ? lessonLinks(locale, lessons, t) : null;
 
   return (
-    <PageShell locale={locale} path={`/blog/${encodeURIComponent(article.slug)}/`}>
+    <PageShell locale={locale} path={articlePath("en", article.slug)}>
       <ReadingProgress target="article" />
       <div className="container-page flex max-w-[1160px] flex-col gap-6 py-12 lg:py-20">
         <Link href={localePath(locale, "/blog/")} className="self-start font-semibold text-lapis">← {t.back}</Link>
