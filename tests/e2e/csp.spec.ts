@@ -1,8 +1,9 @@
 import { readFileSync } from "node:fs";
 import { expect, test, type Page } from "@playwright/test";
+import { policyFor } from "../../scripts/headers.mjs";
 
-// http-server cannot send headers, so attach the generated Content-Security-Policy to every document.
-const csp = readFileSync("out/_headers", "utf8").match(/Content-Security-Policy: (.+)/)![1];
+// http-server cannot send headers, so attach the policy Cloudflare would send for each document's path.
+const headers = readFileSync("out/_headers", "utf8");
 
 async function withCsp(page: Page) {
   const violations: string[] = [];
@@ -13,12 +14,13 @@ async function withCsp(page: Page) {
   await page.route("http://localhost:4173/**", async (route) => {
     if (route.request().resourceType() !== "document") return route.fallback();
     const response = await route.fetch();
+    const csp = policyFor(headers, new URL(route.request().url()).pathname);
     await route.fulfill({ response, headers: { ...response.headers(), "content-security-policy": csp } });
   });
   return violations;
 }
 
-for (const path of ["/", "/ru/", "/tj/work/simorgh/", "/privacy/", "/no-such-page/"]) {
+for (const path of ["/", "/ru/", "/tj/work/simorgh/", "/privacy/", "/tj/blog/how-a-telegram-bot-works/", "/no-such-page/"]) {
   test(`${path} runs under the strict CSP`, async ({ page }) => {
     const violations = await withCsp(page);
     await page.goto(path);
