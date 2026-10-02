@@ -8,6 +8,7 @@ describe("formatCount", () => {
     expect(formatCount(1558, "en")).toBe("1,558");
     expect(spaces(formatCount(1558, "ru"))).toBe("1 558");
     expect(formatCount(7, "tj")).toBe("7");
+    expect(spaces(formatCount(1558, "tj"))).toBe("1 558");
   });
 });
 
@@ -15,7 +16,7 @@ describe("formatDate", () => {
   it("formats a long date in Dushanbe time", () => {
     expect(formatDate("2026-10-01T09:00:00Z", "en")).toBe("October 1, 2026");
     expect(spaces(formatDate("2026-10-01T09:00:00Z", "ru"))).toBe("1 октября 2026 г.");
-    expect(formatDate("2026-10-01T09:00:00Z", "tj")).toContain("2026");
+    expect(formatDate("2026-10-01T09:00:00Z", "tj")).toBe("1 октябри 2026");
   });
 
   it("uses the Dushanbe calendar day, not UTC", () => {
@@ -38,5 +39,13 @@ describe("shortSource", () => {
     ["Reuters — Top stories", "Reuters"],
   ])("shortens %s", (source, expected) => {
     expect(shortSource(source)).toBe(expected);
+  });
+});
+
+describe("Tajik formatting is the same on the server and in the browser", () => {
+  it("does not depend on Tajik locale data, which browsers lack", () => {
+    // Browsers fall back to English for "tg"; our output must not come from that path.
+    expect(formatPrice(140, "tj")).not.toContain("$140");
+    expect(formatDate("2026-10-03T00:00:00Z", "tj")).toBe("3 октябри 2026");
   });
 });
