@@ -34,16 +34,16 @@ export function LettersDemo({ locale }: { locale: Locale }) {
           [t.russian, String(check.cyrillic)],
           [t.share, `${percent}%`],
         ].map(([label, value]) => (
-          <div key={label} className="rounded-lg bg-white p-2">
+          <div key={label} className="rounded-lg bg-surface p-2">
             <dt className="text-xs text-soft">{label}</dt>
             <dd className="font-mono text-lg font-bold">{value}</dd>
           </div>
         ))}
       </dl>
       <div className="h-3 overflow-hidden rounded-full bg-line" aria-hidden="true">
-        <div className={`h-full ${check.pass ? "bg-turquoise" : "bg-[#c2410c]"}`} style={{ width: `${percent}%` }} />
+        <div className={`h-full ${check.pass ? "bg-turquoise" : "bg-danger-line"}`} style={{ width: `${percent}%` }} />
       </div>
-      <p aria-live="polite" className={`rounded-lg px-3 py-2 font-semibold ${check.pass ? "bg-[#e3f4f1] text-[#0d5e5c]" : "bg-[#fdeee6] text-[#9a3412]"}`}>
+      <p aria-live="polite" className={`rounded-lg px-3 py-2 font-semibold ${check.pass ? "bg-success-soft text-success" : "bg-danger-soft text-danger"}`}>
         {check.pass ? `✓ ${t.pass}` : `✗ ${t.fail}`}
       </p>
     </DemoFrame>

@@ -28,7 +28,7 @@ export function EditorDemo({ locale }: { locale: Locale }) {
                   <p>{item.source}</p>
                 </div>
                 <div className="rounded-lg border border-line p-3">
-                  <p className="text-xs font-bold uppercase tracking-wide text-lapis">{t.draft}</p>
+                  <p className="text-xs font-bold uppercase tracking-wide text-link">{t.draft}</p>
                   <p>{item.draft}</p>
                 </div>
               </div>

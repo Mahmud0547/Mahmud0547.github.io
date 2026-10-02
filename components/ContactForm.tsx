@@ -94,7 +94,7 @@ export function ContactForm({ t, telegram, privacyHref }: ContactFormProps) {
 
   if (status === "sent") {
     return (
-      <div className="rounded-[20px] bg-white p-6 text-ink lg:rounded-3xl lg:p-9">
+      <div className="rounded-[20px] bg-surface p-6 text-ink lg:rounded-3xl lg:p-9">
         <p role="status" className="text-lg font-semibold leading-normal">
           {t.sent}
         </p>
@@ -108,7 +108,7 @@ export function ContactForm({ t, telegram, privacyHref }: ContactFormProps) {
     <form
       onSubmit={onSubmit}
       onFocus={startTurnstile}
-      className="flex flex-col gap-4 rounded-[20px] bg-white p-6 text-ink lg:gap-5 lg:rounded-3xl lg:p-9"
+      className="flex flex-col gap-4 rounded-[20px] bg-surface p-6 text-ink lg:gap-5 lg:rounded-3xl lg:p-9"
     >
       <label className="flex flex-col gap-2">
         <span className={label}>{t.name}</span>
@@ -141,7 +141,7 @@ export function ContactForm({ t, telegram, privacyHref }: ContactFormProps) {
       {failed && (
         <p role="alert" className="rounded-[10px] bg-paper px-3.5 py-3 text-sm leading-normal text-ink">
           {status === "rate-limited" ? t.tooMany : t.error}{" "}
-          <a href={telegram} target="_blank" rel="noopener noreferrer" className="font-semibold text-lapis underline">
+          <a href={telegram} target="_blank" rel="noopener noreferrer" className="font-semibold text-link underline">
             Telegram
           </a>
         </p>
@@ -149,13 +149,13 @@ export function ContactForm({ t, telegram, privacyHref }: ContactFormProps) {
       <button
         type="submit"
         disabled={status === "sending"}
-        className="rounded-[10px] bg-saffron px-6 py-3.5 text-base font-semibold text-ink disabled:opacity-70"
+        className="rounded-[10px] bg-saffron px-6 py-3.5 text-base font-semibold text-on-accent disabled:opacity-70"
       >
         {status === "sending" ? t.sending : t.send}
       </button>
       <p className="text-[13px] leading-normal text-soft">
         {t.note}{" "}
-        <a href={privacyHref} className="font-medium text-lapis underline">
+        <a href={privacyHref} className="font-medium text-link underline">
           {t.privacy}
         </a>
       </p>

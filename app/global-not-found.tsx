@@ -21,7 +21,7 @@ export default function GlobalNotFound() {
             404
           </p>
           <h1 className="text-[32px] font-extrabold tracking-[-0.03em] lg:text-5xl">{t.notFound.title}</h1>
-          <Link href="/" className="mt-2 rounded-xl bg-saffron px-6 py-[15px] text-base font-semibold text-ink">
+          <Link href="/" className="mt-2 rounded-xl bg-saffron px-6 py-[15px] text-base font-semibold text-on-accent">
             {t.notFound.home}
           </Link>
         </main>

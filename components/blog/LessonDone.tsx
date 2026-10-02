@@ -12,7 +12,7 @@ export function LessonDone({ slug, t }: Props) {
     <div className="flex flex-wrap items-center gap-3 font-sans">
       {done ? (
         <>
-          <p className="rounded-full bg-[#e3f4f1] px-4 py-2 font-semibold text-[#0d5e5c]" role="status">✓ {t.done}</p>
+          <p className="rounded-full bg-success-soft px-4 py-2 font-semibold text-success" role="status">✓ {t.done}</p>
           <button type="button" className="text-sm text-soft underline" onClick={() => setDone(slug, false)}>
             {t.undo}
           </button>

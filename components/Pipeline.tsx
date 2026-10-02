@@ -49,7 +49,7 @@ export function Pipeline({ locale, t, stats, live = false, activeStep = null }: 
               <div aria-hidden="true" className="flex flex-col items-center">
                 <span
                   className={`grid size-8 place-items-center rounded-full text-sm font-bold transition-colors duration-500 lg:size-9 lg:text-[15px] ${
-                    active ? "bg-saffron text-ink" : "bg-white/10 text-white"
+                    active ? "bg-saffron text-on-accent" : "bg-white/10 text-white"
                   }`}
                 >
                   {index + 1}

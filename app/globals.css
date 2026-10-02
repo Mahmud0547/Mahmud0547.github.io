@@ -1,5 +1,20 @@
 @import "tailwindcss";
 
+/* `dark:` follows the theme: an explicit data-theme on <html> wins, otherwise the device setting. */
+@custom-variant dark {
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) & {
+      @slot;
+    }
+  }
+  :root[data-theme="dark"] & {
+    @slot;
+  }
+}
+
+/* `lite:` applies in the light (slow-internet) version, see lib/preferences.ts. */
+@custom-variant lite (:root[data-lite] &);
+
 @theme {
   --color-deep: #172a66;
   --color-lapis: #233c8c;
@@ -16,6 +31,24 @@
   --color-mint: #3fd3b4;
   --color-haze: #dce3ef;
   --color-darker: #101f4f;
+
+  /* Roles that change with the theme (light values; dark ones below). */
+  --color-surface: #ffffff;
+  --color-link: #233c8c;
+  --color-success: #0d5e5c;
+  --color-success-soft: #e3f4f1;
+  --color-danger: #9a3412;
+  --color-danger-line: #c2410c;
+  --color-danger-soft: #fdeee6;
+  --color-tint: #eef1f9;
+  --color-tint-strong: #e6ebf5;
+  --color-idea-soft: #fdf6e3;
+  --color-banner: #fdf6e3;
+  --color-on-turquoise: #ffffff;
+  /* Fixed in both themes. */
+  --color-night: #151827;
+  --color-on-night: #f3f4f7;
+  --color-on-accent: #151827;
 
   --font-sans: var(--font-onest), ui-sans-serif, system-ui, sans-serif;
   --font-serif: var(--font-source-serif), ui-serif, Georgia, serif;
@@ -36,8 +69,67 @@
   }
 }
 
+/*
+ * Dark theme. "Same as the device" follows the system setting; an explicit choice (data-theme on <html>,
+ * set before first paint by the script in components/ThemeScript.tsx) wins over it.
+ * Brand surfaces (deep, panel, darker) and saffron stay; light surfaces become night blue.
+ */
+@layer base {
+  :root {
+    color-scheme: light;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --color-paper: #0b1230;
+    --color-surface: #121a3d;
+    --color-ink: #eef1f9;
+    --color-soft: #a9b3d1;
+    --color-line: #26305a;
+    --color-lapis: #3550b0;
+    --color-link: #9fb0dd;
+    --color-turquoise: #3fd3b4;
+    --color-haze: #1b2550;
+    --color-success: #6fe0c6;
+    --color-success-soft: #13302e;
+    --color-danger: #f3a283;
+    --color-danger-line: #f07a4a;
+    --color-danger-soft: #3a1d1d;
+    --color-tint: #1b2550;
+    --color-tint-strong: #1b2550;
+    --color-idea-soft: #2a2616;
+    --color-banner: #1d2244;
+    --color-on-turquoise: #0b1230;
+  }
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --color-paper: #0b1230;
+  --color-surface: #121a3d;
+  --color-ink: #eef1f9;
+  --color-soft: #a9b3d1;
+  --color-line: #26305a;
+  --color-lapis: #3550b0;
+  --color-link: #9fb0dd;
+  --color-turquoise: #3fd3b4;
+  --color-haze: #1b2550;
+  --color-success: #6fe0c6;
+  --color-success-soft: #13302e;
+  --color-danger: #f3a283;
+  --color-danger-line: #f07a4a;
+  --color-danger-soft: #3a1d1d;
+  --color-tint: #1b2550;
+  --color-tint-strong: #1b2550;
+  --color-idea-soft: #2a2616;
+  --color-banner: #1d2244;
+  --color-on-turquoise: #0b1230;
+}
+
 :focus-visible {
-  outline: 2px solid var(--color-lapis);
+  outline: 2px solid var(--color-link);
   outline-offset: 3px;
 }
 
@@ -69,4 +161,28 @@
     opacity: 0;
     transform: translateY(var(--packet-distance, 20px));
   }
+}
+
+/*
+ * Light version: no motion, and photos wait behind a "Show photo" button (components/LitePhoto.tsx).
+ * Hidden lazy images are never requested, so the bytes are really saved.
+ */
+:root[data-lite] *,
+:root[data-lite] *::before,
+:root[data-lite] *::after {
+  animation: none !important;
+  transition: none !important;
+  scroll-behavior: auto !important;
+}
+
+.lite-placeholder {
+  display: none;
+}
+
+:root[data-lite] .lite-media:not([data-shown]) > .lite-placeholder {
+  display: flex;
+}
+
+:root[data-lite] .lite-media:not([data-shown]) > :not(.lite-placeholder) {
+  display: none;
 }

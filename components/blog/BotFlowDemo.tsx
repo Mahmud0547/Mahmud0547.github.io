@@ -57,7 +57,7 @@ export function BotFlowDemo({ locale }: { locale: Locale }) {
     return () => window.clearTimeout(id);
   }, [running, step, last]);
 
-  const button = "rounded-full border border-line bg-white px-4 py-2 text-sm font-semibold hover:border-lapis disabled:opacity-40";
+  const button = "rounded-full border border-line bg-surface px-4 py-2 text-sm font-semibold hover:border-link disabled:opacity-40";
 
   return (
     <DemoFrame label={t.demo} title={f.title}>
@@ -73,7 +73,7 @@ export function BotFlowDemo({ locale }: { locale: Locale }) {
               setStep(0);
               setPlaying(false);
             }}
-            className={`rounded-full px-4 py-2 font-mono text-sm ${choice === i ? "bg-lapis text-white" : "border border-line bg-white"}`}
+            className={`rounded-full px-4 py-2 font-mono text-sm ${choice === i ? "bg-lapis text-white" : "border border-line bg-surface"}`}
           >
             {m.text}
           </button>
@@ -88,7 +88,7 @@ export function BotFlowDemo({ locale }: { locale: Locale }) {
               key={s}
               data-active={active}
               className={`flex flex-col items-center gap-1 rounded-xl border px-1 py-3 text-center text-[11px] font-semibold transition-colors motion-reduce:transition-none sm:text-sm ${
-                active ? "border-saffron bg-white shadow-sm" : "border-transparent text-soft"
+                active ? "border-saffron bg-surface shadow-sm" : "border-transparent text-soft"
               }`}
             >
               <span className="text-2xl sm:text-3xl">{icons[s]}</span>
@@ -98,13 +98,13 @@ export function BotFlowDemo({ locale }: { locale: Locale }) {
         })}
       </ol>
 
-      <div className="flex min-w-0 flex-col gap-3 rounded-xl bg-white p-4" aria-live="polite">
+      <div className="flex min-w-0 flex-col gap-3 rounded-xl bg-surface p-4" aria-live="polite">
         <p className="text-sm font-bold text-turquoise">
           {format(f.step, { n: step + 1, total: f.steps.length })} · {f.stations[from]}
           {from !== to && ` → ${f.stations[to]}`}
         </p>
         <p>{f.steps[step]}</p>
-        <pre tabIndex={0} className="overflow-x-auto rounded-lg bg-ink p-3 font-mono text-xs leading-relaxed text-paper sm:text-sm">
+        <pre tabIndex={0} className="overflow-x-auto rounded-lg bg-night p-3 font-mono text-xs leading-relaxed text-on-night sm:text-sm">
           <code>{payload(step, message.text, message.reply, message.rule)}</code>
         </pre>
       </div>

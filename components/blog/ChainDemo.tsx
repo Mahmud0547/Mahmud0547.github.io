@@ -42,7 +42,7 @@ export function ChainDemo({ locale }: { locale: Locale }) {
       </button>
       <div aria-live="polite">
         {result && (
-          <ol className="flex flex-col gap-1 rounded-xl bg-ink p-4 font-mono text-sm text-paper">
+          <ol className="flex flex-col gap-1 rounded-xl bg-night p-4 font-mono text-sm text-on-night">
             {result.steps.map((step) => <li key={step.model}>{step.model}: {t.log[step.state]}</li>)}
             {!result.writer && <li className="text-saffron">{t.none}</li>}
           </ol>

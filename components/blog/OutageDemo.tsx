@@ -12,16 +12,16 @@ export function OutageDemo({ locale }: { locale: Locale }) {
 
   return (
     <DemoFrame label={demoStrings[locale].demo} title={t.title}>
-      <label className="flex items-center gap-3 self-start rounded-full bg-white px-4 py-2 font-semibold">
-        <input type="checkbox" className="h-5 w-5 accent-[#c2410c]" checked={down} onChange={(e) => setDown(e.target.checked)} />
+      <label className="flex items-center gap-3 self-start rounded-full bg-surface px-4 py-2 font-semibold">
+        <input type="checkbox" className="h-5 w-5 accent-danger-line" checked={down} onChange={(e) => setDown(e.target.checked)} />
         🏦 {t.toggle}
       </label>
       <div className="grid gap-3 sm:grid-cols-2" aria-live="polite">
-        <div className="flex flex-col gap-2 rounded-xl bg-white p-4">
+        <div className="flex flex-col gap-2 rounded-xl bg-surface p-4">
           <p className="text-sm font-bold">A · {t.naive}</p>
-          {down ? <p className="font-semibold text-[#9a3412]">✗ {t.naiveDown}</p> : <p className="font-mono text-lg font-bold">{t.naiveOk}</p>}
+          {down ? <p className="font-semibold text-danger">✗ {t.naiveDown}</p> : <p className="font-mono text-lg font-bold">{t.naiveOk}</p>}
         </div>
-        <div className="flex flex-col gap-2 rounded-xl bg-white p-4">
+        <div className="flex flex-col gap-2 rounded-xl bg-surface p-4">
           <p className="text-sm font-bold">B · {t.cached}</p>
           <p className="font-mono text-lg font-bold">{t.cachedValue}</p>
           <p className="text-sm text-soft">{down ? t.cachedDownNote : t.cachedNote}</p>

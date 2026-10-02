@@ -18,12 +18,12 @@ export function Quiz({ locale, questions }: { locale: Locale; questions: QuizQue
         {questions.map((q, qi) => {
           const chosen = answers[qi];
           return (
-            <li key={qi} className="flex flex-col gap-2 rounded-xl bg-white p-4">
+            <li key={qi} className="flex flex-col gap-2 rounded-xl bg-surface p-4">
               <p className="font-semibold">{qi + 1}. {q.question}</p>
               <div className="flex flex-col gap-2" role="group" aria-label={q.question}>
                 {q.options.map((option, oi) => {
                   const state =
-                    chosen === null ? "" : option.correct ? "border-turquoise bg-[#e3f4f1]" : chosen === oi ? "border-[#c2410c] bg-[#fdeee6]" : "opacity-60";
+                    chosen === null ? "" : option.correct ? "border-turquoise bg-success-soft" : chosen === oi ? "border-danger-line bg-danger-soft" : "opacity-60";
                   return (
                     <button
                       key={oi}
@@ -31,7 +31,7 @@ export function Quiz({ locale, questions }: { locale: Locale; questions: QuizQue
                       disabled={chosen !== null}
                       aria-pressed={chosen === oi}
                       onClick={() => setAnswers((a) => a.map((v, i) => (i === qi ? oi : v)))}
-                      className={`rounded-lg border border-line px-3 py-2 text-left hover:border-lapis disabled:cursor-default ${state}`}
+                      className={`rounded-lg border border-line px-3 py-2 text-left hover:border-link disabled:cursor-default ${state}`}
                     >
                       {option.text}
                     </button>

@@ -30,7 +30,7 @@ export function LinkDemo({ locale }: { locale: Locale }) {
       {left !== null && (
         <div className={ui.card}>
           <code className="break-all rounded bg-paper px-2 py-1 font-mono text-sm">…/storage/v1/object/sign/documents/report.pdf?token=eyJh…</code>
-          <p className={`font-semibold ${left > 0 ? "text-[#0d5e5c]" : "text-[#9a3412]"}`}>
+          <p className={`font-semibold ${left > 0 ? "text-success" : "text-danger"}`}>
             ⏱ {left > 0 ? format(t.left, { s: left }) : t.expired}
           </p>
           <div className="flex flex-wrap gap-2">

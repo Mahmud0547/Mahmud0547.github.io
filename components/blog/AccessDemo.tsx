@@ -11,10 +11,10 @@ import { ui } from "./ui";
 const roles: Role[] = ["visitor", "member", "editor", "admin"];
 const actions: Action[] = ["readPublic", "readMembers", "writePost", "readInbox", "makeAdmin"];
 const tone: Record<AccessResult, string> = {
-  allowed: "bg-[#e3f4f1] text-[#0d5e5c]",
-  hidden: "bg-white text-ink",
-  refused: "bg-[#e6ebf5] text-deep",
-  leaked: "bg-[#fdeee6] text-[#9a3412]",
+  allowed: "bg-success-soft text-success",
+  hidden: "bg-surface text-ink",
+  refused: "bg-tint-strong text-link",
+  leaked: "bg-danger-soft text-danger",
 };
 
 export function AccessDemo({ locale }: { locale: Locale }) {
@@ -49,7 +49,7 @@ export function AccessDemo({ locale }: { locale: Locale }) {
         <legend className="mb-2 text-sm text-soft">{t.rulesIn}</legend>
         {(["app", "database"] as const).map((where) => (
           <button key={where} type="button" aria-pressed={rulesIn === where} onClick={() => change(setRulesIn)(where)}
-            className={`rounded-full px-4 py-2 text-sm font-semibold ${rulesIn === where ? "bg-lapis text-white" : "border border-line bg-white"}`}>
+            className={`rounded-full px-4 py-2 text-sm font-semibold ${rulesIn === where ? "bg-lapis text-white" : "border border-line bg-surface"}`}>
             {where === "app" ? t.inApp : t.inDb}
           </button>
         ))}
