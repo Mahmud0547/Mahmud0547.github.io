@@ -67,18 +67,35 @@ export function BlogIndex({ locale, articles }: { locale: Locale; articles: Arti
         })}
 
         {others.length > 0 && (
-          <section aria-labelledby="other-articles" className="flex flex-col gap-2">
-            <h2 id="other-articles" className="text-2xl font-extrabold tracking-[-0.02em]">{t.otherArticles}</h2>
-            <ul className="flex flex-col divide-y divide-line">
+          <section aria-labelledby="articles" className="flex flex-col gap-5 rounded-3xl border border-line bg-surface p-5 shadow-sm sm:p-8">
+            <div className="flex flex-col gap-2">
+              <p className="text-xs font-bold uppercase tracking-[0.14em] text-link">{t.articles}</p>
+              <h2 id="articles" className="text-2xl font-extrabold tracking-[-0.02em] lg:text-3xl">{t.articlesTitle}</h2>
+              <p className="text-soft">{t.articlesLead}</p>
+            </div>
+            <ul className="flex flex-col gap-3">
               {others.map((a) => (
-                <li key={a.slug} className="flex flex-col gap-2 py-7">
-                  <p className="text-sm text-soft">
-                    <time dateTime={a.date}>{formatDate(a.date, locale)}</time> · {format(t.minutes, { count: a.minutes })}
-                  </p>
-                  <h3 className="text-xl font-extrabold tracking-[-0.02em]" lang={htmlLang[a.lang]}>
-                    <Link href={articlePath(locale, a.slug)} className="hover:text-link">{a.title}</Link>
-                  </h3>
-                  <p className="font-serif text-[17px] leading-relaxed text-soft" lang={htmlLang[a.lang]}>{a.description}</p>
+                <li key={a.slug}>
+                  <Link
+                    href={articlePath(locale, a.slug)}
+                    className="group flex flex-col gap-2.5 rounded-2xl border border-line bg-paper p-5 hover:border-link sm:p-6"
+                  >
+                    <span className="text-sm text-soft">
+                      <span className="font-semibold text-link">{t.caseStudy}</span> · <time dateTime={a.date}>{formatDate(a.date, locale)}</time> ·{" "}
+                      {format(t.minutes, { count: a.minutes })}
+                    </span>
+                    <span className="text-xl font-extrabold tracking-[-0.02em] group-hover:text-link" lang={htmlLang[a.lang]}>
+                      {a.title}
+                    </span>
+                    <span className="font-serif text-[17px] leading-relaxed text-soft" lang={htmlLang[a.lang]}>
+                      {a.description}
+                    </span>
+                    {a.result && (
+                      <span className="self-start rounded-xl bg-success-soft px-3 py-1.5 text-sm font-bold text-success" lang={htmlLang[a.lang]}>
+                        {a.result}
+                      </span>
+                    )}
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -121,6 +138,7 @@ export function BlogArticle({ locale, article, lessons = [] }: { locale: Locale;
           <article id="article" className="flex min-w-0 flex-col gap-6" lang={lang}>
             <header className="flex flex-col gap-4">
               <p className="flex flex-wrap items-center gap-x-3 gap-y-2 font-sans text-sm text-soft" lang={htmlLang[locale]}>
+                {!article.series && <span className="font-semibold text-link">{t.caseStudy}</span>}
                 {article.series && (
                   <span className="font-semibold text-link">
                     {seriesName(t, article.series.id)} · {format(t.lesson, { n: article.series.lesson, total: Math.max(lessons.length, article.series.lesson) })}
@@ -178,6 +196,21 @@ export function BlogArticle({ locale, article, lessons = [] }: { locale: Locale;
                     <span className="text-xl font-extrabold group-hover:underline" lang={htmlLang[next.lang]}>{next.title}</span>
                   </Link>
                 )}
+              </footer>
+            )}
+
+            {!article.series && (
+              <footer className="dark-surface mt-6 flex flex-col gap-4 rounded-3xl bg-deep p-6 font-sans text-white sm:p-8" lang={htmlLang[locale]}>
+                <h2 className="text-2xl font-extrabold tracking-[-0.02em] lg:text-3xl">{t.cta.title}</h2>
+                <p className="text-lg text-mist">{t.cta.text}</p>
+                <div className="flex flex-col gap-3 sm:flex-row">
+                  <Link href={`${localePath(locale)}#contact`} className="rounded-xl bg-saffron px-6 py-3.5 text-center font-semibold text-on-accent">
+                    {t.cta.contact}
+                  </Link>
+                  <Link href={`${localePath(locale)}#services`} className="rounded-xl border-[1.5px] border-white/35 px-6 py-3.5 text-center font-semibold text-white">
+                    {t.cta.services}
+                  </Link>
+                </div>
               </footer>
             )}
           </article>

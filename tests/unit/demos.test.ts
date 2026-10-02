@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { cyrillicCheck, homePage, loadSeconds, matchRule, parseAmount, partsFor, pythonCode, runChain, toSomoni, tryAccess } from "@/lib/demos";
+import { cyrillicCheck, homePage, loadSeconds, matchRule, parseAmount, partsFor, pythonCode, routineCost, runChain, toSomoni, tryAccess } from "@/lib/demos";
 
 describe("matchRule", () => {
   const rules = [
@@ -119,5 +119,23 @@ describe("lesson 5: slow internet", () => {
 
   it("matches the real build closely enough to quote in the lesson", () => {
     expect(homePage.reduce((sum, p) => sum + p.kb, 0)).toBe(613);
+  });
+});
+
+describe("routine calculator", () => {
+  it("counts hours and money per month", () => {
+    // 40 questions a day × 3 minutes, 22 working days = 44 hours; checking 1 minute each leaves 14.67.
+    const r = routineCost({ perDay: 40, minutes: 3, checkMinutes: 1, hourlyRate: 10 }, 140);
+    expect(r.hoursBefore).toBeCloseTo(44);
+    expect(r.hoursAfter).toBeCloseTo(14.667, 2);
+    expect(r.moneySaved).toBeCloseTo(293.33, 1);
+    // $293.33 / 22 days = $13.33 a day → $140 back in 10.5 days.
+    expect(r.paybackDays).toBeCloseTo(10.5, 1);
+  });
+
+  it("never claims savings when the check takes as long as the task", () => {
+    const r = routineCost({ perDay: 10, minutes: 2, checkMinutes: 5, hourlyRate: 20 }, 140);
+    expect(r.hoursSaved).toBe(0);
+    expect(r.paybackDays).toBeNull();
   });
 });

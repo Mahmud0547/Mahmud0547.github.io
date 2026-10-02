@@ -232,6 +232,11 @@
     ]
   },
   "blog": {
+    "articles": "Articles",
+    "articlesTitle": "Automation in practice",
+    "articlesLead": "Real projects with real numbers: which daily routine our bots took over, and what it means for a business.",
+    "caseStudy": "Case study",
+    "cta": {"title": "Want the same for your business?", "text": "Tell me which task your team repeats every day. I will reply within 24 hours with a plan, a price and a timeline — free and with no obligation.", "contact": "Describe your task", "services": "See packages and prices"},
     "title": "Blog",
     "lead": "Notes from real projects: bots, AI automation and web platforms.",
     "read": "Read",
@@ -252,8 +257,7 @@
     "progress": "{n} of {total} lessons finished",
     "next": "Next lesson",
     "allLessons": "All lessons of the course",
-    "callouts": { "idea": "Key idea", "warning": "Careful" },
-    "otherArticles": "Other articles"
+    "callouts": { "idea": "Key idea", "warning": "Careful" }
   },
   "footer": {
     "copyright": "© {year} Mahmud Faiezov. Built with Next.js, hosted on Cloudflare.",

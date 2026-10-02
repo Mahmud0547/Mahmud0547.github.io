@@ -18,6 +18,7 @@ const demos: Record<string, ComponentType<{ locale: Locale }>> = {
   "outage": dynamic(() => import("./OutageDemo").then((m) => m.OutageDemo)),
   "access": dynamic(() => import("./AccessDemo").then((m) => m.AccessDemo)),
   "signed-link": dynamic(() => import("./LinkDemo").then((m) => m.LinkDemo)),
+  "routine": dynamic(() => import("./RoutineDemo").then((m) => m.RoutineDemo)),
   "slow-net": dynamic(() => import("./SlowNetDemo").then((m) => m.SlowNetDemo)),
 };
 
