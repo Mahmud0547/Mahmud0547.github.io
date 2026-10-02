@@ -1,3 +1,5 @@
+import { existsSync } from "node:fs";
+import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { allArticles, articleBySlug, parseArticle, seriesLessons } from "@/lib/blog";
 import type { Locale } from "@/lib/locale";
@@ -145,5 +147,15 @@ describe("learning blocks", () => {
   it("rejects a series without a lesson number and unknown levels", () => {
     expect(() => parseArticle("x", "---\ntitle: T\ndescription: D\ndate: 2026-10-02\nseries: s\n---\nx")).toThrow(/lesson/);
     expect(() => parseArticle("x", "---\ntitle: T\ndescription: D\ndate: 2026-10-02\nlevel: expert\n---\nx")).toThrow(/level/);
+  });
+});
+
+describe("preview images", () => {
+  it("exist for every article in every language (npm run og:lessons)", () => {
+    for (const a of allArticles()) {
+      for (const lang of a.languages) {
+        expect(existsSync(join(process.cwd(), "public", "og", "blog", `${lang}-${a.slug}.png`)), `${lang}-${a.slug}.png`).toBe(true);
+      }
+    }
   });
 });

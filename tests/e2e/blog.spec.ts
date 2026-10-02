@@ -88,6 +88,8 @@ test("a translated article has its own canonical URL, language and hreflang link
   await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", `https://simorghdev.pages.dev/tj${BOT}`);
   await expect(page.locator('link[rel="alternate"][hreflang="ru"]')).toHaveAttribute("href", `https://simorghdev.pages.dev/ru${BOT}`);
   await expect(page.locator('link[rel="alternate"][hreflang="x-default"]')).toHaveAttribute("href", `https://simorghdev.pages.dev${BOT}`);
+  await expect(page.locator('meta[property="og:image"]')).toHaveAttribute("content", "https://simorghdev.pages.dev/og/blog/tj-how-a-telegram-bot-works.png");
+  expect((await page.request.get("/og/blog/tj-how-a-telegram-bot-works.png")).headers()["content-type"]).toContain("image/png");
 });
 
 test("the message journey steps forward and back", async ({ page }) => {

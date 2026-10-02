@@ -1,3 +1,5 @@
+import { existsSync } from "node:fs";
+import { join } from "node:path";
 import type { Metadata, MetadataRoute } from "next";
 import { links } from "@/content/site";
 import { allArticles } from "./blog";
@@ -10,6 +12,12 @@ export const sitePaths = ["/", "/work/simorgh/", "/privacy/", "/blog/"] as const
 
 const ogLocale: Record<Locale, string> = { en: "en_US", ru: "ru_RU", tj: "tg_TJ" };
 const ogImage = { url: `${config.siteUrl}/og.png`, width: 1200, height: 630 };
+
+/** The article's own preview card (scripts/render-lesson-og.mjs), or the site-wide one if it has not been rendered. */
+export function articleImage(article: { slug: string; lang: Locale }) {
+  const file = `og/blog/${article.lang}-${article.slug}.png`;
+  return existsSync(join(process.cwd(), "public", file)) ? { ...ogImage, url: `${config.siteUrl}/${file}` } : ogImage;
+}
 
 const absolute = (locale: Locale, path: string) => `${config.siteUrl}${localePath(locale, path)}`;
 
@@ -48,6 +56,7 @@ export function sitemapEntries(): MetadataRoute.Sitemap {
 export function articleMetadata(article: { slug: string; lang: Locale; languages: Locale[]; title: string; description: string; date: string }): Metadata {
   const path = `/blog/${article.slug}/`;
   const url = absolute(article.lang, path);
+  const image = articleImage(article);
   const languages =
     article.languages.length > 1
       ? Object.fromEntries([...article.languages.map((l) => [htmlLang[l], absolute(l, path)]), ["x-default", absolute("en", path)]])
@@ -65,9 +74,9 @@ export function articleMetadata(article: { slug: string; lang: Locale; languages
       type: "article",
       locale: ogLocale[article.lang],
       publishedTime: article.date,
-      images: [ogImage],
+      images: [image],
     },
-    twitter: { card: "summary_large_image", title: article.title, description: article.description, images: [ogImage.url] },
+    twitter: { card: "summary_large_image", title: article.title, description: article.description, images: [image.url] },
     verification: { google: config.googleVerification },
   };
 }

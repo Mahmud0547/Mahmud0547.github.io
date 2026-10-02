@@ -12,7 +12,8 @@
     "typecheck": "next typegen && tsc --noEmit",
     "test": "vitest run",
     "test:e2e": "playwright test",
-    "og": "node scripts/render-og.mjs"
+    "og": "node scripts/render-og.mjs",
+    "og:lessons": "node scripts/render-lesson-og.mjs"
   },
   "dependencies": {
     "next": "16.3.8",
