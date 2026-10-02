@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
-import { allArticles, articleBySlug, parseArticle } from "@/lib/blog";
+import { allArticles, articleBySlug, parseArticle, seriesLessons } from "@/lib/blog";
 import type { Locale } from "@/lib/locale";
-import { parseBlocks, parseInline } from "@/lib/markdown";
+import { outline, parseBlocks, parseInline } from "@/lib/markdown";
 
 describe("parseArticle", () => {
   it("reads front matter and estimates reading time", () => {
@@ -29,10 +29,20 @@ describe("articles in content/blog", () => {
     expect(new Set(articles.map((a) => a.slug)).size).toBe(articles.length);
     expect(articles.map((a) => a.date)).toEqual([...articles.map((a) => a.date)].sort().reverse());
   });
-  it("use URL-safe slugs and descriptions short enough for search results", () => {
+  it("use URL-safe slugs and descriptions short enough for search results, in every language", () => {
     for (const a of articles) {
       expect(a.slug).toMatch(/^[a-z0-9]+(-[a-z0-9]+)*$/);
-      expect(a.description.length, a.slug).toBeLessThanOrEqual(170);
+      for (const lang of a.languages) {
+        expect(articleBySlug(a.slug, lang)!.description.length, `${a.slug} (${lang})`).toBeLessThanOrEqual(170);
+      }
+    }
+  });
+
+  it("number the lessons of a course 1, 2, 3… in every language", () => {
+    for (const locale of ["en", "ru", "tj"] as const) {
+      const lessons = seriesLessons("how-it-works", locale);
+      expect(lessons.map((a) => a.series!.lesson)).toEqual(lessons.map((_, i) => i + 1));
+      expect(lessons.every((a) => a.learn.length >= 3 && a.level)).toBe(true);
     }
   });
 });
@@ -110,5 +120,30 @@ describe("translations", () => {
           .map((b) => (b.type === "demo" ? b.name : `quiz:${b.questions.length}`));
       for (const lang of article.languages) expect(shape(lang)).toEqual(shape("en"));
     }
+  });
+});
+
+describe("learning blocks", () => {
+  it("reads callouts", () => {
+    expect(parseBlocks("> [!IDEA] Think small.")).toEqual([{ type: "callout", kind: "idea", text: "Think small." }]);
+    expect(parseBlocks("> [!WARNING] Careful")).toEqual([{ type: "callout", kind: "warning", text: "Careful" }]);
+    expect(parseBlocks("> Just a quote")).toEqual([{ type: "quote", text: "Just a quote" }]);
+  });
+
+  it("builds a table of contents from section headings", () => {
+    expect(outline("## One\n\ntext\n\n### Sub\n\n## Two **bold**")).toEqual([
+      { id: "s1", text: "One" },
+      { id: "s2", text: "Two bold" },
+    ]);
+  });
+
+  it("reads lesson fields from front matter", () => {
+    const a = parseArticle("x", "---\ntitle: T\ndescription: D\ndate: 2026-10-02\nseries: how-it-works\nlesson: 2\nlevel: beginner\nlearn: a; b ;c\n---\nx");
+    expect(a).toMatchObject({ series: { id: "how-it-works", lesson: 2 }, level: "beginner", learn: ["a", "b", "c"] });
+  });
+
+  it("rejects a series without a lesson number and unknown levels", () => {
+    expect(() => parseArticle("x", "---\ntitle: T\ndescription: D\ndate: 2026-10-02\nseries: s\n---\nx")).toThrow(/lesson/);
+    expect(() => parseArticle("x", "---\ntitle: T\ndescription: D\ndate: 2026-10-02\nlevel: expert\n---\nx")).toThrow(/level/);
   });
 });

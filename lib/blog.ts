@@ -22,6 +22,11 @@ export interface Article {
   tags: string[];
   body: string;
   minutes: number;
+  /** Course this article is a lesson of, and its place in it (front matter `series` and `lesson`). */
+  series?: { id: string; lesson: number };
+  level?: "beginner" | "intermediate";
+  /** "In this lesson you will learn" points (front matter `learn`, separated by ";"). */
+  learn: string[];
 }
 
 const DIR = join(process.cwd(), "content", "blog");
@@ -39,6 +44,8 @@ export function parseArticle(slug: string, source: string, lang: Locale = "en", 
     if (!meta[key]) throw new Error(`${slug} (${lang}) is missing "${key}"`);
   }
   if (!/^\d{4}-\d{2}-\d{2}$/.test(meta.date)) throw new Error(`${slug} (${lang}) has an invalid date`);
+  if (meta.series && !(Number(meta.lesson) >= 1)) throw new Error(`${slug} (${lang}) is in a series but has no lesson number`);
+  if (meta.level && meta.level !== "beginner" && meta.level !== "intermediate") throw new Error(`${slug} (${lang}) has an unknown level`);
   const body = match[2]!.trim();
   const words = body.replace(/```[\s\S]*?```/g, "").split(/\s+/).length;
   return {
@@ -51,6 +58,9 @@ export function parseArticle(slug: string, source: string, lang: Locale = "en", 
     tags: (meta.tags ?? "").split(",").map((t: string) => t.trim()).filter(Boolean),
     body,
     minutes: Math.max(1, Math.round(words / 200)),
+    ...(meta.series ? { series: { id: meta.series, lesson: Number(meta.lesson) } } : {}),
+    ...(meta.level ? { level: meta.level as Article["level"] } : {}),
+    learn: (meta.learn ?? "").split(";").map((t: string) => t.trim()).filter(Boolean),
   };
 }
 
@@ -85,4 +95,11 @@ export function articleBySlug(slug: string, locale: Locale = "en"): Article | un
   const languages = slugs().get(slug);
   if (!languages) return undefined;
   return read(slug, languages.includes(locale) ? locale : "en", languages);
+}
+
+/** Lessons of a course in order, each in `locale` where translated. */
+export function seriesLessons(id: string, locale: Locale = "en"): Article[] {
+  return allArticles(locale)
+    .filter((a) => a.series?.id === id)
+    .sort((a, b) => a.series!.lesson - b.series!.lesson);
 }

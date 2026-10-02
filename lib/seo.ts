@@ -34,7 +34,6 @@ export function sitemapEntries(): MetadataRoute.Sitemap {
   const pages = sitePaths.flatMap((path) =>
     locales.map((locale) => ({ url: absolute(locale, path), alternates: { languages: languageLinks(path) } })),
   );
-  // Articles are in English; only the English URL is listed (the others point to it as canonical).
   // Each article once per language it is written in; untranslated copies point their canonical to English.
   const articles = allArticles().flatMap((a) =>
     a.languages.map((lang) => ({ url: absolute(lang, `/blog/${a.slug}/`), lastModified: a.date })),
