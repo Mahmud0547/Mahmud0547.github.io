@@ -10,6 +10,8 @@ All notable changes to this project are documented here. The format follows [Kee
 - Self-hosted Onest and Source Serif 4 fonts with Tajik letter support.
 - CI: type check, lint, unit and browser tests, JavaScript budget, Lighthouse.
 - Performance budgets matched to the Next.js runtime (ADR 0004).
+- Dark theme with a switcher: Light, Same as the device, Dark; remembered in the browser and applied before the first paint.
+- Light version for slow internet: switches on by itself on 2G/3G or data saver, turns off motion, and loads photos and lesson exercises only on tap.
 
 ### Removed
 - Visitor geolocation via ipapi.co and Google Fonts requests.

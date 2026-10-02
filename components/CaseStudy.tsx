@@ -105,7 +105,7 @@ export function CaseStudy({ locale }: { locale: Locale }) {
             </h2>
             <p className="mt-2 text-[17px] leading-normal text-mist">{t.ctaText}</p>
           </div>
-          <Link href={`${home}#contact`} className="rounded-xl bg-saffron px-6 py-[15px] text-base font-semibold text-ink">
+          <Link href={`${home}#contact`} className="rounded-xl bg-saffron px-6 py-[15px] text-base font-semibold text-on-accent">
             {t.ctaButton}
           </Link>
         </div>

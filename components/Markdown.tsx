@@ -14,7 +14,7 @@ function Inline({ text }: { text: string }) {
         if (part.type === "code") return <code key={i} className="rounded bg-paper px-1.5 py-0.5 font-mono text-[0.9em]">{part.text}</code>;
         if (part.type === "link") {
           return (
-            <a key={i} href={part.href} className="font-semibold text-lapis underline" {...(/^https?:/i.test(part.href) ? external : {})}>
+            <a key={i} href={part.href} className="font-semibold text-link underline" {...(/^https?:/i.test(part.href) ? external : {})}>
               {part.text}
             </a>
           );
@@ -29,8 +29,8 @@ function Inline({ text }: { text: string }) {
 type Labels = { idea: string; warning: string };
 
 const calloutStyle = {
-  idea: { icon: "💡", box: "border-saffron bg-[#fdf6e3]" },
-  warning: { icon: "⚠️", box: "border-[#c2410c] bg-[#fdeee6]" },
+  idea: { icon: "💡", box: "border-saffron bg-idea-soft" },
+  warning: { icon: "⚠️", box: "border-danger-line bg-danger-soft" },
 };
 
 export function Markdown({ source, locale = "en", labels }: { source: string; locale?: Locale; labels?: Labels }) {
@@ -68,7 +68,7 @@ export function Markdown({ source, locale = "en", labels }: { source: string; lo
               <div key={i} tabIndex={0} role="region" aria-label={block.head.join(", ")} className="overflow-x-auto rounded-xl border border-line">
                 <table className="w-full border-collapse font-sans text-base">
                   <thead className="bg-paper">
-                    <tr>{block.head.map((cell, j) => <th key={j} scope="col" className="px-4 py-3 text-left font-bold"><Inline text={cell} /></th>)}</tr>
+                    <tr>{block.head.map((cell, j) => cell.trim() === "" ? <td key={j} /> /* empty corner cell: not a header */ : <th key={j} scope="col" className="px-4 py-3 text-left font-bold"><Inline text={cell} /></th>)}</tr>
                   </thead>
                   <tbody>
                     {block.rows.map((row, r) => (
@@ -88,7 +88,7 @@ export function Markdown({ source, locale = "en", labels }: { source: string; lo
           case "quiz":
             return <Quiz key={i} locale={locale} questions={block.questions} />;
           case "code":
-            return <pre key={i} tabIndex={0} className="overflow-x-auto rounded-xl bg-ink p-4 font-mono text-sm leading-relaxed text-paper"><code>{block.text}</code></pre>;
+            return <pre key={i} tabIndex={0} className="overflow-x-auto rounded-xl bg-night p-4 font-mono text-sm leading-relaxed text-on-night"><code>{block.text}</code></pre>;
           default:
             return <p key={i}><Inline text={block.text} /></p>;
         }

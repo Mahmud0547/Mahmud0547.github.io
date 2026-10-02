@@ -55,9 +55,9 @@ export function BlogIndex({ locale, articles }: { locale: Locale; articles: Arti
         {seriesIds.map((id) => {
           const lessons = articles.filter((a) => a.series?.id === id).sort((a, b) => a.series!.lesson - b.series!.lesson);
           return (
-            <section key={id} aria-labelledby={`course-${id}`} className="flex flex-col gap-5 rounded-3xl border border-line bg-white p-5 shadow-sm sm:p-8">
+            <section key={id} aria-labelledby={`course-${id}`} className="flex flex-col gap-5 rounded-3xl border border-line bg-surface p-5 shadow-sm sm:p-8">
               <div className="flex flex-col gap-2">
-                <p className="text-xs font-bold uppercase tracking-[0.14em] text-lapis">{t.course}</p>
+                <p className="text-xs font-bold uppercase tracking-[0.14em] text-link">{t.course}</p>
                 <h2 id={`course-${id}`} className="text-2xl font-extrabold tracking-[-0.02em] lg:text-3xl">{seriesName(t, id)}</h2>
                 <p className="text-soft">{t.courseLead}</p>
               </div>
@@ -76,7 +76,7 @@ export function BlogIndex({ locale, articles }: { locale: Locale; articles: Arti
                     <time dateTime={a.date}>{formatDate(a.date, locale)}</time> · {format(t.minutes, { count: a.minutes })}
                   </p>
                   <h3 className="text-xl font-extrabold tracking-[-0.02em]" lang={htmlLang[a.lang]}>
-                    <Link href={articlePath(locale, a.slug)} className="hover:text-lapis">{a.title}</Link>
+                    <Link href={articlePath(locale, a.slug)} className="hover:text-link">{a.title}</Link>
                   </h3>
                   <p className="font-serif text-[17px] leading-relaxed text-soft" lang={htmlLang[a.lang]}>{a.description}</p>
                 </li>
@@ -116,17 +116,17 @@ export function BlogArticle({ locale, article, lessons = [] }: { locale: Locale;
     <PageShell locale={locale} path={articlePath("en", article.slug)}>
       <ReadingProgress target="article" />
       <div className="container-page flex max-w-[1160px] flex-col gap-6 py-12 lg:py-20">
-        <Link href={localePath(locale, "/blog/")} className="self-start font-semibold text-lapis">← {t.back}</Link>
+        <Link href={localePath(locale, "/blog/")} className="self-start font-semibold text-link">← {t.back}</Link>
         <div className="grid gap-12 lg:grid-cols-[minmax(0,760px)_280px] lg:justify-between">
           <article id="article" className="flex min-w-0 flex-col gap-6" lang={lang}>
             <header className="flex flex-col gap-4">
               <p className="flex flex-wrap items-center gap-x-3 gap-y-2 font-sans text-sm text-soft" lang={htmlLang[locale]}>
                 {article.series && (
-                  <span className="font-semibold text-lapis">
+                  <span className="font-semibold text-link">
                     {seriesName(t, article.series.id)} · {format(t.lesson, { n: article.series.lesson, total: Math.max(lessons.length, article.series.lesson) })}
                   </span>
                 )}
-                {article.level && <span className="rounded-full bg-[#e3f4f1] px-3 py-0.5 font-semibold text-[#0d5e5c]">{t.levels[article.level]}</span>}
+                {article.level && <span className="rounded-full bg-success-soft px-3 py-0.5 font-semibold text-success">{t.levels[article.level]}</span>}
                 <span>
                   <time dateTime={article.date}>{formatDate(article.date, locale)}</time> · {format(t.minutes, { count: article.minutes })}
                 </span>
@@ -138,9 +138,9 @@ export function BlogArticle({ locale, article, lessons = [] }: { locale: Locale;
                   <span className="text-soft">{t.readIn}:</span>
                   {article.languages.map((l) =>
                     l === article.lang ? (
-                      <span key={l} aria-current="page" className="rounded-full bg-ink px-3 py-1 font-semibold text-white" lang={htmlLang[l]}>{languageNames[l]}</span>
+                      <span key={l} aria-current="page" className="rounded-full bg-night px-3 py-1 font-semibold text-white" lang={htmlLang[l]}>{languageNames[l]}</span>
                     ) : (
-                      <Link key={l} href={articlePath(l, article.slug)} hrefLang={htmlLang[l]} lang={htmlLang[l]} className="rounded-full border border-line px-3 py-1 hover:border-lapis">
+                      <Link key={l} href={articlePath(l, article.slug)} hrefLang={htmlLang[l]} lang={htmlLang[l]} className="rounded-full border border-line px-3 py-1 hover:border-link">
                         {languageNames[l]}
                       </Link>
                     ),
@@ -150,7 +150,7 @@ export function BlogArticle({ locale, article, lessons = [] }: { locale: Locale;
             </header>
 
             {article.learn.length > 0 && (
-              <section aria-labelledby="learn" className="rounded-2xl border border-line bg-white p-5 font-sans sm:p-6">
+              <section aria-labelledby="learn" className="rounded-2xl border border-line bg-surface p-5 font-sans sm:p-6">
                 <h2 id="learn" className="mb-3 text-lg font-bold">🎯 {t.learnTitle}</h2>
                 <ul className="flex flex-col gap-2">
                   {article.learn.map((point) => (

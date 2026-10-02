@@ -4,6 +4,7 @@ import type { Locale } from "@/lib/locale";
 
 const en = {
   demo: "Try it",
+  load: "Load the exercise",
   flow: {
     title: "A message's journey",
     pick: "Message to send",
@@ -72,6 +73,7 @@ export type DemoStrings = typeof en;
 
 const ru: DemoStrings = {
   demo: "Попробуйте",
+  load: "Загрузить упражнение",
   flow: {
     title: "Путешествие сообщения",
     pick: "Какое сообщение отправить",
@@ -138,6 +140,7 @@ const ru: DemoStrings = {
 
 const tj: DemoStrings = {
   demo: "Санҷед",
+  load: "Машқро бор кунед",
   flow: {
     title: "Сафари паём",
     pick: "Кадом паёмро фиристем",

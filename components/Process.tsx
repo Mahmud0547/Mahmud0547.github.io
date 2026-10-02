@@ -14,7 +14,7 @@ export function Process({ locale }: { locale: Locale }) {
               <div aria-hidden="true" className="flex flex-col items-center lg:flex-row lg:gap-3">
                 <span
                   className={`grid size-8 shrink-0 place-items-center rounded-full text-sm font-bold lg:size-10 lg:text-base ${
-                    first ? "bg-saffron text-ink" : "bg-white/10 text-white"
+                    first ? "bg-saffron text-on-accent" : "bg-white/10 text-white"
                   }`}
                 >
                   {index + 1}

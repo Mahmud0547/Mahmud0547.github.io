@@ -262,5 +262,20 @@
   "notFound": {
     "title": "Page not found",
     "home": "Back to the home page"
+  },
+  "theme": {
+    "label": "Colour theme",
+    "light": "Light",
+    "system": "Same as the device",
+    "dark": "Dark"
+  },
+  "lite": {
+    "title": "Slow internet detected — the light version is on",
+    "text": "No animations, photos and exercises load when you tap them. Saves data and time.",
+    "showFull": "Show full version",
+    "close": "Close",
+    "toggle": "Light version",
+    "showPhoto": "Show photo",
+    "size": "{size} KB"
   }
 }

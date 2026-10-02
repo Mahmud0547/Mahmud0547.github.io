@@ -35,10 +35,10 @@ export function CourseProgress({ lessons, current, t }: Props) {
               <Link
                 href={lesson.href}
                 aria-current={isCurrent ? "page" : undefined}
-                className={`flex items-center gap-3 rounded-xl border p-3 hover:border-lapis ${isCurrent ? "border-lapis bg-[#eef1f9]" : "border-line bg-white"}`}
+                className={`flex items-center gap-3 rounded-xl border p-3 hover:border-link ${isCurrent ? "border-link bg-tint" : "border-line bg-surface"}`}
               >
                 <span
-                  className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-sm font-bold ${isDone ? "bg-turquoise text-white" : "bg-paper text-ink"}`}
+                  className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-sm font-bold ${isDone ? "bg-turquoise text-on-turquoise" : "bg-paper text-ink"}`}
                   aria-hidden="true"
                 >
                   {isDone ? "✓" : i + 1}

@@ -20,7 +20,7 @@ export function Hero({ locale }: { locale: Locale }) {
           </h1>
           <p className="max-w-[580px] text-[17px] leading-normal text-mist lg:text-xl">{t.lead}</p>
           <div className="flex w-full flex-col gap-2.5 sm:w-auto sm:flex-row lg:gap-3.5">
-            <a href={`${home}#work`} className="rounded-xl bg-saffron px-6 py-[15px] text-center text-base font-semibold text-ink lg:text-[17px]">
+            <a href={`${home}#work`} className="rounded-xl bg-saffron px-6 py-[15px] text-center text-base font-semibold text-on-accent lg:text-[17px]">
               {t.primary}
             </a>
             <a
