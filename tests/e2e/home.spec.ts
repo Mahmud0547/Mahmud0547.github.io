@@ -104,7 +104,8 @@ test("contact lists the three questions and every channel", async ({ page }) => 
   await expect(contact.getByRole("heading", { level: 2 })).toHaveText("Tell me what you want to automate");
   await expect(contact.locator("ol > li")).toHaveCount(3);
   const expected = {
-    Telegram: "https://t.me/Simorgh_Dev",
+    Telegram: "https://t.me/SimorghDev",
+    "Telegram channel": "https://t.me/Simorgh_Dev",
     GitHub: "https://github.com/Mahmud0547",
     LinkedIn: "https://www.linkedin.com/in/mahmud-faiezov",
     Instagram: "https://www.instagram.com/mahmud.simorghdev",

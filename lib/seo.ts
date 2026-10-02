@@ -49,7 +49,7 @@ export function personJsonLd(locale: Locale): Record<string, unknown> {
         url: home,
         image: `${config.siteUrl}/images/mahmud.webp`,
         address: { "@type": "PostalAddress", addressLocality: "Dushanbe", addressCountry: "TJ" },
-        sameAs: [links.github, links.linkedin, links.instagram, links.fiverr, links.upwork, links.telegram],
+        sameAs: [links.github, links.linkedin, links.instagram, links.fiverr, links.upwork, links.telegram, links.channel],
       },
       {
         "@type": "ProfessionalService",

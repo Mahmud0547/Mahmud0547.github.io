@@ -1,5 +1,6 @@
 export const links = {
-  telegram: "https://t.me/Simorgh_Dev",
+  telegram: "https://t.me/SimorghDev",
+  channel: "https://t.me/Simorgh_Dev",
   linkedin: "https://www.linkedin.com/in/mahmud-faiezov",
   instagram: "https://www.instagram.com/mahmud.simorghdev",
   fiverr: "https://www.fiverr.com/s/3A8051m",
