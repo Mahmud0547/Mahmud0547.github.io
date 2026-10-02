@@ -63,7 +63,7 @@ That should never even reach the editor. So there is a tiny automatic check: the
 
 {{demo:letters}}
 
-Look at the Tajik example: it fails, even though it is a perfectly good text. Tajik letters like **ҳ, ҷ, қ, ӯ** are not in the Russian alphabet, so the check does not count them. That is fine here — this channel is Russian — but it shows something important: **every automatic rule is built for one situation**. A Tajik channel would need its own rule. Copying a rule without understanding it is how bugs are born.
+Now try the Tajik example. It passes — the check calls it a Russian post! Most Tajik letters are the same as Russian ones; only a few, like **ҳ, ҷ, қ, ӯ**, are different. So this rule catches English reasoning, but it **cannot tell Russian from Tajik**. For this channel that is acceptable — the models are asked for Russian, and a person reads every post anyway. But it shows something important: **every automatic rule is built for one situation and has blind spots**. Before trusting a rule, ask: what would slip through it?
 
 ## Free models change — so have a backup
 
@@ -101,7 +101,8 @@ for model in settings.ai_models_list:          # the models, in order
     except RetryableError as e:                 # busy, too slow, wrong language…
         failures.append(str(e))                 # remember why, try the next one
 
-raise GenerationError("All models are unavailable, try again in a few minutes.")
+# "All models are unavailable right now, try again in a couple of minutes."
+raise GenerationError("Все модели сейчас недоступны, попробуй через пару минут.")
 ```
 
 Notice how small these are. Reliable systems are rarely one clever trick; they are many small, plain rules, each one easy to read and easy to test.
@@ -139,11 +140,11 @@ The automation does the slow part. A person keeps the judgement.
 - Publish it and correct it later
 ! A wrong number, once published, spreads. The editor's job is exactly to catch this.
 
-? Why is the newsroom's letter check rejecting a good Tajik text?
-- Tajik texts are always too long
-+ The rule counts only Russian letters, and Tajik has letters like ҳ and ҷ that it does not count
-- The model was overloaded
-! Every automatic rule is made for one situation. This channel is Russian; a Tajik channel needs its own rule.
+? A model answers in Tajik instead of Russian. Does the letter check catch it?
+- Yes, it always notices a wrong language
++ No — most Tajik letters are the same as Russian ones, so the text passes
+- Only if the text is long
+! The check catches English, not Tajik. Every automatic rule has blind spots — one more reason a person approves every post.
 
 ? All three models in the chain are unavailable. What happens?
 - The system publishes the source article in English
