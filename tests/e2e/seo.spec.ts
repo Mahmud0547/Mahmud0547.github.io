@@ -24,9 +24,9 @@ test("home page carries structured data", async ({ page }) => {
   expect(data["@graph"].map((node: { "@type": string }) => node["@type"])).toEqual(["Person", "ProfessionalService"]);
 });
 
-test("sitemap lists all nine pages and robots points to it", () => {
+test("sitemap lists every page and article, and robots points to it", () => {
   const sitemap = readFileSync("out/sitemap.xml", "utf8");
-  expect([...sitemap.matchAll(/<loc>/g)]).toHaveLength(9);
+  expect([...sitemap.matchAll(/<loc>/g)]).toHaveLength(15);
   expect(sitemap).toContain(`<loc>${site}/tj/privacy/</loc>`);
   expect(readFileSync("out/robots.txt", "utf8")).toContain(`Sitemap: ${site}/sitemap.xml`);
 });

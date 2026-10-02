@@ -59,5 +59,5 @@ test("desktop navigation links to the home page sections", async ({ page, isMobi
   await page.goto("/ru/");
   const nav = page.locator("header nav").first();
   const hrefs = await nav.getByRole("link").evaluateAll((links) => links.map((a) => a.getAttribute("href")));
-  expect(hrefs).toEqual(["/ru/#work", "/ru/#services", "/ru/#about", "/ru/#contact"]);
+  expect(hrefs).toEqual(["/ru/#work", "/ru/#services", "/ru/#about", "/ru/blog/", "/ru/#contact"]);
 });

@@ -45,6 +45,10 @@ describe("sitemapEntries", () => {
         "/", "/ru/", "/tj/",
         "/work/simorgh/", "/ru/work/simorgh/", "/tj/work/simorgh/",
         "/privacy/", "/ru/privacy/", "/tj/privacy/",
+        "/blog/", "/ru/blog/", "/tj/blog/",
+        "/blog/ai-newsroom-human-in-the-loop/",
+        "/blog/official-data-you-can-trust/",
+        "/blog/access-rules-in-the-database/",
       ].map((p) => `${site}${p}`).sort(),
     );
   });
