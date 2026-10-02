@@ -175,3 +175,38 @@ export function loadSeconds(parts: PagePart[], network: Network, lite: boolean):
   const kb = used.reduce((sum, p) => sum + p.kb, 0);
   return (waves * rttMs) / 1000 + (kb * 8) / kbps;
 }
+
+// ── Articles: the routine calculator ─────────────────────────────────────────
+
+export interface Routine {
+  /** How many times a day the task is done by hand. */
+  perDay: number;
+  /** Minutes one time takes by hand. */
+  minutes: number;
+  /** Minutes a person still spends per item once a bot does the work (checking, like the Simorgh editor). */
+  checkMinutes: number;
+  /** Cost of one working hour, in US dollars. */
+  hourlyRate: number;
+  /** Working days in a month. */
+  days?: number;
+}
+
+export interface RoutineResult {
+  hoursBefore: number;
+  hoursAfter: number;
+  hoursSaved: number;
+  moneySaved: number;
+  /** Working days until the saved time pays for a bot of the given price; null when nothing is saved. */
+  paybackDays: number | null;
+}
+
+/** What a repeated task costs a month by hand and with a bot that leaves a person only the check. */
+export function routineCost(r: Routine, botPrice: number): RoutineResult {
+  const days = r.days ?? 22;
+  const hoursBefore = (r.perDay * r.minutes * days) / 60;
+  const hoursAfter = (r.perDay * Math.min(r.checkMinutes, r.minutes) * days) / 60;
+  const hoursSaved = hoursBefore - hoursAfter;
+  const moneySaved = hoursSaved * r.hourlyRate;
+  const perDay = moneySaved / days;
+  return { hoursBefore, hoursAfter, hoursSaved, moneySaved, paybackDays: perDay > 0 ? botPrice / perDay : null };
+}

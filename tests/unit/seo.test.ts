@@ -51,6 +51,7 @@ describe("sitemapEntries", () => {
         "/blog/official-data-you-can-trust/", "/ru/blog/official-data-you-can-trust/", "/tj/blog/official-data-you-can-trust/",
         "/blog/access-rules-in-the-database/", "/ru/blog/access-rules-in-the-database/", "/tj/blog/access-rules-in-the-database/",
         "/blog/websites-for-slow-internet/", "/ru/blog/websites-for-slow-internet/", "/tj/blog/websites-for-slow-internet/",
+        "/blog/automating-a-telegram-news-channel-with-ai/", "/ru/blog/automating-a-telegram-news-channel-with-ai/", "/tj/blog/automating-a-telegram-news-channel-with-ai/",
       ].map((p) => `${site}${p}`).sort(),
     );
   });

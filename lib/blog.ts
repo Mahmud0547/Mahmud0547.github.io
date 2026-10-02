@@ -27,6 +27,8 @@ export interface Article {
   level?: "beginner" | "intermediate";
   /** "In this lesson you will learn" points (front matter `learn`, separated by ";"). */
   learn: string[];
+  /** For articles (not lessons): the one measured result shown on the article's card (front matter `result`). */
+  result?: string;
 }
 
 const DIR = join(process.cwd(), "content", "blog");
@@ -61,6 +63,7 @@ export function parseArticle(slug: string, source: string, lang: Locale = "en", 
     ...(meta.series ? { series: { id: meta.series, lesson: Number(meta.lesson) } } : {}),
     ...(meta.level ? { level: meta.level as Article["level"] } : {}),
     learn: (meta.learn ?? "").split(";").map((t: string) => t.trim()).filter(Boolean),
+    ...(meta.result ? { result: meta.result } : {}),
   };
 }
 

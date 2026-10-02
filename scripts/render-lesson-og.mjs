@@ -6,9 +6,9 @@ import { mkdirSync, readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 
 const extra = {
-  en: { interactive: "Interactive lesson · try it on the page", by: "Mahmud Faiezov · SimorghDev" },
-  ru: { interactive: "Интерактивный урок · пробуйте прямо на странице", by: "Махмуд Файзов · SimorghDev" },
-  tj: { interactive: "Дарси интерактивӣ · дар худи саҳифа санҷед", by: "Маҳмуд Файзов · SimorghDev" },
+  en: { interactive: "Interactive lesson · try it on the page", case: "Real project · real numbers", by: "Mahmud Faiezov · SimorghDev" },
+  ru: { interactive: "Интерактивный урок · пробуйте прямо на странице", case: "Реальный проект · настоящие цифры", by: "Махмуд Файзов · SimorghDev" },
+  tj: { interactive: "Дарси интерактивӣ · дар худи саҳифа санҷед", case: "Лоиҳаи воқеӣ · рақамҳои воқеӣ", by: "Маҳмуд Файзов · SimorghDev" },
 };
 
 function frontMatter(source) {
@@ -35,7 +35,7 @@ function html({ lang, meta }) {
   const t = JSON.parse(readFileSync(`messages/${lang}.json`, "utf8")).blog;
   const course = meta.series
     ? `${t.series[meta.series]} · ${format(t.lesson, { n: meta.lesson, total: lessonsIn(meta.series) })}`
-    : t.title;
+    : `${t.articles} · ${t.caseStudy}`;
   const size = meta.title.length > 80 ? 54 : meta.title.length > 60 ? 62 : 70;
   const mark = `data:image/svg+xml;base64,${readFileSync("public/brand/mark.svg").toString("base64")}`;
   return `<!doctype html><html lang="${lang === "tj" ? "tg" : lang}"><head><meta charset="utf-8">
@@ -55,7 +55,7 @@ function html({ lang, meta }) {
   <div class="glow"></div>
   <div class="top"><div class="brand"><img src="${mark}" alt="">SimorghDev</div><div class="course">${escape(course)}</div></div>
   <h1>${escape(meta.title)}</h1>
-  <div class="foot"><span>${escape(extra[lang].by)}</span><span class="chip">${escape(extra[lang].interactive)}</span></div>
+  <div class="foot"><span>${escape(extra[lang].by)}</span><span class="chip">${escape(meta.series ? extra[lang].interactive : extra[lang].case)}</span></div>
 </body></html>`;
 }
 

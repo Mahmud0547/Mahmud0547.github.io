@@ -201,11 +201,43 @@ test("lesson 5: the light version of the page is ready sooner and skips the phot
   await expect(demo.getByRole("row", { name: /Photos/ })).toContainText("waits for a tap");
 });
 
+test("the blog has an Articles card next to the course, with the case and its result", async ({ page }) => {
+  await page.goto("/blog/");
+  const articles = page.getByRole("region", { name: "Automation in practice" });
+  await expect(articles.getByText("Articles", { exact: true })).toBeVisible();
+  const card = articles.getByRole("link", { name: /One person and an AI bot run a news channel/ });
+  await expect(card).toHaveAttribute("href", "/blog/automating-a-telegram-news-channel-with-ai/");
+  await expect(card).toContainText("956 articles read by the bot");
+  // Articles are not lessons: the course still has five.
+  await expect(page.getByRole("region", { name: "How it works" }).getByRole("listitem")).toHaveCount(5);
+});
+
+test("an article is a case study that ends with a call to order", async ({ page }) => {
+  await page.goto("/ru/blog/automating-a-telegram-news-channel-with-ai/");
+  await expect(page.getByText("Кейс", { exact: true }).first()).toBeVisible();
+  await expect(page.getByText(/Урок \d из/)).toHaveCount(0);
+  await expect(page.getByRole("heading", { name: "Хотите так же для своего бизнеса?" })).toBeVisible();
+  await expect(page.getByRole("link", { name: "Описать задачу" })).toHaveAttribute("href", "/ru/#contact");
+  await expect(page.getByRole("link", { name: "Пакеты и цены" })).toHaveAttribute("href", "/ru/#services");
+  await expect(page.locator('meta[property="og:image"]')).toHaveAttribute("content", /\/og\/blog\/ru-automating-a-telegram-news-channel-with-ai\.png$/);
+});
+
+test("the routine calculator shows hours saved and when a bot pays off", async ({ page }) => {
+  await page.goto("/blog/automating-a-telegram-news-channel-with-ai/");
+  const demo = await demoBlock(page, "What does your routine cost?");
+  await expect(demo.getByRole("button", { name: "Answering the same customer questions" })).toHaveAttribute("aria-pressed", "true");
+  await expect(demo).toContainText("44 h a month");
+  await expect(demo).toContainText(/pays for itself in \d+ working days/);
+  await demo.getByLabel(/Minutes to check, with a bot/).fill("30");
+  await expect(demo).toContainText("a bot would not help");
+});
+
 const LESSON_PATHS = [
   "/blog/ai-newsroom-human-in-the-loop/",
   "/blog/official-data-you-can-trust/",
   "/blog/access-rules-in-the-database/",
   "/blog/websites-for-slow-internet/",
+  "/blog/automating-a-telegram-news-channel-with-ai/",
 ];
 
 for (const path of ["/blog/", "/tj/blog/", BOT, `/tj${BOT}`, ...LESSON_PATHS, ...LESSON_PATHS.map((p) => `/tj${p}`)]) {
