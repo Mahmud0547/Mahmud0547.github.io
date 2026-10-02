@@ -1,5 +1,5 @@
 import AxeBuilder from "@axe-core/playwright";
-import { expect, test } from "@playwright/test";
+import { expect, test, type Page } from "@playwright/test";
 
 const LESSONS = [
   "How a Telegram bot works — explained so a child could get it",
@@ -74,6 +74,13 @@ test("header links to the blog", async ({ page, isMobile }) => {
 
 const BOT = "/blog/how-a-telegram-bot-works/";
 
+/** An interactive demo, once its code has loaded and it responds to input. */
+async function demoBlock(page: Page, name: string) {
+  const region = page.locator("section[data-ready]").filter({ has: page.getByRole("heading", { name, exact: true }) });
+  await expect(region).toHaveAttribute("data-ready", "true");
+  return region;
+}
+
 test("a translated article has its own canonical URL, language and hreflang links", async ({ page }) => {
   await page.goto(`/tj${BOT}`);
   await expect(page.locator("h1")).toContainText("Боти Telegram");
@@ -85,7 +92,7 @@ test("a translated article has its own canonical URL, language and hreflang link
 
 test("the message journey steps forward and back", async ({ page }) => {
   await page.goto(BOT);
-  const demo = page.getByRole("region", { name: "A message's journey" });
+  const demo = await demoBlock(page, "A message's journey");
   await expect(demo.getByText("Step 1 of 6")).toBeVisible();
   await demo.getByRole("button", { name: "100 usd" }).click();
   await demo.getByRole("button", { name: /Next step/ }).click();
@@ -97,7 +104,7 @@ test("the message journey steps forward and back", async ({ page }) => {
 
 test("the bot playground answers by the first matching rule", async ({ page }) => {
   await page.goto(BOT);
-  const demo = page.getByRole("region", { name: "Build your own bot" });
+  const demo = await demoBlock(page, "Build your own bot");
   await demo.getByLabel("Write to your bot…").fill("What is the PRICE?");
   await demo.getByRole("button", { name: "Send" }).click();
   await expect(demo.getByText("Our prices start at $50. Want the full list?", { exact: true })).toBeVisible();
@@ -111,14 +118,14 @@ test("the bot playground answers by the first matching rule", async ({ page }) =
 
 test("the amount demo asks when the currency is missing", async ({ page }) => {
   await page.goto(BOT);
-  const demo = page.getByRole("region", { name: "How a bot understands “100 usd”" });
+  const demo = await demoBlock(page, "How a bot understands “100 usd”");
   await demo.getByLabel("Type an amount, the way a person would").fill("500");
   await expect(demo.getByText("There is no currency, so the bot asks: “Which currency?”")).toBeVisible();
 });
 
 test("the quiz explains every answer and counts the score", async ({ page }) => {
   await page.goto(BOT);
-  const quiz = page.getByRole("region", { name: "Check yourself" });
+  const quiz = await demoBlock(page, "Check yourself");
   await quiz.getByRole("button", { name: "To Telegram's servers" }).click();
   await expect(quiz.getByText("✓ Correct!")).toBeVisible();
   await quiz.getByRole("button", { name: "The last one" }).click();
@@ -131,10 +138,10 @@ test("the quiz explains every answer and counts the score", async ({ page }) => 
 
 test("lesson 2: the editor game and the letter check", async ({ page }) => {
   await page.goto("/blog/ai-newsroom-human-in-the-loop/");
-  const editor = page.getByRole("region", { name: "You are the editor" });
+  const editor = await demoBlock(page, "You are the editor");
   await editor.getByRole("button", { name: "✓ Approve" }).first().click();
   await expect(editor.getByText("Look again.")).toBeVisible();
-  const letters = page.getByRole("region", { name: "The letter check" });
+  const letters = await demoBlock(page, "The letter check");
   await letters.getByRole("button", { name: "Russian post" }).click();
   await expect(letters.getByText(/goes to the editor/)).toBeVisible();
   await letters.getByRole("button", { name: "Model thinking out loud" }).click();
@@ -142,16 +149,16 @@ test("lesson 2: the editor game and the letter check", async ({ page }) => {
   // The blind spot the lesson teaches: Tajik shares most letters with Russian and passes.
   await letters.getByRole("button", { name: "Tajik text" }).click();
   await expect(letters.getByText(/goes to the editor/)).toBeVisible();
-  const chain = page.getByRole("region", { name: "The fallback chain" });
+  const chain = await demoBlock(page, "The fallback chain");
   await chain.getByRole("button", { name: /Write the post/ }).click();
   await expect(chain.getByText("Model C: wrote the post ✓")).toBeVisible();
 });
 
 test("lesson 3: the nominal trap and the outage", async ({ page }) => {
   await page.goto("/blog/official-data-you-can-trust/");
-  const nominal = page.getByRole("region", { name: "The nominal trap" });
+  const nominal = await demoBlock(page, "The nominal trap");
   await expect(nominal.getByText("1,000 × 0.2089 ÷ 10 = 20.89 TJS")).toBeVisible();
-  const outage = page.getByRole("region", { name: "When the source goes down" });
+  const outage = await demoBlock(page, "When the source goes down");
   await outage.getByLabel(/The bank's website is down/).check();
   await expect(outage.getByText("Error: could not load the rates")).toBeVisible();
   await expect(outage.getByText(/last saved official rate/)).toBeVisible();
@@ -159,13 +166,13 @@ test("lesson 3: the nominal trap and the outage", async ({ page }) => {
 
 test("lesson 4: rules in the app leak, rules in the database refuse; links expire", async ({ page }) => {
   await page.goto("/blog/access-rules-in-the-database/");
-  const access = page.getByRole("region", { name: "Who may do what" });
+  const access = await demoBlock(page, "Who may do what");
   await access.getByRole("button", { name: /straight to the database/ }).click();
   await expect(access.getByText(/The data has leaked/)).toBeVisible();
   await access.getByRole("button", { name: "In the database" }).click();
   await access.getByRole("button", { name: /straight to the database/ }).click();
   await expect(access.getByText(/Refused by the database/)).toBeVisible();
-  const link = page.getByRole("region", { name: "A link that expires" });
+  const link = await demoBlock(page, "A link that expires");
   await link.getByRole("button", { name: /Get the download link/ }).click();
   await link.getByRole("button", { name: /Skip 30 seconds/ }).click();
   await link.getByRole("button", { name: /Skip 30 seconds/ }).click();
