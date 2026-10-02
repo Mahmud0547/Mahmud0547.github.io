@@ -123,3 +123,55 @@ export function tryAccess(role: Role, action: Action, rulesIn: "app" | "database
   if (via === "app") return "hidden";
   return rulesIn === "database" ? "refused" : "leaked";
 }
+
+// ── Lesson 5: slow internet ──────────────────────────────────────────────────
+
+export type Network = "4g" | "3g" | "2g";
+
+/**
+ * Speed and delay per connection. 3G and 2G are the boundaries Chrome itself uses to report
+ * navigator.connection.effectiveType (700 kbit/s and 270 ms, 70 kbit/s and 1400 ms); 4G is a typical city connection.
+ */
+export const networks: Record<Network, { kbps: number; rttMs: number }> = {
+  "4g": { kbps: 10_000, rttMs: 50 },
+  "3g": { kbps: 700, rttMs: 270 },
+  "2g": { kbps: 70, rttMs: 1400 },
+};
+
+export type PartId = "html" | "css" | "fonts" | "js" | "photos";
+
+export interface PagePart {
+  id: PartId;
+  /** Compressed size in kilobytes, as it travels over the network. */
+  kb: number;
+  /** 1: the page itself; 2: what the page asks for at once; 3: what is needed only further down. */
+  wave: 1 | 2 | 3;
+  /** Loaded in the light version too (false: waits for a tap). */
+  inLite: boolean;
+}
+
+/** This site's home page, measured from the build on 2026-10-03 (gzip for text, file size for fonts and photos). */
+export const homePage: PagePart[] = [
+  { id: "html", kb: 19, wave: 1, inLite: true },
+  { id: "css", kb: 10, wave: 2, inLite: true },
+  { id: "fonts", kb: 59, wave: 2, inLite: true },
+  { id: "js", kb: 183, wave: 2, inLite: true },
+  { id: "photos", kb: 342, wave: 3, inLite: false },
+];
+
+/** The parts a version downloads before the visitor taps anything. */
+export function partsFor(parts: PagePart[], lite: boolean): PagePart[] {
+  return parts.filter((p) => !lite || p.inLite);
+}
+
+/**
+ * A rough load time: one round trip per wave of requests, plus the time to move every byte.
+ * Real browsers overlap more, but the proportions — and the lesson — stay the same.
+ */
+export function loadSeconds(parts: PagePart[], network: Network, lite: boolean): number {
+  const { kbps, rttMs } = networks[network];
+  const used = partsFor(parts, lite);
+  const waves = new Set(used.map((p) => p.wave)).size;
+  const kb = used.reduce((sum, p) => sum + p.kb, 0);
+  return (waves * rttMs) / 1000 + (kb * 8) / kbps;
+}
