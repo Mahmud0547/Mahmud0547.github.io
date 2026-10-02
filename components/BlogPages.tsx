@@ -16,10 +16,13 @@ type BlogText = Messages["blog"];
 
 const languageNames: Record<Locale, string> = { en: "English", ru: "Русский", tj: "Тоҷикӣ" };
 
+/** Link to an article. Slugs are already limited to [a-z0-9-] by lib/blog.ts; encoding keeps any other value inert. */
+const articlePath = (locale: Locale, slug: string) => localePath(locale, `/blog/${encodeURIComponent(slug)}/`);
+
 function lessonLinks(locale: Locale, lessons: Article[], t: BlogText): LessonLink[] {
   return lessons.map((a) => ({
     slug: a.slug,
-    href: localePath(locale, `/blog/${a.slug}/`),
+    href: articlePath(locale, a.slug),
     title: a.title,
     minutes: format(t.minutes, { count: a.minutes }),
     lang: htmlLang[a.lang],
@@ -67,7 +70,7 @@ export function BlogIndex({ locale, articles }: { locale: Locale; articles: Arti
                     <time dateTime={a.date}>{formatDate(a.date, locale)}</time> · {format(t.minutes, { count: a.minutes })}
                   </p>
                   <h3 className="text-xl font-extrabold tracking-[-0.02em]" lang={htmlLang[a.lang]}>
-                    <Link href={localePath(locale, `/blog/${a.slug}/`)} className="hover:text-lapis">{a.title}</Link>
+                    <Link href={articlePath(locale, a.slug)} className="hover:text-lapis">{a.title}</Link>
                   </h3>
                   <p className="font-serif text-[17px] leading-relaxed text-soft" lang={htmlLang[a.lang]}>{a.description}</p>
                 </li>
@@ -96,7 +99,7 @@ function Contents({ items, title }: { items: { id: string; text: string }[]; tit
 
 export function BlogArticle({ locale, article, lessons = [] }: { locale: Locale; article: Article; lessons?: Article[] }) {
   const t = getMessages(locale).blog;
-  const url = `${config.siteUrl}${localePath(article.lang, `/blog/${article.slug}/`)}`;
+  const url = `${config.siteUrl}${articlePath(article.lang, article.slug)}`;
   const lang = htmlLang[article.lang];
   const sections = outline(article.body);
   const index = lessons.findIndex((l) => l.slug === article.slug);
@@ -104,7 +107,7 @@ export function BlogArticle({ locale, article, lessons = [] }: { locale: Locale;
   const course = article.series && lessons.length > 0 ? lessonLinks(locale, lessons, t) : null;
 
   return (
-    <PageShell locale={locale} path={`/blog/${article.slug}/`}>
+    <PageShell locale={locale} path={`/blog/${encodeURIComponent(article.slug)}/`}>
       <ReadingProgress target="article" />
       <div className="container-page flex max-w-[1160px] flex-col gap-6 py-12 lg:py-20">
         <Link href={localePath(locale, "/blog/")} className="self-start font-semibold text-lapis">← {t.back}</Link>
@@ -131,7 +134,7 @@ export function BlogArticle({ locale, article, lessons = [] }: { locale: Locale;
                     l === article.lang ? (
                       <span key={l} aria-current="page" className="rounded-full bg-ink px-3 py-1 font-semibold text-white" lang={htmlLang[l]}>{languageNames[l]}</span>
                     ) : (
-                      <Link key={l} href={localePath(l, `/blog/${article.slug}/`)} hrefLang={htmlLang[l]} lang={htmlLang[l]} className="rounded-full border border-line px-3 py-1 hover:border-lapis">
+                      <Link key={l} href={articlePath(l, article.slug)} hrefLang={htmlLang[l]} lang={htmlLang[l]} className="rounded-full border border-line px-3 py-1 hover:border-lapis">
                         {languageNames[l]}
                       </Link>
                     ),
@@ -164,7 +167,7 @@ export function BlogArticle({ locale, article, lessons = [] }: { locale: Locale;
               <footer className="mt-6 flex flex-col gap-6 border-t border-line pt-8" lang={htmlLang[locale]}>
                 <LessonDone slug={article.slug} t={t} />
                 {next && (
-                  <Link href={localePath(locale, `/blog/${next.slug}/`)} className="group flex flex-col gap-1 rounded-2xl bg-deep p-5 text-white sm:p-6">
+                  <Link href={articlePath(locale, next.slug)} className="group flex flex-col gap-1 rounded-2xl bg-deep p-5 text-white sm:p-6">
                     <span className="text-sm font-semibold text-saffron">{t.next} →</span>
                     <span className="text-xl font-extrabold group-hover:underline" lang={htmlLang[next.lang]}>{next.title}</span>
                   </Link>
