@@ -3,6 +3,10 @@ title: "How a Telegram bot works — explained so a child could get it"
 description: "Follow one message from your phone to a bot and back, build a tiny bot right in the page, and see the real code behind it. No experience needed."
 date: 2026-10-02
 tags: Telegram bots, Explained simply, Python
+series: how-it-works
+lesson: 1
+level: beginner
+learn: what happens to a message between your phone and a bot; how a bot chooses its answer — and build one yourself; the difference between polling and a webhook; how to keep a bot's token safe
 ---
 You write “/start” to a bot, and in less than a second it answers — with your name, with buttons, sometimes with a photo. It feels like a person is sitting on the other side. Nobody is. So who answers?
 
@@ -25,6 +29,8 @@ Three helpers make it work:
 Now let's follow one message. Choose what to send, then press **Next step** (or **Play**) and watch where the message is at every moment. The dark box shows what the data really looks like at that point.
 
 {{demo:bot-flow}}
+
+> [!IDEA] Telegram delivers, the bot thinks. Every message goes through Telegram in both directions — the bot never talks to your phone directly.
 
 Did you notice the most surprising part? **Your message never goes straight to the bot.** It always goes through Telegram, in both directions. That is why a bot can answer you on your phone, your laptop and your tablet at once — Telegram does the delivering, the bot only does the thinking.
 
@@ -101,6 +107,8 @@ How does the bot learn that a new update has arrived? There are two ways, and th
 ## The token: the key to the bot
 
 When you create a bot with Telegram's official helper, **@BotFather**, you get a **token** — a long line like `123456789:AAH...`. This token is the key to the bot. Whoever has it can read the bot's messages and write as the bot.
+
+> [!WARNING] The token is like the key to your house. Anyone who sees it can act as your bot.
 
 Three rules, no exceptions:
 

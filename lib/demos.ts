@@ -52,3 +52,74 @@ export function parseAmount(input: string): AmountParse {
   const currency = currencyWords.find(([pattern]) => pattern.test(cleaned))?.[1] ?? null;
   return { cleaned, amount, currency };
 }
+
+// ── Lesson 2: the AI newsroom ────────────────────────────────────────────────
+
+export interface ScriptCheck {
+  letters: number;
+  cyrillic: number;
+  share: number;
+  pass: boolean;
+}
+
+/**
+ * The newsroom's real check (simorgh-news, ai/generator.py looks_russian): a post must be in Russian, so more than
+ * half of its letters must be Russian Cyrillic. Otherwise the model probably sent its reasoning instead of a post.
+ */
+export function cyrillicCheck(text: string): ScriptCheck {
+  const letters = text.match(/\p{L}/gu)?.length ?? 0;
+  const cyrillic = text.match(/[а-яёА-ЯЁ]/g)?.length ?? 0;
+  const share = letters ? cyrillic / letters : 0;
+  return { letters, cyrillic, share, pass: letters > 0 && share > 0.5 };
+}
+
+export type ModelState = "ok" | "busy" | "english";
+
+export interface ChainStep {
+  model: string;
+  state: ModelState;
+}
+
+/** Tries the models in order, like the newsroom's fallback chain; returns what happened and who wrote the post. */
+export function runChain(models: { name: string; state: ModelState }[]): { steps: ChainStep[]; writer: string | null } {
+  const steps: ChainStep[] = [];
+  for (const model of models) {
+    steps.push({ model: model.name, state: model.state });
+    if (model.state === "ok") return { steps, writer: model.name };
+  }
+  return { steps, writer: null };
+}
+
+// ── Lesson 3: official data ──────────────────────────────────────────────────
+
+/** Somoni for `amount` units when the bank publishes `value` somoni per `nominal` units. */
+export function toSomoni(amount: number, value: number, nominal: number): number {
+  return (amount * value) / nominal;
+}
+
+// ── Lesson 4: access rules ───────────────────────────────────────────────────
+
+export type Role = "visitor" | "member" | "editor" | "admin";
+export type Action = "readPublic" | "readMembers" | "writePost" | "readInbox" | "makeAdmin";
+
+const allowedBy: Record<Action, Role[]> = {
+  readPublic: ["visitor", "member", "editor", "admin"],
+  readMembers: ["member", "editor", "admin"],
+  writePost: ["editor", "admin"],
+  readInbox: ["admin"],
+  makeAdmin: [], // nobody may raise their own role; admins change roles of others through one checked function
+};
+
+export type AccessResult = "allowed" | "hidden" | "refused" | "leaked";
+
+/**
+ * What happens when `role` tries `action`.
+ * - Rules only in the app: the app hides the button, but a direct request reaches a database that answers anyone.
+ * - Rules in the database: the answer is the same however the request arrives.
+ */
+export function tryAccess(role: Role, action: Action, rulesIn: "app" | "database", via: "app" | "api"): AccessResult {
+  const permitted = allowedBy[action].includes(role);
+  if (permitted) return "allowed";
+  if (via === "app") return "hidden";
+  return rulesIn === "database" ? "refused" : "leaked";
+}

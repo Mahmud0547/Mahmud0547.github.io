@@ -19,6 +19,7 @@ export type Block =
   | { type: "ul" | "ol"; items: string[] }
   | { type: "code"; text: string; lang: string }
   | { type: "table"; head: string[]; rows: string[][] }
+  | { type: "callout"; kind: "idea" | "warning"; text: string }
   | { type: "demo"; name: string }
   | { type: "quiz"; questions: QuizQuestion[] };
 
@@ -72,7 +73,13 @@ export function parseBlocks(source: string): Block[] {
         blocks.push({ type: "table", head: cells(first), rows: lines.slice(2).map(cells) });
       } else if (lines.every((l) => /^[-*] /.test(l))) blocks.push({ type: "ul", items: lines.map((l) => l.slice(2)) });
       else if (lines.every((l) => /^\d+\. /.test(l))) blocks.push({ type: "ol", items: lines.map((l) => l.replace(/^\d+\. /, "")) });
-      else if (lines.every((l) => l.startsWith(">"))) blocks.push({ type: "quote", text: lines.map((l) => l.replace(/^>\s?/, "")).join(" ") });
+      else if (lines.every((l) => l.startsWith(">"))) {
+        const text = lines.map((l) => l.replace(/^>\s?/, "")).join(" ");
+        // GitHub-style callouts: "> [!IDEA] text" and "> [!WARNING] text".
+        const callout = /^\[!(IDEA|WARNING)\]\s*(.*)$/.exec(text);
+        if (callout) blocks.push({ type: "callout", kind: callout[1]!.toLowerCase() as "idea" | "warning", text: callout[2]! });
+        else blocks.push({ type: "quote", text });
+      }
       else blocks.push({ type: "p", text: lines.join(" ") });
     }
   }
@@ -99,4 +106,11 @@ export function parseInline(text: string): Inline[] {
   }
   if (last < text.length) out.push({ type: "text", text: text.slice(last) });
   return out;
+}
+
+/** Section headings for a table of contents; ids match the ones the article renders (s1, s2, …). */
+export function outline(source: string): { id: string; text: string }[] {
+  return parseBlocks(source)
+    .filter((b): b is { type: "h2"; text: string } => b.type === "h2")
+    .map((b, i) => ({ id: `s${i + 1}`, text: parseInline(b.text).map((part) => part.text).join("") }));
 }

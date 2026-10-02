@@ -26,7 +26,7 @@ test("home page carries structured data", async ({ page }) => {
 
 test("sitemap lists every page and article, and robots points to it", () => {
   const sitemap = readFileSync("out/sitemap.xml", "utf8");
-  expect([...sitemap.matchAll(/<loc>/g)]).toHaveLength(18);
+  expect([...sitemap.matchAll(/<loc>/g)]).toHaveLength(24);
   expect(sitemap).toContain(`<loc>${site}/tj/privacy/</loc>`);
   expect(readFileSync("out/robots.txt", "utf8")).toContain(`Sitemap: ${site}/sitemap.xml`);
 });

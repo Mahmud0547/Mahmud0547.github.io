@@ -1,8 +1,16 @@
 import { readFileSync } from "node:fs";
 import { expect, test, type Page } from "@playwright/test";
 
-// http-server cannot send headers, so attach the generated Content-Security-Policy to every document.
-const csp = readFileSync("out/_headers", "utf8").match(/Content-Security-Policy: (.+)/)![1];
+// http-server cannot send headers, so attach the policy Cloudflare would send for each document's path:
+// the page's own rule, or the site-wide "/*" rule. (Same lookup as policyFor in scripts/headers.mjs,
+// which Playwright cannot import because it loads specs as CommonJS.)
+const rules = new Map(
+  readFileSync("out/_headers", "utf8")
+    .split("\n\n")
+    .map((block) => block.split("\n"))
+    .map((lines) => [lines[0], lines.find((l) => l.startsWith("  Content-Security-Policy:"))?.slice(27) ?? ""] as const),
+);
+const policyFor = (path: string) => rules.get(path) || rules.get("/*")!;
 
 async function withCsp(page: Page) {
   const violations: string[] = [];
@@ -13,12 +21,13 @@ async function withCsp(page: Page) {
   await page.route("http://localhost:4173/**", async (route) => {
     if (route.request().resourceType() !== "document") return route.fallback();
     const response = await route.fetch();
+    const csp = policyFor(new URL(route.request().url()).pathname);
     await route.fulfill({ response, headers: { ...response.headers(), "content-security-policy": csp } });
   });
   return violations;
 }
 
-for (const path of ["/", "/ru/", "/tj/work/simorgh/", "/privacy/", "/no-such-page/"]) {
+for (const path of ["/", "/ru/", "/tj/work/simorgh/", "/privacy/", "/tj/blog/how-a-telegram-bot-works/", "/no-such-page/"]) {
   test(`${path} runs under the strict CSP`, async ({ page }) => {
     const violations = await withCsp(page);
     await page.goto(path);

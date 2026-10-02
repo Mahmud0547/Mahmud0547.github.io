@@ -1,17 +1,7 @@
-import type { ComponentType } from "react";
 import type { Locale } from "@/lib/locale";
 import { parseBlocks, parseInline } from "@/lib/markdown";
-import { AmountDemo } from "./blog/AmountDemo";
-import { BotFlowDemo } from "./blog/BotFlowDemo";
-import { BotPlayground } from "./blog/BotPlayground";
+import { Demo } from "./blog/Demo";
 import { Quiz } from "./blog/Quiz";
-
-/** Interactive blocks an article can place with {{demo:name}} on its own line. */
-const demos: Record<string, ComponentType<{ locale: Locale }>> = {
-  "bot-flow": BotFlowDemo,
-  "bot-playground": BotPlayground,
-  "amount": AmountDemo,
-};
 
 const external = { target: "_blank", rel: "noopener noreferrer" } as const;
 
@@ -36,13 +26,23 @@ function Inline({ text }: { text: string }) {
 }
 
 /** Renders article text. React escapes every string, so the output can contain only these elements. */
-export function Markdown({ source, locale = "en" }: { source: string; locale?: Locale }) {
+type Labels = { idea: string; warning: string };
+
+const calloutStyle = {
+  idea: { icon: "💡", box: "border-saffron bg-[#fdf6e3]" },
+  warning: { icon: "⚠️", box: "border-[#c2410c] bg-[#fdeee6]" },
+};
+
+export function Markdown({ source, locale = "en", labels }: { source: string; locale?: Locale; labels?: Labels }) {
+  const blocks = parseBlocks(source);
+  // Section ids s1, s2, … in heading order, the same ones outline() gives the table of contents.
+  const sectionIds = new Map(blocks.flatMap((b, i) => (b.type === "h2" ? [i] : [])).map((blockIndex, n) => [blockIndex, `s${n + 1}`]));
   return (
     <div className="flex flex-col gap-5 font-serif text-[17px] leading-[1.7] lg:text-lg">
-      {parseBlocks(source).map((block, i) => {
+      {blocks.map((block, i) => {
         switch (block.type) {
           case "h2":
-            return <h2 key={i} className="mt-6 font-sans text-2xl font-extrabold tracking-[-0.02em] lg:text-[28px]"><Inline text={block.text} /></h2>;
+            return <h2 key={i} id={sectionIds.get(i)} className="mt-6 scroll-mt-24 font-sans text-2xl font-extrabold tracking-[-0.02em] lg:text-[28px]"><Inline text={block.text} /></h2>;
           case "h3":
             return <h3 key={i} className="mt-4 font-sans text-xl font-bold"><Inline text={block.text} /></h3>;
           case "quote":
@@ -51,6 +51,18 @@ export function Markdown({ source, locale = "en" }: { source: string; locale?: L
             return <ul key={i} className="flex list-disc flex-col gap-2 pl-6">{block.items.map((item, j) => <li key={j}><Inline text={item} /></li>)}</ul>;
           case "ol":
             return <ol key={i} className="flex list-decimal flex-col gap-2 pl-6">{block.items.map((item, j) => <li key={j}><Inline text={item} /></li>)}</ol>;
+          case "callout": {
+            const style = calloutStyle[block.kind];
+            return (
+              <aside key={i} className={`flex gap-3 rounded-xl border-l-4 px-4 py-3 font-sans text-base leading-relaxed ${style.box}`}>
+                <span aria-hidden="true" className="text-xl">{style.icon}</span>
+                <p>
+                  {labels && <strong className="block">{labels[block.kind]}</strong>}
+                  <Inline text={block.text} />
+                </p>
+              </aside>
+            );
+          }
           case "table":
             return (
               <div key={i} tabIndex={0} role="region" aria-label={block.head.join(", ")} className="overflow-x-auto rounded-xl border border-line">
@@ -70,11 +82,9 @@ export function Markdown({ source, locale = "en" }: { source: string; locale?: L
                 </table>
               </div>
             );
-          case "demo": {
-            const Demo = demos[block.name];
-            if (!Demo) throw new Error(`Unknown demo "${block.name}"`);
-            return <Demo key={i} locale={locale} />;
-          }
+          case "demo":
+            // Interactive blocks an article places with {{demo:name}} on its own line.
+            return <Demo key={i} name={block.name} locale={locale} />;
           case "quiz":
             return <Quiz key={i} locale={locale} questions={block.questions} />;
           case "code":

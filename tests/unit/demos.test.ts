@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { matchRule, parseAmount, pythonCode } from "@/lib/demos";
+import { cyrillicCheck, matchRule, parseAmount, pythonCode, runChain, toSomoni, tryAccess } from "@/lib/demos";
 
 describe("matchRule", () => {
   const rules = [
@@ -39,5 +39,59 @@ describe("parseAmount", () => {
   it("reports what is missing", () => {
     expect(parseAmount("dollars please")).toMatchObject({ amount: null, currency: "USD" });
     expect(parseAmount("500")).toMatchObject({ amount: 500, currency: null });
+  });
+});
+
+describe("cyrillicCheck", () => {
+  it("passes a Russian post and fails English reasoning, like the newsroom", () => {
+    expect(cyrillicCheck("Министры договорились о новых правилах.").pass).toBe(true);
+    expect(cyrillicCheck("Okay, the user wants a post. Let me think…").pass).toBe(false);
+  });
+  it("needs more than half, and some letters at all", () => {
+    expect(cyrillicCheck("ab вг").pass).toBe(false);
+    expect(cyrillicCheck("123 !!").pass).toBe(false);
+  });
+  it("does not count Tajik-only letters as Russian", () => {
+    expect(cyrillicCheck("ҳҷқ").cyrillic).toBe(0);
+  });
+});
+
+describe("runChain", () => {
+  it("skips busy and English-answering models and stops at the first that works", () => {
+    const result = runChain([
+      { name: "A", state: "busy" },
+      { name: "B", state: "english" },
+      { name: "C", state: "ok" },
+      { name: "D", state: "ok" },
+    ]);
+    expect(result.writer).toBe("C");
+    expect(result.steps.map((s) => s.model)).toEqual(["A", "B", "C"]);
+  });
+  it("reports no writer when every model fails", () => {
+    expect(runChain([{ name: "A", state: "busy" }]).writer).toBeNull();
+  });
+});
+
+describe("toSomoni", () => {
+  it("divides by the nominal the bank publishes", () => {
+    expect(toSomoni(1000, 0.2089, 10)).toBeCloseTo(20.89);
+    expect(toSomoni(100, 9.2331, 1)).toBeCloseTo(923.31);
+  });
+});
+
+describe("tryAccess", () => {
+  it("allows what the role may do, however it asks", () => {
+    expect(tryAccess("editor", "writePost", "app", "api")).toBe("allowed");
+    expect(tryAccess("visitor", "readPublic", "database", "app")).toBe("allowed");
+  });
+  it("only hides the button in the app", () => {
+    expect(tryAccess("member", "readInbox", "app", "app")).toBe("hidden");
+  });
+  it("leaks on a direct request when rules live only in the app, and refuses when they live in the database", () => {
+    expect(tryAccess("visitor", "readMembers", "app", "api")).toBe("leaked");
+    expect(tryAccess("visitor", "readMembers", "database", "api")).toBe("refused");
+  });
+  it("never lets anyone make themselves admin", () => {
+    expect(tryAccess("admin", "makeAdmin", "database", "api")).toBe("refused");
   });
 });

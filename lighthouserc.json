@@ -2,7 +2,7 @@
   "ci": {
     "collect": {
       "staticDistDir": "./out",
-      "url": ["/", "/ru/", "/tj/", "/work/simorgh/", "/privacy/"],
+      "url": ["/", "/ru/", "/tj/", "/work/simorgh/", "/privacy/", "/tj/blog/how-a-telegram-bot-works/"],
       "numberOfRuns": 3
     },
     "assert": {
