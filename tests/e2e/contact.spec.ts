@@ -105,7 +105,7 @@ test("keeps the honeypot away from people", async ({ page }) => {
 test("loads Turnstile only after the visitor starts typing", async ({ page }) => {
   const loads: string[] = [];
   page.on("request", (request) => {
-    if (request.url().includes("challenges.cloudflare.com")) loads.push(request.url());
+    if (new URL(request.url()).hostname === "challenges.cloudflare.com") loads.push(request.url());
   });
   await page.goto("/");
   await page.waitForLoadState("networkidle");
