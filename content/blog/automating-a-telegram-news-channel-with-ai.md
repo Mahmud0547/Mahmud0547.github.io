@@ -1,9 +1,9 @@
 ---
 title: "One person and an AI bot run a news channel: how we automated a Telegram newsroom"
-description: "A news channel used to need people reading sources all day. Our AI bot read 956 articles and drafted the posts; a person only approves. Real numbers inside."
+description: "A news channel used to need people reading sources all day. Our AI bot reads about 270 articles a day; a person approves a post in 14 seconds. Real numbers."
 date: 2026-10-03
 tags: AI automation, Telegram bots, Case study
-result: 956 articles read by the bot · publishing takes one tap
+result: ~270 articles a day read by the bot · a decision takes 14 seconds
 ---
 Every business has a job that someone does again and again: reads the same kind of messages, copies the same kind of data, writes the same kind of text. It is never urgent enough to fix, so it quietly eats hours every single day.
 
@@ -23,14 +23,14 @@ That is a full-time job for at least one person. Most small channels and busines
 
 ## What the bot does now
 
-We built **Simorgh News**: an AI system that does steps 1 to 3 by itself and leaves a person only the decision. Here is what it has done since it went live on a cloud server on 29 September 2026, as of 3 October:
+We built **Simorgh News**: an AI system that does steps 1 to 3 by itself and leaves a person only the decision. Here is what it has done by 3 October 2026, straight from its database. It went live on a cloud server on 29 September.
 
 | What | By whom | Real number |
 |---|---|---|
 | Checking the news sources | the bot, every 30 minutes, day and night | 48 times a day |
-| Reading and storing articles | the bot | **956 articles** |
+| Reading and storing articles | the bot | **964 articles** — about 270 a day |
 | Writing drafts in Russian | the bot, with an AI model | on request |
-| Checking drafts | a person, in the web panel or in Telegram | 16 drafts |
+| Checking drafts | a person, in the web panel or in Telegram | 16 decisions, half in **14 seconds** or less |
 | Publishing | a person, one tap | 9 posts |
 
 Look at the last two lines. The person checked 16 drafts and published 9 — **7 were rejected**. That is not a weakness, it is the point: the AI does the heavy work, and nothing reaches the readers without a human “yes”.
@@ -39,9 +39,9 @@ Look at the last two lines. The person checked 16 drafts and published 9 — **7
 
 ## What changed for the person
 
-Before, the work was hours of reading and writing. Now it is a few seconds per post: open the draft, compare it with the source the panel shows next to it, tap **Approve**, **Edit** or **Reject**.
+Before, the work was hours of reading and writing. Now it is seconds per post: open the draft, compare it with the source the panel shows next to it, tap **Approve**, **Edit** or **Reject**. The database keeps the time of every draft and every decision: **half of the decisions took 14 seconds or less.**
 
-How many hours is that? Here is a simple estimate — not a measurement: if a person spent **just one minute** looking at each of the 956 articles the bot read, that alone would be about **16 hours** of work. Writing a post by hand takes much longer than approving one. The bot did all of that reading without anyone sitting at a screen.
+How much reading is that? On a full day the bot takes in about **270 new articles** — 342 on its busiest day so far. Here is a simple estimate, not a measurement: if a person spent **just one minute** on each, that would be about **4.5 hours a day** — more than half a working day — only to skim the news, before writing a single post. The bot does all of that reading without anyone sitting at a screen.
 
 And it keeps working while the person sleeps: the sources are checked 48 times a day, so the morning starts with fresh drafts waiting.
 
