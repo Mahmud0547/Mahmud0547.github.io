@@ -207,7 +207,7 @@ test("the blog has an Articles card next to the course, with the case and its re
   await expect(articles.getByText("Articles", { exact: true })).toBeVisible();
   const card = articles.getByRole("link", { name: /One person and an AI bot run a news channel/ });
   await expect(card).toHaveAttribute("href", "/blog/automating-a-telegram-news-channel-with-ai/");
-  await expect(card).toContainText("956 articles read by the bot");
+  await expect(card).toContainText("270 articles a day read by the bot");
   // Articles are not lessons: the course still has five.
   await expect(page.getByRole("region", { name: "How it works" }).getByRole("listitem")).toHaveCount(5);
 });
