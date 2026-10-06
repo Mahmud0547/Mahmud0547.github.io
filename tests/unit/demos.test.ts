@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { cyrillicCheck, homePage, loadSeconds, matchRule, parseAmount, partsFor, pythonCode, routineCost, runChain, toSomoni, tryAccess } from "@/lib/demos";
+import { NEWS_BY_UTC_HOUR, bestCard, cyrillicCheck, homePage, isWorkingHour, loadSeconds, matchRule, outsideHours, parseAmount, partsFor, pythonCode, rankCards, routineCost, runChain, toLocalHours, toSomoni, tryAccess, wordKeys } from "@/lib/demos";
 
 describe("matchRule", () => {
   const rules = [
@@ -137,5 +137,68 @@ describe("routine calculator", () => {
     const r = routineCost({ perDay: 10, minutes: 2, checkMinutes: 5, hourlyRate: 20 }, 140);
     expect(r.hoursSaved).toBe(0);
     expect(r.paybackDays).toBeNull();
+  });
+});
+
+describe("lesson 6: answering from documents", () => {
+  const cards = [
+    { id: "menu", title: "Menu and prices", text: "Plov costs 35 somoni, salad 15 somoni." },
+    { id: "delivery", title: "Delivery", text: "We deliver across Dushanbe from 10:00 to 22:00, delivery is free from 100 somoni." },
+    { id: "hours", title: "Opening hours", text: "We are open every day from 9:00 to 23:00." },
+  ];
+  const stop = ["the", "and", "you", "how", "much", "what", "does", "are", "your", "for", "can", "from"];
+
+  it("finds the card that shares the question's words", () => {
+    const ranked = rankCards("How much does plov cost?", cards, stop);
+    expect(ranked[0].id).toBe("menu");
+    expect(ranked[0].words).toEqual(["plov", "cost"]);
+    expect(bestCard(ranked)).toBe("menu");
+  });
+
+  it("matches different forms of a word by its first letters", () => {
+    expect(rankCards("Do you do deliveries?", cards, stop)[0].id).toBe("delivery");
+  });
+
+  it("admits it does not know when no card fits", () => {
+    const ranked = rankCards("Is there a helicopter pad?", cards, stop);
+    expect(bestCard(ranked)).toBeNull();
+  });
+
+  it("ignores stop words and very short words", () => {
+    expect(wordKeys("How much is it for you?", stop)).toEqual([]);
+  });
+});
+
+describe("article 2: news does not sleep", () => {
+  it("uses the measured total", () => {
+    expect(NEWS_BY_UTC_HOUR.reduce((s, c) => s + c, 0)).toBe(1498);
+  });
+
+  it("moves counts to local time", () => {
+    const dubai = toLocalHours(NEWS_BY_UTC_HOUR, 4);
+    expect(dubai[4]).toBe(NEWS_BY_UTC_HOUR[0]);
+    expect(dubai[3]).toBe(NEWS_BY_UTC_HOUR[23]);
+  });
+
+  it("62% of the news comes outside 9:00–18:00 Dubai time", () => {
+    const r = outsideHours(toLocalHours(NEWS_BY_UTC_HOUR, 4), 9, 18);
+    expect(r.outside).toBe(924);
+    expect(Math.round(r.share * 100)).toBe(62);
+  });
+
+  it("handles night shifts that cross midnight", () => {
+    expect(isWorkingHour(23, 22, 6)).toBe(true);
+    expect(isWorkingHour(3, 22, 6)).toBe(true);
+    expect(isWorkingHour(12, 22, 6)).toBe(false);
+    expect(outsideHours([1, 1, 1], 0, 0).share).toBe(1);
+  });
+});
+
+import { lessonStrings } from "@/components/blog/strings-lessons";
+describe.each(["en", "ru", "tj"] as const)("lesson 6 presets in %s", (locale) => {
+  const k = lessonStrings[locale].knowledge;
+  const cards = k.cards.map((c) => ({ ...c, text: c.text.replace("{price}", "35") }));
+  it.each(k.presets.map((q, i) => [q, k.expect[i]] as const))("“%s” → %s", (question, expected) => {
+    expect(bestCard(rankCards(question, cards, k.stop))).toBe(expected);
   });
 });
