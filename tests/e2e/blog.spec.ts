@@ -7,24 +7,25 @@ const LESSONS = [
   "Where exchange rates come from — and how to build a site people can trust",
   "Who can see what: why access rules belong in the database",
   "A website for slow internet: what a page really downloads",
+  "How an AI bot answers from your documents — and why it says “I don't know”",
 ];
 
 test("the blog shows the course with its lessons in order", async ({ page }) => {
   await page.goto("/blog/");
   await expect(page.locator("h1")).toHaveText("Blog");
   const course = page.getByRole("region", { name: "How it works" });
-  await expect(course.getByRole("listitem")).toHaveCount(5);
+  await expect(course.getByRole("listitem")).toHaveCount(6);
   for (const [i, title] of LESSONS.entries()) {
-    await expect(course.getByRole("listitem").nth(i)).toContainText(`Lesson ${i + 1} of 5`);
+    await expect(course.getByRole("listitem").nth(i)).toContainText(`Lesson ${i + 1} of 6`);
     await expect(course.getByRole("listitem").nth(i)).toContainText(title);
   }
-  await expect(course.getByText("0 of 5 lessons finished")).toBeVisible();
+  await expect(course.getByText("0 of 6 lessons finished")).toBeVisible();
 });
 
 test("a lesson has its header, what you will learn, code and structured data", async ({ page }) => {
   await page.goto("/blog/access-rules-in-the-database/");
   await expect(page.locator("h1")).toHaveText(LESSONS[3]!);
-  await expect(page.getByText("How it works · Lesson 4 of 5")).toBeVisible();
+  await expect(page.getByText("How it works · Lesson 4 of 6")).toBeVisible();
   await expect(page.getByText("Intermediate", { exact: true })).toBeVisible();
   await expect(page.getByRole("region", { name: /In this lesson you will learn/ }).getByRole("listitem")).toHaveCount(5);
   await expect(page.locator("article pre code").first()).toContainText("create policy");
@@ -40,7 +41,7 @@ test("finishing a lesson is remembered in the course list", async ({ page }) => 
   await page.getByRole("link", { name: /Next lesson/ }).click();
   await expect(page).toHaveURL(/\/blog\/ai-newsroom-human-in-the-loop\/$/);
   await page.goto("/blog/");
-  await expect(page.getByText("1 of 5 lessons finished")).toBeVisible();
+  await expect(page.getByText("1 of 6 lessons finished")).toBeVisible();
 });
 
 test("the contents link to the sections of the lesson", async ({ page, isMobile }) => {
@@ -64,7 +65,7 @@ test("Russian blog keeps the Russian interface and Russian lessons", async ({ pa
   await page.getByRole("link", { name: /Как работает ИИ-редакция/ }).click();
   await expect(page).toHaveURL(/\/ru\/blog\/ai-newsroom-human-in-the-loop\/$/);
   await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", "https://simorghdev.pages.dev/ru/blog/ai-newsroom-human-in-the-loop/");
-  await expect(page.getByText("Как это работает · Урок 2 из 5")).toBeVisible();
+  await expect(page.getByText("Как это работает · Урок 2 из 6")).toBeVisible();
 });
 
 test("header links to the blog", async ({ page, isMobile }) => {
@@ -209,7 +210,7 @@ test("the blog has an Articles card next to the course, with the case and its re
   await expect(card).toHaveAttribute("href", "/blog/automating-a-telegram-news-channel-with-ai/");
   await expect(card).toContainText("270 articles a day read by the bot");
   // Articles are not lessons: the course still has five.
-  await expect(page.getByRole("region", { name: "How it works" }).getByRole("listitem")).toHaveCount(5);
+  await expect(page.getByRole("region", { name: "How it works" }).getByRole("listitem")).toHaveCount(6);
 });
 
 test("an article is a case study that ends with a call to order", async ({ page }) => {
@@ -232,12 +233,51 @@ test("the routine calculator shows hours saved and when a bot pays off", async (
   await expect(demo).toContainText("a bot would not help");
 });
 
+test("lesson 6: the bot finds the right card, answers from it and admits when it does not know", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/blog/how-a-bot-answers-from-your-documents/");
+  const demo = await demoBlock(page, "Ask the café's bot");
+  await demo.getByRole("button", { name: "How much does plov cost?" }).click();
+  await expect(demo.getByText("Plov costs 35 somoni, salad 15 somoni, tea 5 somoni.").last()).toBeVisible();
+  await expect(demo.getByText("Answer taken from: Menu and prices")).toBeVisible();
+  await demo.getByLabel("Change the price of plov").fill("42");
+  await expect(demo.getByText(/Plov costs 42 somoni/).last()).toBeVisible();
+  await demo.getByRole("button", { name: "Is there a helicopter pad?" }).click();
+  await expect(demo.getByText("I'm not sure — I'll pass your question to a manager.")).toBeVisible();
+  await demo.getByLabel("Type your own question…").fill("Do you deliver to my home?");
+  await demo.getByRole("button", { name: "Ask", exact: true }).click();
+  await expect(demo.getByText("Answer taken from: Delivery")).toBeVisible();
+});
+
+test("article 2: the clock counts the news outside working hours and the bot covers it", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/blog/news-does-not-sleep/");
+  const demo = await demoBlock(page, "When the news comes out");
+  await expect(demo.getByText("924 of 1,498 articles")).toBeVisible();
+  await demo.getByLabel("Work starts").fill("10");
+  await demo.getByLabel("Work ends").fill("19");
+  await expect(demo.getByText("909 of 1,498 articles")).toBeVisible();
+  await demo.getByRole("button", { name: /Live through a day/ }).click();
+  await expect(demo.getByText(/While you were off: [\d,]+ news/)).toBeVisible();
+  await demo.getByRole("button", { name: "Turn on the bot" }).click();
+  await expect(demo.getByRole("button", { name: "Turn on the bot" })).toHaveAttribute("aria-pressed", "true");
+});
+
+test("the blog lists both case studies in the Articles card", async ({ page }) => {
+  await page.goto("/blog/");
+  const articles = page.getByRole("region", { name: "Automation in practice" });
+  await expect(articles.getByRole("listitem")).toHaveCount(2);
+  await expect(articles.getByRole("link", { name: /News does not sleep/ })).toContainText("62% of the news comes out after work hours");
+});
+
 const LESSON_PATHS = [
   "/blog/ai-newsroom-human-in-the-loop/",
   "/blog/official-data-you-can-trust/",
   "/blog/access-rules-in-the-database/",
   "/blog/websites-for-slow-internet/",
   "/blog/automating-a-telegram-news-channel-with-ai/",
+  "/blog/how-a-bot-answers-from-your-documents/",
+  "/blog/news-does-not-sleep/",
 ];
 
 for (const path of ["/blog/", "/tj/blog/", BOT, `/tj${BOT}`, ...LESSON_PATHS, ...LESSON_PATHS.map((p) => `/tj${p}`)]) {

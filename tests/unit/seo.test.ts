@@ -52,6 +52,8 @@ describe("sitemapEntries", () => {
         "/blog/access-rules-in-the-database/", "/ru/blog/access-rules-in-the-database/", "/tj/blog/access-rules-in-the-database/",
         "/blog/websites-for-slow-internet/", "/ru/blog/websites-for-slow-internet/", "/tj/blog/websites-for-slow-internet/",
         "/blog/automating-a-telegram-news-channel-with-ai/", "/ru/blog/automating-a-telegram-news-channel-with-ai/", "/tj/blog/automating-a-telegram-news-channel-with-ai/",
+        "/blog/how-a-bot-answers-from-your-documents/", "/ru/blog/how-a-bot-answers-from-your-documents/", "/tj/blog/how-a-bot-answers-from-your-documents/",
+        "/blog/news-does-not-sleep/", "/ru/blog/news-does-not-sleep/", "/tj/blog/news-does-not-sleep/",
       ].map((p) => `${site}${p}`).sort(),
     );
   });

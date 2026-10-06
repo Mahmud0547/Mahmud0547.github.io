@@ -19,6 +19,8 @@ const demos: Record<string, ComponentType<{ locale: Locale }>> = {
   "access": dynamic(() => import("./AccessDemo").then((m) => m.AccessDemo)),
   "signed-link": dynamic(() => import("./LinkDemo").then((m) => m.LinkDemo)),
   "routine": dynamic(() => import("./RoutineDemo").then((m) => m.RoutineDemo)),
+  "knowledge": dynamic(() => import("./KnowledgeDemo").then((m) => m.KnowledgeDemo)),
+  "night-clock": dynamic(() => import("./NightClockDemo").then((m) => m.NightClockDemo)),
   "slow-net": dynamic(() => import("./SlowNetDemo").then((m) => m.SlowNetDemo)),
 };
 

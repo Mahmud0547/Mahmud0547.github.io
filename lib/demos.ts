@@ -210,3 +210,75 @@ export function routineCost(r: Routine, botPrice: number): RoutineResult {
   const perDay = moneySaved / days;
   return { hoursBefore, hoursAfter, hoursSaved, moneySaved, paybackDays: perDay > 0 ? botPrice / perDay : null };
 }
+
+// ── Lesson 6: a bot that answers from your documents ─────────────────────────
+
+export interface KbCard {
+  id: string;
+  title: string;
+  text: string;
+}
+
+export interface KbMatch {
+  id: string;
+  /** Share of the question's words found in the card, 0…1. */
+  score: number;
+  /** The question's words that the card contains. */
+  words: string[];
+}
+
+/**
+ * Word keys for matching: lower case, ё → е, words of 3+ letters, minus stop words, cut to 5 letters
+ * so that "доставка" and "доставляете" meet. Real bots compare meaning (embeddings); this is the same idea, simplified.
+ */
+export function wordKeys(text: string, stop: string[]): string[] {
+  const stopSet = new Set(stop.map((w) => w.toLowerCase().replace(/ё/g, "е")));
+  const words = text.toLowerCase().replace(/ё/g, "е").match(/[\p{L}\d]+/gu) ?? [];
+  return [...new Set(words.filter((w) => w.length >= 3 && !stopSet.has(w)).map((w) => w.slice(0, 5)))];
+}
+
+/** Ranks cards by how many of the question's word keys each one contains, best first. */
+export function rankCards(question: string, cards: KbCard[], stop: string[]): KbMatch[] {
+  const asked = wordKeys(question, stop);
+  return cards
+    .map((card) => {
+      const has = wordKeys(`${card.title} ${card.text}`, stop);
+      // Same word in another form: one key starts with the other (at least 4 letters in common).
+      const words = asked.filter((k) => has.some((h) => h === k || (Math.min(h.length, k.length) >= 4 && (h.startsWith(k) || k.startsWith(h)))));
+      return { id: card.id, score: asked.length ? words.length / asked.length : 0, words };
+    })
+    .sort((a, b) => b.score - a.score);
+}
+
+/** The card the bot answers from, or null when nothing matches well enough — then a person should answer. */
+export function bestCard(ranked: KbMatch[], minScore = 0.3): string | null {
+  return ranked[0] && ranked[0].score >= minScore ? ranked[0].id : null;
+}
+
+// ── Article 2: news does not sleep ──────────────────────────────────────────
+
+/**
+ * Articles per hour of publication (UTC) in the Simorgh database, 29 September – 6 October 2026:
+ * 1,498 articles from BBC News and Al Jazeera, read from the production database on 6 October.
+ */
+export const NEWS_BY_UTC_HOUR = [57, 34, 27, 32, 48, 58, 44, 44, 63, 47, 74, 85, 82, 77, 73, 91, 94, 67, 50, 66, 62, 69, 62, 92];
+
+/** Counts per local hour for a UTC offset in whole hours. */
+export function toLocalHours(utc: number[], offset: number): number[] {
+  const local = new Array(24).fill(0);
+  utc.forEach((count, hour) => (local[(((hour + offset) % 24) + 24) % 24] += count));
+  return local;
+}
+
+/** Whether `hour` is inside working hours [start, end); handles shifts over midnight. */
+export function isWorkingHour(hour: number, start: number, end: number): boolean {
+  if (start === end) return false;
+  return start < end ? hour >= start && hour < end : hour >= start || hour < end;
+}
+
+/** How much arrives outside working hours. */
+export function outsideHours(counts: number[], start: number, end: number): { outside: number; total: number; share: number } {
+  const total = counts.reduce((s, c) => s + c, 0);
+  const outside = counts.reduce((s, c, h) => s + (isWorkingHour(h, start, end) ? 0 : c), 0);
+  return { outside, total, share: total ? outside / total : 0 };
+}
