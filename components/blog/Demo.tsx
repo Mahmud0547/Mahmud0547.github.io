@@ -22,6 +22,9 @@ const demos: Record<string, ComponentType<{ locale: Locale }>> = {
   "knowledge": dynamic(() => import("./KnowledgeDemo").then((m) => m.KnowledgeDemo)),
   "night-clock": dynamic(() => import("./NightClockDemo").then((m) => m.NightClockDemo)),
   "slow-net": dynamic(() => import("./SlowNetDemo").then((m) => m.SlowNetDemo)),
+  "message-globe": dynamic(() => import("./MessageGlobeDemo").then((m) => m.MessageGlobeDemo)),
+  "delay-city": dynamic(() => import("./DelayCityDemo").then((m) => m.DelayCityDemo)),
+  "check-every": dynamic(() => import("./CheckEveryDemo").then((m) => m.CheckEveryDemo)),
 };
 
 export const demoNames = Object.keys(demos);

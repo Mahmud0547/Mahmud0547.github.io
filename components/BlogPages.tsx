@@ -7,6 +7,7 @@ import { htmlLang } from "@/lib/locale";
 import { outline } from "@/lib/markdown";
 import { articleImage } from "@/lib/seo";
 import { CourseProgress, type LessonLink } from "./blog/CourseProgress";
+import { Hero3D } from "./blog/Hero3D";
 import { LessonDone } from "./blog/LessonDone";
 import { ReadingProgress } from "./blog/ReadingProgress";
 import { JsonLd } from "./JsonLd";
@@ -137,6 +138,7 @@ export function BlogArticle({ locale, article, lessons = [] }: { locale: Locale;
         <div className="grid gap-12 lg:grid-cols-[minmax(0,760px)_280px] lg:justify-between">
           <article id="article" className="flex min-w-0 flex-col gap-6" lang={lang}>
             <header className="flex flex-col gap-4">
+              {article.hero && <Hero3D name={article.hero} />}
               <p className="flex flex-wrap items-center gap-x-3 gap-y-2 font-sans text-sm text-soft" lang={htmlLang[locale]}>
                 {!article.series && <span className="font-semibold text-link">{t.caseStudy}</span>}
                 {article.series && (

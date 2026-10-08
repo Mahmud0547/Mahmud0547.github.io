@@ -282,3 +282,127 @@ export function outsideHours(counts: number[], start: number, end: number): { ou
   const outside = counts.reduce((s, c, h) => s + (isWorkingHour(h, start, end) ? 0 : c), 0);
   return { outside, total, share: total ? outside / total : 0 };
 }
+
+// ── Lesson 7: a message's trip around the world ────────────────────────────
+
+export interface Place {
+  id: string;
+  lat: number;
+  lon: number;
+  /** For people: the Telegram data center of their region. */
+  dc?: string;
+}
+
+/** Where readers are and where a bot's server can be. Names come from the lesson strings. */
+export const PEOPLE: Place[] = [
+  { id: "dushanbe", lat: 38.56, lon: 68.77, dc: "amsterdam" },
+  { id: "dubai", lat: 25.2, lon: 55.27, dc: "amsterdam" },
+  { id: "almaty", lat: 43.24, lon: 76.89, dc: "amsterdam" },
+  { id: "moscow", lat: 55.76, lon: 37.62, dc: "amsterdam" },
+  { id: "london", lat: 51.51, lon: -0.13, dc: "amsterdam" },
+  { id: "newyork", lat: 40.71, lon: -74.01, dc: "miami" },
+];
+export const SERVERS: Place[] = [
+  { id: "frankfurt", lat: 50.11, lon: 8.68 },
+  { id: "dubai", lat: 25.2, lon: 55.27 },
+  { id: "singapore", lat: 1.35, lon: 103.82 },
+  { id: "virginia", lat: 39.04, lon: -77.49 },
+];
+/** Telegram's data centers: users are served from the one for their region (Amsterdam for Europe, Central Asia and the Middle East). */
+export const TELEGRAM_DCS: Place[] = [
+  { id: "amsterdam", lat: 52.37, lon: 4.9 },
+  { id: "miami", lat: 25.76, lon: -80.19 },
+  { id: "singapore", lat: 1.35, lon: 103.82 },
+];
+
+/** Light in optical fiber covers about 200,000 km per second, i.e. 200 km per millisecond. */
+export const FIBER_KM_PER_MS = 200;
+
+/** Great-circle distance in kilometres. */
+export function distanceKm(a: Place, b: Place): number {
+  const r = Math.PI / 180;
+  const h = Math.sin(((b.lat - a.lat) * r) / 2) ** 2 + Math.cos(a.lat * r) * Math.cos(b.lat * r) * Math.sin(((b.lon - a.lon) * r) / 2) ** 2;
+  return 2 * 6371 * Math.asin(Math.min(1, Math.sqrt(h)));
+}
+
+/** The Telegram data center that serves a person: the one of their region, else the nearest. */
+export function telegramFor(person: Place): Place {
+  return TELEGRAM_DCS.find((dc) => dc.id === person.dc) ?? TELEGRAM_DCS.reduce((best, dc) => (distanceKm(person, dc) < distanceKm(person, best) ? dc : best));
+}
+
+export interface Leg {
+  from: Place;
+  to: Place;
+  km: number;
+  ms: number;
+}
+
+/** The four legs of a message and its reply: you → Telegram → bot → Telegram → you. */
+export function messageTrip(person: Place, server: Place): { legs: Leg[]; km: number; ms: number } {
+  const dc = telegramFor(person);
+  const legs = [
+    [person, dc],
+    [dc, server],
+    [server, dc],
+    [dc, person],
+  ].map(([from, to]) => {
+    const km = distanceKm(from!, to!);
+    return { from: from!, to: to!, km, ms: km / FIBER_KM_PER_MS };
+  });
+  const km = legs.reduce((s, l) => s + l.km, 0);
+  return { legs, km, ms: km / FIBER_KM_PER_MS };
+}
+
+/** Whether a point is land, from the 2° Natural Earth mask in lib/land-mask.ts. */
+export function makeLandTest(mask: { step: number; width: number; height: number; bits: string }): (lat: number, lon: number) => boolean {
+  const bytes = Uint8Array.from(atob(mask.bits), (c) => c.charCodeAt(0));
+  return (lat, lon) => {
+    const row = Math.min(mask.height - 1, Math.max(0, Math.floor((90 - lat) / mask.step)));
+    const col = (((Math.floor((lon + 180) / mask.step) % mask.width) + mask.width) % mask.width);
+    const i = row * mask.width + col;
+    return ((bytes[i >> 3]! >> (i & 7)) & 1) === 1;
+  };
+}
+
+// ── Article 3: how fast a bot sees the news ────────────────────────────────
+
+/**
+ * Minutes from the time a source printed on an article to the moment Simorgh saved it, from the production
+ * database (read on 8 October 2026): 1,797 articles published 30 September 06:00 – 8 October 00:00 UTC.
+ */
+export const DELAY_STATS = {
+  all: { n: 1797, median: 37.8, p25: 23.3, p75: 78.2, le30: 670, le60: 1262, gt180: 302 },
+  bbc: { n: 1111, median: 49.1, p25: 22.6, p75: 201.9, le30: 375, le60: 597, gt180: 302 },
+  aljazeera: { n: 686, median: 32.9, p25: 23.9, p75: 42.7, le30: 295, le60: 665, gt180: 0 },
+  checkEveryMin: 30,
+} as const;
+
+/** Delay buckets in minutes: ≤15, 15–30, 30–60, 1–3 h, over 3 h. */
+export const DELAY_BUCKETS = [15, 30, 60, 180, Infinity] as const;
+
+/** Articles by hour of publication (Dubai time, rows 0–23) and delay bucket (columns), same data as DELAY_STATS. */
+export const DELAY_BY_HOUR: number[][] = [
+  [9, 21, 30, 7, 13], [8, 16, 32, 9, 19], [6, 10, 18, 9, 22], [11, 11, 23, 19, 31], [4, 10, 25, 3, 15], [2, 9, 17, 5, 3],
+  [3, 8, 12, 3, 6], [4, 9, 11, 4, 1], [8, 16, 18, 7, 9], [5, 15, 16, 11, 18], [4, 21, 16, 10, 9], [5, 10, 29, 9, 8],
+  [14, 26, 23, 11, 10], [3, 17, 31, 9, 8], [21, 27, 30, 18, 14], [13, 28, 40, 16, 15], [7, 33, 29, 16, 10], [21, 18, 30, 17, 17],
+  [15, 17, 32, 12, 10], [7, 43, 25, 15, 11], [13, 38, 31, 5, 16], [7, 21, 23, 9, 10], [6, 20, 23, 5, 12], [7, 23, 28, 4, 15],
+];
+
+/**
+ * What a check interval means: a story that appears at a random moment waits on average half an interval and at
+ * most a whole one. `estimatedMedian` swaps the measured 15-minute average wait for the new one — an estimate.
+ */
+export function checkEvery(minutes: number, sources = 2): { averageWait: number; worstWait: number; checksPerDay: number; estimatedMedian: number } {
+  const averageWait = minutes / 2;
+  return {
+    averageWait,
+    worstWait: minutes,
+    checksPerDay: Math.round((1440 / minutes) * sources),
+    estimatedMedian: Math.max(averageWait, DELAY_STATS.all.median - DELAY_STATS.checkEveryMin / 2 + averageWait),
+  };
+}
+
+/** For each story time, the minutes until the next check (checks at 0, every, 2·every, …). */
+export function waitsUntilCheck(storyMinutes: number[], every: number): number[] {
+  return storyMinutes.map((t) => Math.ceil(t / every) * every - t);
+}

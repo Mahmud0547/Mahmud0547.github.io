@@ -14,6 +14,8 @@ All notable changes to this project are documented here. The format follows [Kee
 - Light version for slow internet: switches on by itself on 2G/3G or data saver, turns off motion, and loads photos and lesson exercises only on tap.
 - Lesson 5 of “How it works”: a website for slow internet, with a load-time simulator built on this site's real page sizes, in English, Russian and Tajik.
 - Lesson 6 “How an AI bot answers from your documents” with an animated answer-from-cards demo, and the case study “News does not sleep” with a draggable 24-hour clock on real Simorgh data, in English, Russian and Tajik.
+- 3D banners for lessons and articles (front matter `hero`), drawn on canvas without a 3D library and skipped in the light version.
+- Lesson 7 "How your message travels around the world" with an interactive 3D globe (Natural Earth land mask, great-circle routes, trip distance and light-in-fibre time), and the case study "How fast does a bot see the news?" with a rotatable 3D chart of 1,797 real Simorgh articles and a check-schedule simulator, in English, Russian and Tajik.
 - Articles section on the blog, separate from the course: case studies with real numbers and a call to order. First article: how an AI bot runs a Telegram news channel (Simorgh), with a routine-cost calculator.
 
 ### Removed

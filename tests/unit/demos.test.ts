@@ -202,3 +202,56 @@ describe.each(["en", "ru", "tj"] as const)("lesson 6 presets in %s", (locale) =>
     expect(bestCard(rankCards(question, cards, k.stop))).toBe(expected);
   });
 });
+
+import { DELAY_BY_HOUR, DELAY_STATS, PEOPLE, SERVERS, checkEvery, distanceKm, makeLandTest, messageTrip, telegramFor, waitsUntilCheck } from "@/lib/demos";
+import { LAND } from "@/lib/land-mask";
+describe("lesson 7: a message's trip", () => {
+  const place = (list: typeof PEOPLE, id: string) => list.find((p) => p.id === id)!;
+  it("measures great-circle distances", () => {
+    // Dushanbe – Amsterdam is about 5,000 km in a straight line.
+    expect(Math.round(distanceKm(place(PEOPLE, "dushanbe"), { id: "ams", lat: 52.37, lon: 4.9 }) / 100) * 100).toBe(5000);
+    expect(distanceKm(place(PEOPLE, "dubai"), place(PEOPLE, "dubai"))).toBe(0);
+  });
+  it("sends Central Asia and the Middle East through Amsterdam, New York through Miami", () => {
+    expect(telegramFor(place(PEOPLE, "almaty")).id).toBe("amsterdam");
+    expect(telegramFor(place(PEOPLE, "dubai")).id).toBe("amsterdam");
+    expect(telegramFor(place(PEOPLE, "newyork")).id).toBe("miami");
+  });
+  it("adds up four legs at 200 km per millisecond", () => {
+    const trip = messageTrip(place(PEOPLE, "dushanbe"), place(SERVERS, "frankfurt"));
+    expect(trip.legs).toHaveLength(4);
+    expect(trip.legs[0]!.km).toBeCloseTo(trip.legs[3]!.km);
+    expect(trip.ms).toBeCloseTo(trip.km / 200);
+    // There and back is about 11,000 km: ~55 ms of light in glass.
+    expect(Math.round(trip.ms)).toBeGreaterThan(50);
+    expect(Math.round(trip.ms)).toBeLessThan(60);
+  });
+  it("knows land from sea", () => {
+    const isLand = makeLandTest(LAND);
+    expect(isLand(38.56, 68.77)).toBe(true); // Dushanbe
+    expect(isLand(48.86, 2.35)).toBe(true); // Paris
+    expect(isLand(0, -30)).toBe(false); // Atlantic
+    expect(isLand(-30, 80)).toBe(false); // Indian Ocean
+  });
+});
+
+describe("article 3: how fast a bot sees the news", () => {
+  const sum = (col: number) => DELAY_BY_HOUR.reduce((s, row) => s + row[col]!, 0);
+  it("the hour × delay table matches the measured totals", () => {
+    expect(DELAY_BY_HOUR).toHaveLength(24);
+    expect(DELAY_BY_HOUR.flat().reduce((a, b) => a + b, 0)).toBe(DELAY_STATS.all.n);
+    expect(sum(0) + sum(1)).toBe(DELAY_STATS.all.le30);
+    expect(sum(0) + sum(1) + sum(2)).toBe(DELAY_STATS.all.le60);
+    expect(sum(4)).toBe(DELAY_STATS.all.gt180);
+    expect(DELAY_STATS.bbc.n + DELAY_STATS.aljazeera.n).toBe(DELAY_STATS.all.n);
+  });
+  it("a 30-minute check waits 15 minutes on average and keeps the measured median", () => {
+    const r = checkEvery(30);
+    expect(r).toMatchObject({ averageWait: 15, worstWait: 30, checksPerDay: 96 });
+    expect(r.estimatedMedian).toBeCloseTo(DELAY_STATS.all.median);
+    expect(checkEvery(5).estimatedMedian).toBeCloseTo(25.3);
+  });
+  it("waits until the next check", () => {
+    expect(waitsUntilCheck([0, 1, 29, 31], 30)).toEqual([0, 29, 1, 29]);
+  });
+});
