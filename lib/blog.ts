@@ -29,6 +29,8 @@ export interface Article {
   learn: string[];
   /** For articles (not lessons): the one measured result shown on the article's card (front matter `result`). */
   result?: string;
+  /** A 3D banner above the title (front matter `hero`: globe or city). */
+  hero?: string;
 }
 
 const DIR = join(process.cwd(), "content", "blog");
@@ -64,6 +66,7 @@ export function parseArticle(slug: string, source: string, lang: Locale = "en", 
     ...(meta.level ? { level: meta.level as Article["level"] } : {}),
     learn: (meta.learn ?? "").split(";").map((t: string) => t.trim()).filter(Boolean),
     ...(meta.result ? { result: meta.result } : {}),
+    ...(meta.hero ? { hero: meta.hero } : {}),
   };
 }
 

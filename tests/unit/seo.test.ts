@@ -54,6 +54,8 @@ describe("sitemapEntries", () => {
         "/blog/automating-a-telegram-news-channel-with-ai/", "/ru/blog/automating-a-telegram-news-channel-with-ai/", "/tj/blog/automating-a-telegram-news-channel-with-ai/",
         "/blog/how-a-bot-answers-from-your-documents/", "/ru/blog/how-a-bot-answers-from-your-documents/", "/tj/blog/how-a-bot-answers-from-your-documents/",
         "/blog/news-does-not-sleep/", "/ru/blog/news-does-not-sleep/", "/tj/blog/news-does-not-sleep/",
+        "/blog/how-a-message-travels-around-the-world/", "/ru/blog/how-a-message-travels-around-the-world/", "/tj/blog/how-a-message-travels-around-the-world/",
+        "/blog/how-fast-a-bot-sees-the-news/", "/ru/blog/how-fast-a-bot-sees-the-news/", "/tj/blog/how-fast-a-bot-sees-the-news/",
       ].map((p) => `${site}${p}`).sort(),
     );
   });
